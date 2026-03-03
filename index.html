@@ -94,9 +94,20 @@
             background: linear-gradient(-45deg, #0a0f1e, #1a1f30, #0f1425, #1e2438);
         }
 
-        .container {
+        /* Основной интерфейс (будет блокироваться до принятия политики) */
+        #main-interface {
             width: 100%;
             max-width: 1200px;
+            transition: opacity 0.3s, filter 0.3s;
+        }
+        #main-interface.blocked {
+            pointer-events: none;
+            opacity: 0.5;
+            filter: blur(2px);
+        }
+
+        .container {
+            width: 100%;
             background: rgba(255,255,255,0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -881,7 +892,7 @@
 <body>
     <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
 
-    <!-- Панели настроек -->
+    <!-- Панели настроек (остаются как есть) -->
     <div class="settings-panel" id="settingsPanel">
         <button class="settings-close" id="settingsClose">&times;</button>
         <h2>⚙️ Настройки</h2>
@@ -995,141 +1006,144 @@
         </div>
     </div>
 
-    <div class="container" id="app">
-        <button class="settings-button" id="settingsButton"></button>
+    <!-- Основной интерфейс сайта, обёрнут в #main-interface для блокировки -->
+    <div id="main-interface" class="">
+        <div class="container" id="app">
+            <button class="settings-button" id="settingsButton"></button>
 
-        <div id="welcome-block" class="welcome-screen">
-            <h2>👋 Привет!</h2>
-            <p>Это <strong>Kolocrug</strong> —<br>неофициальный браузер</p>
-            <button id="next-btn">✨ Далее ✨</button>
-        </div>
-
-        <div id="name-block" class="name-screen hidden">
-            <h2>🔐 Введите ваше имя</h2>
-            <input type="text" id="username-input" placeholder="например, Александр" autofocus>
-            <button id="enter-btn">🚪 Войти</button>
-        </div>
-
-        <div id="search-block" class="hidden">
-            <h1>🔍 Kolocrug</h1>
-            <div class="greeting" id="greeting"></div>
-            <div class="counter-container">
-                <div class="online-counter">👥 Сейчас на сайте: <span id="online-count">0</span></div>
-            </div>
-            <div class="search-form">
-                <input type="text" id="search-input" placeholder="Что ищем?" autofocus>
-                <button id="search-btn">Найти</button>
-            </div>
-            <div class="quick-links">
-                <div class="quick-link" data-query="погода"><span>☀️</span> Погода</div>
-                <div class="quick-link" data-query="рецепты"><span>🍳</span> Еда</div>
-                <div class="quick-link" data-query="Minecraft"><span>⛏️</span> Майнкрафт</div>
-            </div>
-            <iframe id="search-iframe" class="results-frame" src="about:blank"></iframe>
-
-            <div class="news-section" id="newsSection">
-                <h2 class="section-title">📰 Новости дня</h2>
-                <div class="news-grid" id="newsGrid">Загрузка новостей...</div>
+            <div id="welcome-block" class="welcome-screen">
+                <h2>👋 Привет!</h2>
+                <p>Это <strong>Kolocrug</strong> —<br>неофициальный браузер</p>
+                <button id="next-btn">✨ Далее ✨</button>
             </div>
 
-            <div class="ai-section" id="aiSection">
-                <h2 class="section-title">🎨 Нейросеть</h2>
-                <div class="ai-grid">
-                    <div class="ai-card">
-                        <h3>Генерация картинок</h3>
-                        <input type="text" id="promptInput" class="ai-input" placeholder="Опишите картинку...">
-                        <button id="generateBtn" class="ai-button">Создать</button>
-                        <button id="animateBtn" class="ai-button">✨ Оживить</button>
-                        <div id="generatedImageContainer"></div>
+            <div id="name-block" class="name-screen hidden">
+                <h2>🔐 Введите ваше имя</h2>
+                <input type="text" id="username-input" placeholder="например, Александр" autofocus>
+                <button id="enter-btn">🚪 Войти</button>
+            </div>
+
+            <div id="search-block" class="hidden">
+                <h1>🔍 Kolocrug</h1>
+                <div class="greeting" id="greeting"></div>
+                <div class="counter-container">
+                    <div class="online-counter">👥 Сейчас на сайте: <span id="online-count">0</span></div>
+                </div>
+                <div class="search-form">
+                    <input type="text" id="search-input" placeholder="Что ищем?" autofocus>
+                    <button id="search-btn">Найти</button>
+                </div>
+                <div class="quick-links">
+                    <div class="quick-link" data-query="погода"><span>☀️</span> Погода</div>
+                    <div class="quick-link" data-query="рецепты"><span>🍳</span> Еда</div>
+                    <div class="quick-link" data-query="Minecraft"><span>⛏️</span> Майнкрафт</div>
+                </div>
+                <iframe id="search-iframe" class="results-frame" src="about:blank"></iframe>
+
+                <div class="news-section" id="newsSection">
+                    <h2 class="section-title">📰 Новости дня</h2>
+                    <div class="news-grid" id="newsGrid">Загрузка новостей...</div>
+                </div>
+
+                <div class="ai-section" id="aiSection">
+                    <h2 class="section-title">🎨 Нейросеть</h2>
+                    <div class="ai-grid">
+                        <div class="ai-card">
+                            <h3>Генерация картинок</h3>
+                            <input type="text" id="promptInput" class="ai-input" placeholder="Опишите картинку...">
+                            <button id="generateBtn" class="ai-button">Создать</button>
+                            <button id="animateBtn" class="ai-button">✨ Оживить</button>
+                            <div id="generatedImageContainer"></div>
+                        </div>
+                        <div class="ai-card">
+                            <h3>Результат</h3>
+                            <div id="resultPlaceholder">Здесь будет ваше изображение</div>
+                        </div>
                     </div>
-                    <div class="ai-card">
-                        <h3>Результат</h3>
-                        <div id="resultPlaceholder">Здесь будет ваше изображение</div>
-                    </div>
+                </div>
+
+                <div class="footer">
+                    <a href="#" id="logout-link">🚪 Сменить имя</a>
+                </div>
+                
+                <!-- Юридические ссылки (обычный пользователь) -->
+                <div class="legal-links">
+                    <a href="/legal.html">Политика конфиденциальности</a>
+                    <span>|</span>
+                    <a href="/legal.html">Пользовательское соглашение</a>
+                    <span>|</span>
+                    <span>© 2026 Kolocrug</span>
                 </div>
             </div>
 
-            <div class="footer">
-                <a href="#" id="logout-link">🚪 Сменить имя</a>
-            </div>
-            
-            <!-- ===== ЮРИДИЧЕСКИЕ ССЫЛКИ (ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ) ===== -->
-            <div class="legal-links">
-                <a href="/legal.html">Политика конфиденциальности</a>
-                <span>|</span>
-                <a href="/legal.html">Пользовательское соглашение</a>
-                <span>|</span>
-                <span>© 2026 Kolocrug</span>
-            </div>
-        </div>
+            <div id="admin-block" class="hidden">
+                <h1>👑 Kolocrug Admin</h1>
+                <div class="greeting">
+                    <span id="admin-greeting"></span>
+                    <div class="admin-badge">⚡ Админ ⚡</div>
+                </div>
+                <div class="counter-container">
+                    <div class="online-counter">👑 Онлайн: <span id="admin-online-count">0</span></div>
+                </div>
 
-        <div id="admin-block" class="hidden">
-            <h1>👑 Kolocrug Admin</h1>
-            <div class="greeting">
-                <span id="admin-greeting"></span>
-                <div class="admin-badge">⚡ Админ ⚡</div>
-            </div>
-            <div class="counter-container">
-                <div class="online-counter">👑 Онлайн: <span id="admin-online-count">0</span></div>
-            </div>
+                <button class="admin-settings-button" id="adminSettingsButton">
+                    Настройки
+                </button>
 
-            <button class="admin-settings-button" id="adminSettingsButton">
-                Настройки
-            </button>
-
-            <div class="admin-tabs">
-                <div class="admin-tab active" data-tab="dashboard">📊 Дашборд</div>
-                <div class="admin-tab" data-tab="users">👥 Пользователи</div>
-                <div class="admin-tab" data-tab="stats">📈 Статистика</div>
-            </div>
-            <div class="admin-tab-content active" id="tab-dashboard">
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>👥 Онлайн</h3>
-                        <ul id="admin-online-list"></ul>
-                    </div>
-                    <div class="feature-card">
-                        <h3>📜 История поиска</h3>
-                        <div id="admin-history-list"></div>
-                    </div>
-                    <div class="feature-card">
-                        <h3>📊 Клики</h3>
-                        <div id="admin-click-stats"></div>
-                    </div>
-                    <div class="feature-card">
-                        <h3>📈 По часам</h3>
-                        <div id="admin-hourly-stats"></div>
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-tab="dashboard">📊 Дашборд</div>
+                    <div class="admin-tab" data-tab="users">👥 Пользователи</div>
+                    <div class="admin-tab" data-tab="stats">📈 Статистика</div>
+                </div>
+                <div class="admin-tab-content active" id="tab-dashboard">
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h3>👥 Онлайн</h3>
+                            <ul id="admin-online-list"></ul>
+                        </div>
+                        <div class="feature-card">
+                            <h3>📜 История поиска</h3>
+                            <div id="admin-history-list"></div>
+                        </div>
+                        <div class="feature-card">
+                            <h3>📊 Клики</h3>
+                            <div id="admin-click-stats"></div>
+                        </div>
+                        <div class="feature-card">
+                            <h3>📈 По часам</h3>
+                            <div id="admin-hourly-stats"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="admin-tab-content" id="tab-users">
-                <div class="feature-card">
-                    <h3>Все пользователи</h3>
-                    <div id="all-users-list"></div>
+                <div class="admin-tab-content" id="tab-users">
+                    <div class="feature-card">
+                        <h3>Все пользователи</h3>
+                        <div id="all-users-list"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="admin-tab-content" id="tab-stats">
-                <div class="feature-card">
-                    <h3>Общая статистика</h3>
-                    <div id="total-stats"></div>
+                <div class="admin-tab-content" id="tab-stats">
+                    <div class="feature-card">
+                        <h3>Общая статистика</h3>
+                        <div id="total-stats"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="search-form">
-                <input type="text" id="admin-search-input" placeholder="Поиск для админа">
-                <button id="admin-search-btn">Найти</button>
-            </div>
-            <iframe id="admin-iframe" class="results-frame" src="about:blank"></iframe>
-            <div class="footer">
-                <a href="#" id="admin-logout-link">🚪 Выйти</a>
-            </div>
-            
-            <!-- ===== ЮРИДИЧЕСКИЕ ССЫЛКИ ДЛЯ АДМИНОВ ===== -->
-            <div class="legal-links">
-                <a href="/legal.html">Политика конфиденциальности</a>
-                <span>|</span>
-                <a href="/legal.html">Пользовательское соглашение</a>
-                <span>|</span>
-                <span>© 2026 Kolocrug</span>
+                <div class="search-form">
+                    <input type="text" id="admin-search-input" placeholder="Поиск для админа">
+                    <button id="admin-search-btn">Найти</button>
+                </div>
+                <iframe id="admin-iframe" class="results-frame" src="about:blank"></iframe>
+                <div class="footer">
+                    <a href="#" id="admin-logout-link">🚪 Выйти</a>
+                </div>
+                
+                <!-- Юридические ссылки для админов -->
+                <div class="legal-links">
+                    <a href="/legal.html">Политика конфиденциальности</a>
+                    <span>|</span>
+                    <a href="/legal.html">Пользовательское соглашение</a>
+                    <span>|</span>
+                    <span>© 2026 Kolocrug</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1162,6 +1176,25 @@
         <span>⛶</span> На весь экран
     </div>
 
+    <!-- Баннер с политикой конфиденциальности (с чекбоксом и крестиком) -->
+    <div id="privacy-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px 30px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <div style="position: relative; width: 100%;">
+            <span onclick="handleCloseBanner()" style="position: absolute; top: -5px; right: 0; font-size: 24px; cursor: pointer; color: white; background: transparent; border: none;">&times;</span>
+            <p style="margin-bottom: 5px; font-size: 14px; max-width: 90%;">
+                ⚖️ Используя сайт, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
+                Мы собираем имя пользователя, IP-адрес и данные cookie для работы сайта. Данные не передаются третьим лицам.<br>
+                <span style="color: gold;">Владелец сайта: KacERORga_CoolKroog</span>
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <input type="checkbox" id="accept-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-size: 14px;">Я принимаю условия</span>
+            </label>
+            <button onclick="acceptPrivacy()" style="background: gold; border: none; padding: 8px 25px; border-radius: 40px; font-weight: bold; cursor: pointer;">Принять</button>
+        </div>
+    </div>
+
     <script>
         // ---------- Данные ----------
         const ADMIN_NAMES = ['KacERORga', 'Admin', 'Vlad', 'Masha', 'KacERORga_CoolKroog'];
@@ -1172,7 +1205,8 @@
             ACTIONS: 'krugle_actions',
             HOURLY: 'krugle_hourly',
             USER_SETTINGS: 'krugle_user_settings_',
-            MAINTENANCE: 'maintenance_mode'
+            MAINTENANCE: 'maintenance_mode',
+            PRIVACY_ACCEPTED: 'privacy_accepted' // для запоминания согласия
         };
 
         if (!localStorage.getItem(STORAGE_KEYS.USERS)) localStorage.setItem(STORAGE_KEYS.USERS, '{}');
@@ -1266,10 +1300,52 @@
 
         const maintenancePage = document.getElementById('maintenance-page');
 
+        // Элементы для блокировки интерфейса
+        const mainInterface = document.getElementById('main-interface');
+        const privacyBanner = document.getElementById('privacy-banner');
+        const acceptCheckbox = document.getElementById('accept-checkbox');
+
         let currentUser = null;
         let pingInterval = null;
         let currentImageUrl = null;
         let userSettings = {};
+
+        // Функция для управления блокировкой интерфейса
+        function setInterfaceBlocked(blocked) {
+            if (blocked) {
+                mainInterface.classList.add('blocked');
+            } else {
+                mainInterface.classList.remove('blocked');
+            }
+        }
+
+        // Проверка сохранённого согласия
+        if (localStorage.getItem(STORAGE_KEYS.PRIVACY_ACCEPTED) === 'true') {
+            privacyBanner.style.display = 'none';
+            setInterfaceBlocked(false);
+        } else {
+            setInterfaceBlocked(true);
+        }
+
+        function acceptPrivacy() {
+            if (acceptCheckbox && acceptCheckbox.checked) {
+                localStorage.setItem(STORAGE_KEYS.PRIVACY_ACCEPTED, 'true');
+                privacyBanner.style.display = 'none';
+                setInterfaceBlocked(false);
+            } else {
+                alert('Пожалуйста, отметьте галочку, чтобы принять политику конфиденциальности.');
+            }
+        }
+
+        function handleCloseBanner() {
+            if (acceptCheckbox && acceptCheckbox.checked) {
+                localStorage.setItem(STORAGE_KEYS.PRIVACY_ACCEPTED, 'true');
+                privacyBanner.style.display = 'none';
+                setInterfaceBlocked(false);
+            } else {
+                alert('Пожалуйста, сначала отметьте галочку, чтобы принять условия.');
+            }
+        }
 
         function checkMaintenanceMode() {
             const isMaintenance = localStorage.getItem(STORAGE_KEYS.MAINTENANCE) === 'true';
@@ -1385,13 +1461,12 @@
         });
         usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') enterBtn.click(); });
 
-        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ ПОИСКА (ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ) =====
+        // ===== ФУНКЦИЯ ПОИСКА (ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ) =====
         function searchInIframe(iframe, query) {
             if (!query.trim()) return;
             let searchUrl = userSettings.searchEngine === 'yandex' ? 'https://yandex.ru/search/?text=' + encodeURIComponent(query) :
                             userSettings.searchEngine === 'duckduckgo' ? 'https://duckduckgo.com/?q=' + encodeURIComponent(query) :
                             'https://www.google.com/search?q=' + encodeURIComponent(query);
-            // Открываем в новой вкладке вместо iframe
             window.open(searchUrl, '_blank');
         }
 
@@ -1670,46 +1745,6 @@
                 navigator.serviceWorker.register('/sw.js');
             });
         }
-    </script>
-
-    <!-- Баннер с политикой конфиденциальности (с чекбоксом и крестиком) -->
-    <div id="privacy-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px 30px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-        <div style="position: relative; width: 100%;">
-            <span onclick="handleCloseBanner()" style="position: absolute; top: -5px; right: 0; font-size: 24px; cursor: pointer; color: white; background: transparent; border: none;">&times;</span>
-            <p style="margin-bottom: 5px; font-size: 14px; max-width: 90%;">
-                ⚖️ Используя сайт, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
-                Мы собираем имя пользователя, IP-адрес и данные cookie для работы сайта. Данные не передаются третьим лицам.<br>
-                <span style="color: gold;">Владелец сайта: KacERORga_CoolKroog</span>
-            </p>
-        </div>
-        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
-            <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                <input type="checkbox" id="accept-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-                <span style="font-size: 14px;">Я принимаю условия</span>
-            </label>
-            <button onclick="acceptPrivacy()" style="background: gold; border: none; padding: 8px 25px; border-radius: 40px; font-weight: bold; cursor: pointer;">Принять</button>
-        </div>
-    </div>
-
-    <script>
-    // Функции для работы с баннером конфиденциальности
-    function acceptPrivacy() {
-        const checkbox = document.getElementById('accept-checkbox');
-        if (checkbox && checkbox.checked) {
-            document.getElementById('privacy-banner').style.display = 'none';
-        } else {
-            alert('Пожалуйста, отметьте галочку, чтобы принять политику конфиденциальности.');
-        }
-    }
-
-    function handleCloseBanner() {
-        const checkbox = document.getElementById('accept-checkbox');
-        if (checkbox && checkbox.checked) {
-            document.getElementById('privacy-banner').style.display = 'none';
-        } else {
-            alert('Пожалуйста, сначала отметьте галочку, чтобы принять условия.');
-        }
-    }
     </script>
 </body>
 </html>
