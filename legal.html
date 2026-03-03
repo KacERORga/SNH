@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolocrug — Юридическая информация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 56px;
+            padding: 40px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+            border: 2px solid gold;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            color: #1a2b3c;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #1e4d7c;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed gold;
+            padding-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: rgba(255,255,255,0.5);
+            border: 2px solid transparent;
+            padding: 12px 30px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1a2b3c;
+        }
+
+        .tab:hover {
+            background: rgba(255,215,0,0.2);
+            border-color: gold;
+        }
+
+        .tab.active {
+            background: gold;
+            border-color: #b8860b;
+            color: #1a2b3c;
+        }
+
+        .content {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .content.hidden {
+            display: none;
+        }
+
+        h2 {
+            color: #1e4d7c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid gold;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #1a2b3c;
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+        }
+
+        p {
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin: 15px 0 25px 25px;
+            color: #2c3e50;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        strong {
+            color: #1e4d7c;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #1e4d7c;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .back-button:hover {
+            background: #2a6fa5;
+            transform: translateY(-2px);
+        }
+
+        .last-updated {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed gold;
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2rem; }
+            .tab { padding: 8px 20px; font-size: 1rem; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚖️ Kolocrug</h1>
+        <div class="subtitle">Юридическая информация</div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('privacy')">Политика конфиденциальности</button>
+            <button class="tab" onclick="showTab('agreement')">Пользовательское соглашение</button>
+        </div>
+
+        <!-- ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ -->
+        <div id="privacy-content" class="content">
+            <h2>Политика конфиденциальности</h2>
+            <p>Настоящая Политика конфиденциальности разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок обработки и защиты информации о пользователях сайта Kolocrug [citation:1].</p>
+            
+            <h3>1. Общие положения</h3>
+            <p>1.1. Используя Сайт, вы даете согласие на сбор и обработку ваших данных в соответствии с настоящей Политикой [citation:5].</p>
+            <p>1.2. Администрация Сайта вправе вносить изменения в Политику. Новая редакция вступает в силу с момента публикации [citation:3].</p>
+            
+            <h3>2. Какие данные мы собираем</h3>
+            <p>При использовании Сайта мы можем собирать следующую информацию [citation:3]:</p>
+            <ul>
+                <li><strong>Имя пользователя</strong> — которое вы указываете при входе;</li>
+                <li><strong>IP-адрес</strong> — автоматически фиксируется сервером;</li>
+                <li><strong>Cookie-файлы</strong> — для сохранения настроек и улучшения работы;</li>
+                <li><strong>Историю поиска</strong> — если вы не отключили эту опцию в настройках;</li>
+                <li><strong>Данные о действиях</strong> — клики по быстрым ссылкам, время на сайте [citation:5].</li>
+            </ul>
+            
+            <h3>3. Цели обработки данных</h3>
+            <ul>
+                <li>Обеспечение работы Сайта (вход в систему, сохранение настроек);</li>
+                <li>Улучшение пользовательского опыта;</li>
+                <li>Сбор статистики посещаемости;</li>
+                <li>Предотвращение мошенничества и обеспечение безопасности [citation:1].</li>
+            </ul>
+            
+            <h3>4. Правовые основания обработки</h3>
+            <p>Обработка данных осуществляется на основании ст. 6 Федерального закона № 152-ФЗ, а именно: согласие пользователя, исполнение договора, законные интересы оператора [citation:5].</p>
+            
+            <h3>5. Передача данных третьим лицам</h3>
+            <p>Мы не передаем персональные данные третьим лицам, за исключением случаев, предусмотренных законодательством РФ. Технические данные могут обрабатываться хостинг-провайдером Vercel Inc. [citation:7].</p>
+            
+            <h3>6. Защита данных</h3>
+            <p>Мы принимаем все необходимые организационные и технические меры для защиты персональных данных от несанкционированного доступа, уничтожения, изменения или распространения [citation:1].</p>
+            
+            <h3>7. Cookie-файлы</h3>
+            <p>Сайт использует cookie-файлы для сохранения ваших настроек. Продолжая использовать Сайт, вы соглашаетесь с их применением. Вы можете отключить cookies в настройках браузера [citation:3][citation:5].</p>
+            
+            <h3>8. Ваши права</h3>
+            <p>Вы имеете право на получение информации о хранящихся данных, требовать их удаления, отозвать согласие на обработку [citation:7].</p>
+            
+            <h3>9. Срок хранения данных</h3>
+            <p>Данные хранятся до момента, пока вы не очистите localStorage браузера. Технические логи на сервере хранятся не более 30 дней [citation:1].</p>
+            
+            <h3>10. Контактная информация</h3>
+            <p><strong>Владелец сайта:</strong> KacERORga_CoolKroog</p>
+            
+            <div class="last-updated">Последнее обновление: 4 марта 2026 г.</div>
+        </div>
+
+        <!-- ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ -->
+        <div id="agreement-content" class="content hidden">
+            <h2>Пользовательское соглашение</h2>
+            <p>Настоящее Соглашение является публичной офертой. Используя сайт Kolocrug, вы принимаете его условия [citation:2].</p>
+            
+            <h3>1. Общие положения</h3>
+            <p>1.1. Настоящее Соглашение регулирует отношения между Администрацией сайта и Пользователем [citation:4].</p>
+            <p>1.2. Использование Сайта означает полное и безоговорочное принятие условий Соглашения [citation:6].</p>
+            <p>1.3. Администрация вправе вносить изменения в Соглашение без уведомления Пользователя [citation:8].</p>
+            
+            <h3>2. Предмет соглашения</h3>
+            <p>Предоставление доступа к функционалу Сайта: поиск, новостная лента, нейросеть для генерации изображений, ИИ-помощник, админ-панель [citation:4].</p>
+            
+            <h3>3. Обязанности пользователя</h3>
+            <ul>
+                <li>Не использовать Сайт для распространения запрещенной информации [citation:6];</li>
+                <li>Не пытаться взломать или повредить работоспособность Сайта [citation:8];</li>
+                <li>Не использовать скрипты и ботов для автоматического доступа [citation:2];</li>
+                <li>Не загружать вредоносное ПО через генератор изображений.</li>
+            </ul>
+            
+            <h3>4. Права администрации</h3>
+            <ul>
+                <li>Изменять дизайн и функционал Сайта без предварительного уведомления [citation:4];</li>
+                <li>Ограничивать доступ при нарушении условий [citation:8];</li>
+                <li>Проводить технические работы с временным приостановлением доступа.</li>
+            </ul>
+            
+            <h3>5. Интеллектуальная собственность</h3>
+            <p>Весь контент Сайта является объектом авторского права. Использование материалов без согласия администрации запрещено. При цитировании ссылка на Сайт обязательна [citation:6].</p>
+            
+            <h3>6. Ответственность</h3>
+            <p>Администрация не несет ответственности за содержание внешних ссылок и временную недоступность Сайта [citation:6].</p>
+            
+            <h3>7. Реквизиты</h3>
+            <p><strong>Владелец сайта:</strong> KacERORga_CoolKroog</p>
+            
+            <div class="last-updated">Последнее обновление: 4 марта 2026 г.</div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-button">
+                <span>←</span> Вернуться на Kolocrug
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.content');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.add('hidden'));
+            
+            if (tab === 'privacy') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('privacy-content').classList.remove('hidden');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('agreement-content').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
