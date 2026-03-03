@@ -44,6 +44,39 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold; }
+            50% { box-shadow: 0 0 20px gold, 0 0 30px gold, 0 0 40px gold; }
+            100% { box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #8f00ff; }
+            100% { color: #ff0000; }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -66,6 +99,7 @@
             max-width: 1200px;
             background: rgba(255,255,255,0.6);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 56px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -79,37 +113,112 @@
             border-color: rgba(255,215,0,0.2);
         }
 
-        /* ВСЕ КНОПКИ И КЛИКАБЕЛЬНЫЕ ЭЛЕМЕНТЫ — ИСПРАВЛЕНЫ */
+        /* ===== СТИЛИ ДЛЯ ВСЕХ КНОПОК ===== */
         button, .quick-link, .settings-button, .theme-toggle, .admin-tab,
         .feature-card button, .ai-button, #next-btn, #enter-btn,
         #logout-link, #admin-logout-link, #settingsButton, #adminSettingsButton,
         #saveSettingsBtn, #applyMaintenanceBtn, #clearAllUsers, #clearSearchHistory,
         #clearClickStats, #clearAllData, #saveAdminSettingsBtn, .admin-settings-button,
         .settings-close, .name-example, .news-card, .admin-badge, .online-counter,
-        .footer a {
+        .footer a, .chat-toggle, #chatSend {
             pointer-events: auto !important;
             cursor: pointer !important;
             position: relative;
             z-index: 100;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            outline: none;
         }
 
+        button:hover, .quick-link:hover, .settings-button:hover, .theme-toggle:hover,
+        .admin-tab:hover, .ai-button:hover, #next-btn:hover, #enter-btn:hover,
+        .footer a:hover, .chat-toggle:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active, .quick-link:active, .settings-button:active, .theme-toggle:active,
+        .admin-tab:active, .ai-button:active, #next-btn:active, #enter-btn:active,
+        .chat-toggle:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* ===== КНОПКА НАСТРОЕК (ОБЩАЯ) ===== */
         .settings-button {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.8);
+            background: linear-gradient(135deg, #1e4d7c, #2a6fa5);
+            color: white;
             border-radius: 50px;
             padding: 10px 20px;
-            font-size: 1.2rem;
-            transition: all 0.2s;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(30,77,124,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .settings-button:hover {
-            background: rgba(255,255,255,0.8);
-            transform: scale(1.05);
+        .settings-button::before {
+            content: "⚙️";
+            font-size: 1.2rem;
         }
 
+        /* ===== КНОПКА АДМИН-НАСТРОЕК ===== */
+        .admin-settings-button {
+            background: linear-gradient(135deg, #b8860b, #ffd700);
+            color: #1a2b3c;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .admin-settings-button::before {
+            content: "⚙️";
+            font-size: 1rem;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        }
+        .admin-settings-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        .admin-settings-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 18px rgba(255,215,0,0.5);
+        }
+        .admin-settings-button:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* ===== ПАНЕЛИ НАСТРОЕК ===== */
         .settings-panel {
             position: fixed;
             top: 50%;
@@ -117,15 +226,45 @@
             transform: translate(-50%, -50%);
             width: 90%;
             max-width: 600px;
-            background: rgba(255,255,255,0.8);
+            max-height: 80vh;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(30px);
             border-radius: 40px;
             padding: 30px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 2px solid gold;
             z-index: 1000;
             display: none;
+            animation: slideIn 0.3s ease;
         }
-        .settings-panel.show { display: block; }
+        .settings-panel.show {
+            display: block;
+        }
+        body.dark .settings-panel {
+            background: rgba(30,35,45,0.95);
+            color: white;
+        }
+
+        .settings-close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1a2b3c;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.05);
+        }
+        .settings-close:hover {
+            background: rgba(255,0,0,0.2);
+            transform: rotate(90deg);
+        }
 
         h1 {
             font-size: 4rem;
@@ -134,7 +273,10 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
             animation: fadeSlideUp 0.6s ease-out;
         }
-        body.dark h1 { color: gold; }
+        body.dark h1 {
+            color: gold;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+        }
 
         .greeting {
             font-size: 1.4rem;
@@ -144,12 +286,32 @@
             border-bottom: 1px solid rgba(0,0,0,0.1);
             padding-bottom: 15px;
         }
+        body.dark .greeting {
+            color: #ddd;
+        }
         .greeting span {
             font-weight: 600;
             color: #1e4d7c;
             background: rgba(30,77,124,0.1);
             padding: 4px 12px;
             border-radius: 40px;
+        }
+        body.dark .greeting span {
+            background: rgba(255,215,0,0.2);
+            color: gold;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, gold, orange);
+            color: #1a2b3c;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 4px 0 #b8860b;
+            border: 1px solid white;
+            animation: bounce 2s infinite;
         }
 
         .online-counter {
@@ -163,6 +325,7 @@
             align-items: center;
             gap: 10px;
             font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
         .online-counter span {
             background: rgba(30,77,124,0.8);
@@ -171,6 +334,10 @@
             border-radius: 40px;
             font-weight: 700;
             animation: pulse 2s infinite;
+        }
+        body.dark .online-counter span {
+            background: gold;
+            color: #1a2b3c;
         }
 
         .search-form {
@@ -186,24 +353,23 @@
             background: rgba(255,255,255,0.7);
             backdrop-filter: blur(10px);
             font-size: 1.1rem;
+            transition: all 0.2s;
         }
         .search-form input:focus {
             background: rgba(255,255,255,0.9);
             transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(255,215,0,0.3);
         }
         .search-form button {
             padding: 0 32px;
-            background: rgba(30,77,124,0.8);
+            background: linear-gradient(135deg, #1e4d7c, #2a6fa5);
             color: white;
             border: none;
             border-radius: 60px;
             font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        .search-form button:hover {
-            background: rgba(30,77,124,1);
-            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(30,77,124,0.3);
         }
 
         .quick-links {
@@ -224,11 +390,18 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            font-weight: 500;
         }
         .quick-link:hover {
             background: rgba(255,255,255,0.8);
             transform: translateY(-3px);
+            border-color: gold;
+        }
+        body.dark .quick-link {
+            background: rgba(0,0,0,0.3);
+            color: gold;
+            border-color: rgba(255,215,0,0.3);
         }
 
         .results-frame {
@@ -238,9 +411,25 @@
             border-radius: 30px;
             background: rgba(255,255,255,0.9);
             margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .results-frame:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
 
         .news-section, .ai-section { margin: 30px 0; }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #1a2b3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.dark .section-title { color: gold; }
+
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
@@ -253,8 +442,60 @@
             border-radius: 30px;
             padding: 20px;
             transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .news-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.5); }
+        .news-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.5);
+            border-color: gold;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 0.85rem;
+        }
+        
+        .admin-badge-small {
+            background: gold;
+            color: #1a2b3c;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .news-source {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            padding-top: 8px;
+            border-top: 1px dashed #ccc;
+        }
+        body.dark .news-source {
+            color: #aaa;
+            border-top-color: #444;
+        }
+        
+        .news-source a {
+            color: #1e4d7c;
+            text-decoration: none;
+        }
+        body.dark .news-source a {
+            color: gold;
+        }
+        
+        .news-source a:hover {
+            text-decoration: underline;
+        }
 
         .ai-grid {
             display: grid;
@@ -319,6 +560,34 @@
             text-decoration: none;
             margin: 0 15px;
             font-weight: 500;
+            display: inline-block;
+        }
+        body.dark .footer a { color: gold; }
+
+        /* ===== НОВЫЙ БЛОК С ЮРИДИЧЕСКИМИ ССЫЛКАМИ ===== */
+        .legal-links {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255,215,0,0.3);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .legal-links a {
+            color: #1e4d7c;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.2s;
+        }
+        body.dark .legal-links a {
+            color: gold;
+        }
+        .legal-links a:hover {
+            text-decoration: underline;
+            color: gold;
+        }
+        .legal-links span {
+            color: #4a6f8c;
+            margin: 0 5px;
         }
 
         .theme-toggle {
@@ -329,9 +598,16 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 50px;
-            padding: 10px 20px;
+            padding: 8px 16px;
             cursor: pointer;
             z-index: 100;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        body.dark .theme-toggle {
+            background: rgba(0,0,0,0.3);
+            color: gold;
+            border-color: gold;
         }
 
         /* Админка */
@@ -344,11 +620,22 @@
         .admin-tab {
             background: rgba(255,255,255,0.3);
             border: 1px solid rgba(255,255,255,0.5);
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 40px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.95rem;
         }
-        .admin-tab.active { background: gold; color: #1a2b3c; }
+        .admin-tab.active {
+            background: gold;
+            color: #1a2b3c;
+            border-color: gold;
+            transform: scale(1.05);
+        }
+        .admin-tab:hover {
+            background: rgba(255,215,0,0.3);
+        }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
@@ -363,6 +650,11 @@
             border: 1px solid rgba(255,255,255,0.5);
             border-radius: 40px;
             padding: 20px;
+            transition: all 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: gold;
         }
 
         #maintenance-page {
@@ -386,6 +678,198 @@
         }
 
         .hidden { display: none !important; }
+
+        /* ===== СТИЛИ ДЛЯ AI ЧАТА ===== */
+        #ai-chat-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chat-toggle {
+            background: rgba(255, 215, 0, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1rem;
+            color: #1a2b3c;
+            transition: all 0.3s;
+        }
+        .chat-toggle:hover {
+            background: rgba(255, 215, 0, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,215,0,0.3);
+        }
+        .chat-toggle:active {
+            transform: translateY(2px) scale(0.98);
+        }
+        
+        #ai-chat-window {
+            display: none;
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 320px;
+            height: 450px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 2px solid gold;
+            flex-direction: column;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        body.dark #ai-chat-window {
+            background: rgba(30,35,45,0.95);
+            color: white;
+        }
+        
+        .chat-header {
+            background: gold;
+            padding: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #1a2b3c;
+        }
+        
+        .chat-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #1a2b3c;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .chat-close:hover {
+            background: rgba(255,0,0,0.2);
+            transform: rotate(90deg);
+        }
+        
+        #ai-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            animation: fadeScale 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: #1e4d7c;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message.assistant {
+            align-self: flex-start;
+            background: gold;
+            color: #1a2b3c;
+            border-bottom-left-radius: 4px;
+        }
+        .message.system {
+            align-self: center;
+            background: #e5e5ea;
+            color: #666;
+            font-style: italic;
+            max-width: 90%;
+            font-size: 0.85rem;
+        }
+        body.dark .message.system {
+            background: #3a3f4b;
+            color: #ccc;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 14px;
+            background: #e5e5ea;
+            border-radius: 18px;
+            width: fit-content;
+            align-self: flex-start;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-5px); opacity: 1; }
+        }
+        
+        .chat-input-area {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+            background: rgba(255,255,255,0.8);
+        }
+        body.dark .chat-input-area {
+            background: rgba(30,35,45,0.8);
+            border-color: #444;
+        }
+        
+        #ai-input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        body.dark #ai-input {
+            background: #2a2f3c;
+            border-color: #555;
+            color: white;
+        }
+        
+        #chatSend {
+            width: 36px;
+            height: 36px;
+            margin-left: 8px;
+            background: gold;
+            border: none;
+            border-radius: 50%;
+            color: #1a2b3c;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chatSend:hover {
+            transform: scale(1.1) rotate(15deg);
+            background: #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -397,27 +881,66 @@
         <h2>⚙️ Настройки</h2>
         <div class="settings-group">
             <h3>🎨 Внешний вид</h3>
-            <div class="setting-item"><label>Тема</label><select id="user-theme"><option value="light">Светлая</option><option value="dark">Тёмная</option><option value="system">Как в системе</option></select></div>
-            <div class="setting-item"><label>Размер шрифта</label><select id="font-size"><option value="small">Мелкий</option><option value="medium" selected>Средний</option><option value="large">Крупный</option></select></div>
+            <div class="setting-item">
+                <label>Тема</label>
+                <select id="user-theme">
+                    <option value="light">Светлая</option>
+                    <option value="dark">Тёмная</option>
+                    <option value="system">Как в системе</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label>Размер шрифта</label>
+                <select id="font-size">
+                    <option value="small">Мелкий</option>
+                    <option value="medium" selected>Средний</option>
+                    <option value="large">Крупный</option>
+                </select>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🔔 Уведомления</h3>
-            <div class="setting-item"><label>Звук</label><input type="checkbox" id="user-sound" checked></div>
-            <div class="setting-item"><label>Всплывающие</label><input type="checkbox" id="user-popup" checked></div>
+            <div class="setting-item">
+                <label>Звук</label>
+                <input type="checkbox" id="user-sound" checked>
+            </div>
+            <div class="setting-item">
+                <label>Всплывающие</label>
+                <input type="checkbox" id="user-popup" checked>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🌐 Поиск</h3>
-            <div class="setting-item"><label>Поисковик</label><select id="search-engine"><option value="google">Google</option><option value="yandex">Яндекс</option><option value="duckduckgo">DuckDuckGo</option></select></div>
-            <div class="setting-item"><label>Сохранять историю</label><input type="checkbox" id="save-search-history" checked></div>
+            <div class="setting-item">
+                <label>Поисковик</label>
+                <select id="search-engine">
+                    <option value="google">Google</option>
+                    <option value="yandex">Яндекс</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label>Сохранять историю</label>
+                <input type="checkbox" id="save-search-history" checked>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🖼️ Контент</h3>
-            <div class="setting-item"><label>Показывать новости</label><input type="checkbox" id="show-news" checked></div>
-            <div class="setting-item"><label>Показывать нейросеть</label><input type="checkbox" id="show-ai" checked></div>
+            <div class="setting-item">
+                <label>Показывать новости</label>
+                <input type="checkbox" id="show-news" checked>
+            </div>
+            <div class="setting-item">
+                <label>Показывать нейросеть</label>
+                <input type="checkbox" id="show-ai" checked>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🔐 Приватность</h3>
-            <div class="setting-item"><label>Скрывать имя из онлайн</label><input type="checkbox" id="hide-name-online"></div>
+            <div class="setting-item">
+                <label>Скрывать имя из онлайн</label>
+                <input type="checkbox" id="hide-name-online">
+            </div>
         </div>
         <button id="saveSettingsBtn" style="width:100%; padding:15px; background:gold; border:none; border-radius:40px; font-weight:bold;">Сохранить настройки</button>
     </div>
@@ -427,17 +950,32 @@
         <h2>⚙️ Админ-настройки</h2>
         <div class="settings-group">
             <h3>👥 Управление пользователями</h3>
-            <div class="setting-item"><label>Очистить всех пользователей</label><button id="clearAllUsers">Очистить</button></div>
+            <div class="setting-item">
+                <label>Очистить всех пользователей</label>
+                <button id="clearAllUsers">Очистить</button>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🗑️ Очистка данных</h3>
-            <div class="setting-item"><label>Очистить историю поиска</label><button id="clearSearchHistory">Очистить</button></div>
-            <div class="setting-item"><label>Очистить статистику кликов</label><button id="clearClickStats">Очистить</button></div>
-            <div class="setting-item"><label>Очистить все данные</label><button id="clearAllData">Очистить всё</button></div>
+            <div class="setting-item">
+                <label>Очистить историю поиска</label>
+                <button id="clearSearchHistory">Очистить</button>
+            </div>
+            <div class="setting-item">
+                <label>Очистить статистику кликов</label>
+                <button id="clearClickStats">Очистить</button>
+            </div>
+            <div class="setting-item">
+                <label>Очистить все данные</label>
+                <button id="clearAllData">Очистить всё</button>
+            </div>
         </div>
         <div class="settings-group">
             <h3>🔧 Режим обслуживания</h3>
-            <div class="setting-item"><label>Включить</label><input type="checkbox" id="maintenance-mode"></div>
+            <div class="setting-item">
+                <label>Включить</label>
+                <input type="checkbox" id="maintenance-mode">
+            </div>
             <button id="applyMaintenanceBtn" style="background:gold; border:none; border-radius:40px; padding:8px 16px;">Применить</button>
         </div>
         <button id="saveAdminSettingsBtn" style="width:100%; padding:15px; background:gold; border:none; border-radius:40px;">Применить</button>
@@ -452,7 +990,7 @@
     </div>
 
     <div class="container" id="app">
-        <button class="settings-button" id="settingsButton">⚙️ Настройки</button>
+        <button class="settings-button" id="settingsButton"></button>
 
         <div id="welcome-block" class="welcome-screen">
             <h2>👋 Привет!</h2>
@@ -469,7 +1007,9 @@
         <div id="search-block" class="hidden">
             <h1>🔍 Kolocrug</h1>
             <div class="greeting" id="greeting"></div>
-            <div class="counter-container"><div class="online-counter">👥 Сейчас на сайте: <span id="online-count">0</span></div></div>
+            <div class="counter-container">
+                <div class="online-counter">👥 Сейчас на сайте: <span id="online-count">0</span></div>
+            </div>
             <div class="search-form">
                 <input type="text" id="search-input" placeholder="Что ищем?" autofocus>
                 <button id="search-btn">Найти</button>
@@ -503,14 +1043,34 @@
                 </div>
             </div>
 
-            <div class="footer"><a href="#" id="logout-link">🚪 Сменить имя</a></div>
+            <div class="footer">
+                <a href="#" id="logout-link">🚪 Сменить имя</a>
+            </div>
+            
+            <!-- ===== ЮРИДИЧЕСКИЕ ССЫЛКИ (НОВЫЕ) ===== -->
+            <div class="legal-links">
+                <a href="/legal.html">Политика конфиденциальности</a>
+                <span>|</span>
+                <a href="/legal.html">Пользовательское соглашение</a>
+                <span>|</span>
+                <span>© 2026 Kolocrug</span>
+            </div>
         </div>
 
         <div id="admin-block" class="hidden">
             <h1>👑 Kolocrug Admin</h1>
-            <div class="greeting"><span id="admin-greeting"></span><div class="admin-badge">⚡ Админ ⚡</div></div>
-            <div class="counter-container"><div class="online-counter">👑 Онлайн: <span id="admin-online-count">0</span></div></div>
-            <button class="admin-settings-button" id="adminSettingsButton">⚙️ Админ-настройки</button>
+            <div class="greeting">
+                <span id="admin-greeting"></span>
+                <div class="admin-badge">⚡ Админ ⚡</div>
+            </div>
+            <div class="counter-container">
+                <div class="online-counter">👑 Онлайн: <span id="admin-online-count">0</span></div>
+            </div>
+
+            <button class="admin-settings-button" id="adminSettingsButton">
+                Настройки
+            </button>
+
             <div class="admin-tabs">
                 <div class="admin-tab active" data-tab="dashboard">📊 Дашборд</div>
                 <div class="admin-tab" data-tab="users">👥 Пользователи</div>
@@ -518,31 +1078,69 @@
             </div>
             <div class="admin-tab-content active" id="tab-dashboard">
                 <div class="features-grid">
-                    <div class="feature-card"><h3>👥 Онлайн</h3><ul id="admin-online-list"></ul></div>
-                    <div class="feature-card"><h3>📜 История поиска</h3><div id="admin-history-list"></div></div>
-                    <div class="feature-card"><h3>📊 Клики</h3><div id="admin-click-stats"></div></div>
-                    <div class="feature-card"><h3>📈 По часам</h3><div id="admin-hourly-stats"></div></div>
+                    <div class="feature-card">
+                        <h3>👥 Онлайн</h3>
+                        <ul id="admin-online-list"></ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📜 История поиска</h3>
+                        <div id="admin-history-list"></div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 Клики</h3>
+                        <div id="admin-click-stats"></div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📈 По часам</h3>
+                        <div id="admin-hourly-stats"></div>
+                    </div>
                 </div>
             </div>
-            <div class="admin-tab-content" id="tab-users"><div class="feature-card"><h3>Все пользователи</h3><div id="all-users-list"></div></div></div>
-            <div class="admin-tab-content" id="tab-stats"><div class="feature-card"><h3>Общая статистика</h3><div id="total-stats"></div></div></div>
+            <div class="admin-tab-content" id="tab-users">
+                <div class="feature-card">
+                    <h3>Все пользователи</h3>
+                    <div id="all-users-list"></div>
+                </div>
+            </div>
+            <div class="admin-tab-content" id="tab-stats">
+                <div class="feature-card">
+                    <h3>Общая статистика</h3>
+                    <div id="total-stats"></div>
+                </div>
+            </div>
             <div class="search-form">
                 <input type="text" id="admin-search-input" placeholder="Поиск для админа">
                 <button id="admin-search-btn">Найти</button>
             </div>
             <iframe id="admin-iframe" class="results-frame" src="about:blank"></iframe>
-            <div class="footer"><a href="#" id="admin-logout-link">🚪 Выйти</a></div>
+            <div class="footer">
+                <a href="#" id="admin-logout-link">🚪 Выйти</a>
+            </div>
         </div>
     </div>
 
-    <!-- Регистрация сервис-воркера для PWA -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
-            });
-        }
-    </script>
+    <!-- ===== ЧАТ С ВЕСЁЛЫМ ИИ ===== -->
+    <div id="ai-chat-button">
+        <button class="chat-toggle" onclick="toggleAIChat()">
+            <span>🧠</span> Kolocrug AI
+        </button>
+        
+        <div id="ai-chat-window">
+            <div class="chat-header">
+                <span>🧠 Kolocrug AI</span>
+                <button class="chat-close" onclick="toggleAIChat()">×</button>
+            </div>
+            <div id="ai-messages">
+                <div class="message system">
+                    Привет! Я Kolocrug AI — твой помощник. Спрашивай что хочешь. Я всегда указываю источники информации.
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="ai-input" placeholder="Задай вопрос..." autocomplete="off">
+                <button id="chatSend" onclick="sendAIMessage()">➤</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // ---------- Данные ----------
@@ -839,11 +1437,73 @@
                 if (data.items && data.items.length > 0) {
                     let html = '';
                     data.items.slice(0, 6).forEach(item => {
-                        html += `<div class="news-card" onclick="window.open('${item.link}','_blank')"><h3>${item.title}</h3><p>${item.description?.substring(0,100)||''}...</p><small>${new Date(item.pubDate).toLocaleDateString()}</small></div>`;
+                        html += `
+                            <div class="news-card" onclick="window.open('${item.link}','_blank')">
+                                <h3>${item.title}</h3>
+                                <p>${item.description?.substring(0,100) || ''}...</p>
+                                <div class="news-meta">
+                                    <small>${new Date(item.pubDate).toLocaleDateString()}</small>
+                                </div>
+                                <div class="news-source">
+                                    Источник: <a href="${item.link}" target="_blank">${item.source || new URL(item.link).hostname}</a>
+                                </div>
+                            </div>
+                        `;
                     });
                     newsGrid.innerHTML = html;
-                } else newsGrid.innerHTML = 'Не удалось загрузить новости';
-            } catch { newsGrid.innerHTML = 'Ошибка загрузки новостей'; }
+                } else {
+                    showDemoNews();
+                }
+            } catch {
+                showDemoNews();
+            }
+        }
+
+        function showDemoNews() {
+            const demoNews = [
+                {
+                    title: "Kolocrug AI обновился!",
+                    description: "Теперь нейросеть стала умнее и всегда указывает источники информации",
+                    sourceName: "Блог Kolocrug",
+                    sourceUrl: "#",
+                    date: new Date().toISOString(),
+                    isAdminNews: true
+                },
+                {
+                    title: "Как указывать источники по закону",
+                    description: "Разбираем правила цитирования и указания авторов",
+                    sourceName: "Центр защиты прав СМИ",
+                    sourceUrl: "https://mmdc.ru/blog/2025/03/21/mozhno-li-kopirovat-chuzhie-teksty/",
+                    date: new Date().toISOString(),
+                    isAdminNews: false
+                },
+                {
+                    title: "Новости от администрации",
+                    description: "Планы по развитию Kolocrug на следующий месяц",
+                    sourceName: "Администрация Kolocrug",
+                    sourceUrl: "#",
+                    date: new Date().toISOString(),
+                    isAdminNews: true
+                }
+            ];
+            
+            let html = '';
+            demoNews.forEach(item => {
+                html += `
+                    <div class="news-card" onclick="window.open('${item.sourceUrl}','_blank')">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="news-meta">
+                            <small>${new Date(item.date).toLocaleDateString()}</small>
+                            ${item.isAdminNews ? '<span class="admin-badge-small">👑 Админка</span>' : ''}
+                        </div>
+                        <div class="news-source">
+                            Источник: <a href="${item.sourceUrl}" target="_blank">${item.sourceName}</a>
+                        </div>
+                    </div>
+                `;
+            });
+            newsGrid.innerHTML = html;
         }
 
         async function generateImage(prompt, container, placeholder) {
@@ -903,6 +1563,67 @@
         }, 5000);
 
         checkMaintenanceMode();
+
+        // ===== СКРИПТ ДЛЯ AI ЧАТА =====
+        let chatVisible = false;
+        window.toggleAIChat = function() {
+            const window = document.getElementById('ai-chat-window');
+            chatVisible = !chatVisible;
+            window.style.display = chatVisible ? 'flex' : 'none';
+        }
+
+        window.sendAIMessage = async function() {
+            const input = document.getElementById('ai-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messagesDiv = document.getElementById('ai-messages');
+            
+            // Сообщение пользователя
+            messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
+            input.value = '';
+
+            // Индикатор печатания
+            const typingId = 'typing-' + Date.now();
+            messagesDiv.innerHTML += `<div id="${typingId}" class="typing-indicator"><span></span><span></span><span></span></div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                // Запрос к Pollinations API
+                const response = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { 
+                                role: 'system', 
+                                content: 'Ты официальный ИИ-помощник браузера Kolocrug. Ты знаешь все его функции: поиск, новости, админку. Отвечай дружелюбно, но используй смайлики умеренно — не больше одного-двух за ответ. Если в твоём ответе используется информация из внешних источников (статьи, новости, исследования), обязательно указывай: "Источник: [название издания или сайт]" в конце ответа. Твоя задача — помогать пользователям, давать точную информацию и соблюдать авторские права.' 
+                            },
+                            { role: 'user', content: msg }
+                        ],
+                        model: 'openai'
+                    })
+                });
+                
+                const data = await response.text();
+                
+                document.getElementById(typingId)?.remove();
+                messagesDiv.innerHTML += `<div class="message assistant">${data}</div>`;
+            } catch (error) {
+                document.getElementById(typingId)?.remove();
+                messagesDiv.innerHTML += `<div class="message assistant" style="background:#f88; color:white;">Ошибка. Попробуй ещё раз.</div>`;
+            }
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+
+    <!-- Регистрация сервис-воркера для PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
     </script>
 </body>
-</html>
+                    </html>
