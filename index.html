@@ -1295,135 +1295,67 @@
         function loadUserSettings(username) {
             const saved = localStorage.getItem(STORAGE_KEYS.USER_SETTINGS + username);
             if (saved) userSettings = JSON.parse(saved);
-            else userSettings = { theme: '_SETTINGS + username);
-            if (saved) userSettings = JSON.parse(saved);
-            else userSettings = { theme: 'system', fontSize: 'medium', sound: true, popup:system', fontSize: 'medium', sound: true, popup: true, searchEngine: 'google', saveHistory: true, showNews: true, showAi true, searchEngine: 'google', saveHistory: true, showNews: true, showAi: true, hideName: false };
-            if (userTheme) userTheme.value = userSettings.theme;
-            if (fontSize) fontSize: true, hideName: false };
+            else userSettings = { theme: 'system', fontSize: 'medium', sound: true, popup: true, searchEngine: 'google', saveHistory: true, showNews: true, showAi: true, hideName: false };
             if (userTheme) userTheme.value = userSettings.theme;
             if (fontSize) fontSize.value = userSettings.fontSize;
-            if (.value = userSettings.fontSize;
-            if (userSounduserSound) userSound.checked = userSettings.sound;
-            if (userPopup) userPopup.checked = userSettings.popup;
-            if (searchEngine) searchEngine.value) userSound.checked = userSettings.sound;
+            if (userSound) userSound.checked = userSettings.sound;
             if (userPopup) userPopup.checked = userSettings.popup;
             if (searchEngine) searchEngine.value = userSettings.searchEngine;
             if (saveSearchHistory) saveSearchHistory.checked = userSettings.saveHistory;
-            if (showNews) showNews.checked = user = userSettings.searchEngine;
-            if (saveSearchHistory) saveSearchHistory.checked = userSettings.saveHistory;
             if (showNews) showNews.checked = userSettings.showNews;
-            if (showAi) showAi.checked = userSettings.showAi;
-            if (hideNameOnline) hideNameOnline.checked = userSettings.showNews;
             if (showAi) showAi.checked = userSettings.showAi;
             if (hideNameOnline) hideNameOnline.checked = userSettings.hideName;
         }
         function saveUserSettings() {
             userSettings = {
-                theme: userTheme.value, fontSize:Settings.hideName;
-        }
-        function saveUserSettings() {
-            userSettings = {
                 theme: userTheme.value, fontSize: fontSize.value, sound: userSound.checked,
                 popup: userPopup.checked, searchEngine: searchEngine.value,
- fontSize.value, sound: userSound.checked,
-                popup: userPopup.checked, searchEngine: searchEngine.value,
                 saveHistory: saveSearchHistory.checked, showNews: showNews.checked,
-                showAi: showAi.checked                saveHistory: saveSearchHistory.checked, showNews: showNews.checked,
-                showAi: showAi.checked, hide, hideName: hideNameOnline.checked
-            };
-            if (currentUser) localStorage.setItem(STORAGE_KEYS.USER_SETName: hideNameOnline.checked
+                showAi: showAi.checked, hideName: hideNameOnline.checked
             };
             if (currentUser) localStorage.setItem(STORAGE_KEYS.USER_SETTINGS + currentUser, JSON.stringify(userSettings));
-            applyUserSettings();
-            settingsPanel.classList.removeTINGS + currentUser, JSON.stringify(userSettings));
             applyUserSettings();
             settingsPanel.classList.remove('show');
         }
         function applyUserSettings() {
-            if (userSettings.theme === 'dark') document.body.classList.add('show');
-        }
-        function applyUserSettings() {
             if (userSettings.theme === 'dark') document.body.classList.add('dark');
-            else if (userSettings.theme === 'light') document('dark');
             else if (userSettings.theme === 'light') document.body.classList.remove('dark');
             else {
-                const isDark = window.matchMedia('(prefers-color-scheme:.body.classList.remove('dark');
-            else {
-                const isDark = window.matchMedia('(prefers-color-scheme: dark) dark)').matches;
-                if (isDark) document.body.classList.add('dark'); else document.body.classList.remove('dark');
-            }
-            const').matches;
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 if (isDark) document.body.classList.add('dark'); else document.body.classList.remove('dark');
             }
             const root = document.documentElement;
-            root.style.fontSize root = document.documentElement;
-            root.style.fontSize = userSettings.fontSize === 'small' ? '14px' : userSettings.fontSize === 'medium' ? '16 = userSettings.fontSize === 'small' ? '14px' : userSettings.fontSize === 'medium' ? '16px' : '18px';
-            document.getElementById('newsSection').style.displaypx' : '18px';
+            root.style.fontSize = userSettings.fontSize === 'small' ? '14px' : userSettings.fontSize === 'medium' ? '16px' : '18px';
             document.getElementById('newsSection').style.display = userSettings.showNews ? 'block' : 'none';
-            document.getElementById('aiSection').style.display = userSettings.showAi ? 'block' : = userSettings.showNews ? 'block' : 'none';
-            document.getElementById('aiSection').style.display = userSettings.showAi ? 'block 'none';
-        }
-
-        const savedName = localStorage.getItem('krugle_user');
-        if (s' : 'none';
+            document.getElementById('aiSection').style.display = userSettings.showAi ? 'block' : 'none';
         }
 
         const savedName = localStorage.getItem('krugle_user');
         if (savedName) {
             if (ADMIN_NAMES.includes(savedName)) showAdmin(savedName);
             else showSearch(savedName);
-avedName) {
-            if (ADMIN_NAMES.includes(savedName)) showAdmin(savedName);
-            else showSearch(savedName);
         } else showWelcome();
-
-        function showWelcome() {
-            welcomeBlock.classList.remove('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
-                   } else showWelcome();
 
         function showWelcome() {
             welcomeBlock.classList.remove('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
             settingsButton.style.display = 'none'; leave(); checkMaintenanceMode();
         }
         function showNameInput() {
-            welcomeBlock.classList.add('hidden'); settingsButton.style.display = 'none'; leave(); checkMaintenanceMode();
-        }
-        function showNameInput() {
             welcomeBlock.classList.add('hidden'); nameBlock.classList.remove('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
-            settingsButton.style.display = 'none'; usernameInput.focus nameBlock.classList.remove('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
             settingsButton.style.display = 'none'; usernameInput.focus();
-        }
-        function showSearch(name) {
-            welcomeBlock.classList.add('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList();
         }
         function showSearch(name) {
             welcomeBlock.classList.add('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.remove('hidden'); adminBlock.classList.add('hidden');
             settingsButton.style.display = 'block';
-            greeting.innerHTML = `С возвращением, <span.remove('hidden'); adminBlock.classList.add('hidden');
-            settingsButton.style.display = 'block';
             greeting.innerHTML = `С возвращением, <span>${name}</span>!`;
             searchInput.focus(); searchIframe.src = 'about:blank';
-            join>${name}</span>!`;
-            searchInput.focus(); searchIframe.src = 'about:blank';
-(name); loadUserSettings(name); loadNews();
-        }
-        function showAdmin(name) {
-            welcomeBlock.classList.add('hidden'); nameBlock.classList.add('            join(name); loadUserSettings(name); loadNews();
+            join(name); loadUserSettings(name); loadNews();
         }
         function showAdmin(name) {
             welcomeBlock.classList.add('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.remove('hidden');
-            settingsButton.style.display = 'nonehidden'); searchBlock.classList.add('hidden'); adminBlock.classList.remove('hidden');
             settingsButton.style.display = 'none';
             adminGreeting.innerHTML = `С возвращением, <span>${name}</span>!`;
-            adminSearchInput.f';
-            adminGreeting.innerHTML = `С возвращением, <span>${name}</span>!`;
             adminSearchInput.focus(); adminIframe.src = 'about:blank';
-            join(name); renderAdminFeatures();
-        }
-
-        function join(name) {
-            if (currentUser) leave();
-ocus(); adminIframe.src = 'about:blank';
             join(name); renderAdminFeatures();
         }
 
@@ -1432,236 +1364,114 @@ ocus(); adminIframe.src = 'about:blank';
             currentUser = name;
             updateUser(name);
             if (pingInterval) clearInterval(pingInterval);
-            pingInterval = setInterval(() => { if (            currentUser = name;
-            updateUser(name);
-            if (pingInterval) clearInterval(pingInterval);
             pingInterval = setInterval(() => { if (currentUser) updateUser(currentUser); }, 10000);
             updateHourly(new Date().getHours());
         }
-        function leavecurrentUser) updateUser(currentUser); }, 10000);
-            updateHourly(new Date().getHours());
-        }
         function leave() {
-() {
             if (currentUser) { removeUser(currentUser); currentUser = null; }
-            if (pingInterval) { clearInterval(pingInterval            if (currentUser) { removeUser(currentUser); currentUser = null; }
             if (pingInterval) { clearInterval(pingInterval); pingInterval = null; }
         }
 
         nextBtn.addEventListener('click', showNameInput);
-        enterBtn.addEventListener); pingInterval = null; }
-        }
-
-        nextBtn.addEventListener('click', showNameInput);
-        enterBtn.addEventListener('click('click', () => {
-            const name = usernameInput.value.trim();
-            if (name) {
-                if (localStorage.getItem(STORAGE', () => {
+        enterBtn.addEventListener('click', () => {
             const name = usernameInput.value.trim();
             if (name) {
                 if (localStorage.getItem(STORAGE_KEYS.MAINTENANCE) === 'true' && !ADMIN_NAMES.includes(name)) {
-_KEYS.MAINTENANCE) === 'true' && !ADMIN_NAMES.includes(name                    alert('🔧 Сайт на обслуживании'); return;
-                }
-                localStorage.setItem('krugle)) {
                     alert('🔧 Сайт на обслуживании'); return;
                 }
                 localStorage.setItem('krugle_user', name);
                 if (ADMIN_NAMES.includes(name)) showAdmin(name); else showSearch(name);
-_user', name);
-                if (ADMIN_NAMES.includes(name)) showAdmin(name); else showSearch            } else alert('Введите имя');
-        });
-        usernameInput.addEventListener('keypress', (e) => { if ((name);
             } else alert('Введите имя');
         });
         usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') enterBtn.click(); });
 
-        // ===== ИСПРАВЛЕННАЯe.key === 'Enter') enterBtn.click(); });
-
-        // ===== ИСПРАВЛЕННАЯ ФУ ФУНКЦИЯ ПОИСКА (ОТКРЫТНКЦИЯ ПОИСКА (ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ) =====
-        function searchInIframe(iframe,ИЕ В НОВОЙ ВКЛАДКЕ) =====
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ ПОИСКА (ОТКРЫТИЕ В НОВОЙ ВКЛАДКЕ) =====
         function searchInIframe(iframe, query) {
             if (!query.trim()) return;
-            let searchUrl = userSettings.searchEngine === 'yandex' query) {
-            if (!query.trim()) return;
             let searchUrl = userSettings.searchEngine === 'yandex' ? 'https://yandex.ru/search/?text=' + encodeURIComponent(query) :
-                            userSettings.searchEngine === 'duckduckgo' ? 'https://duckduck ? 'https://yandex.ru/search/?text=' + encodeURIComponent(query) :
-                            userSettings.searchEngine === 'duckduckgo' ? 'https://duckgo.com/?q=' + encodeURIComponent(query) :
-                            'https://www.google.com/search?q=' + encodeURIComponent(query);
-            // Открываем в новой вкладке вместо iframe
-           duckgo.com/?q=' + encodeURIComponent(query) :
+                            userSettings.searchEngine === 'duckduckgo' ? 'https://duckduckgo.com/?q=' + encodeURIComponent(query) :
                             'https://www.google.com/search?q=' + encodeURIComponent(query);
             // Открываем в новой вкладке вместо iframe
             window.open(searchUrl, '_blank');
         }
 
-        searchBtn.addEventListener('click', () => searchInIframe(searchIframe window.open(searchUrl, '_blank');
-        }
-
-        searchBtn.addEventListener('click', () => searchInIframe(searchIf, searchInput.value));
-        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchInIframerame, searchInput.value));
+        searchBtn.addEventListener('click', () => searchInIframe(searchIframe, searchInput.value));
         searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchInIframe(searchIframe, searchInput.value); });
-        adminSearchBtn.addEventListener('click', ()(searchIframe, searchInput.value); });
         adminSearchBtn.addEventListener('click', () => searchInIframe(adminIframe, adminSearchInput.value));
-        adminSearchInput.addEventListener('keypress', (e) => { if (e => searchInIframe(adminIframe, adminSearchInput.value));
         adminSearchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchInIframe(adminIframe, adminSearchInput.value); });
 
-        quickLinks.forEach(.key === 'Enter') searchInIframe(adminIframe, adminSearchInput.value); });
-
-        quicklink => {
-            link.addEventListener('click', function() {
-                const query = this.dataset.query;
-                if (!query) returnLinks.forEach(link => {
+        quickLinks.forEach(link => {
             link.addEventListener('click', function() {
                 const query = this.dataset.query;
                 if (!query) return;
                 if (this.innerText.includes('Погода')) incrementClickStat('погода');
-                else if (this;
-                if (this.innerText.includes('Погода')) incrementClickStat('погода');
-               .innerText.includes('Еда')) incrementClickStat('еда');
-                else if (this.innerText.includes('Майн else if (this.innerText.includes('Еда')) incrementClickStat('еда');
+                else if (this.innerText.includes('Еда')) incrementClickStat('еда');
                 else if (this.innerText.includes('Майнкрафт')) incrementClickStat('майнкрафт');
-                if (!adminBlock.classList.contains('hidden'))крафт')) incrementClickStat('майнкрафт');
-                if (!adminBlock.classList.contains(' searchInIframe(adminIframe, query);
-                else searchInIframe(searchIframe, query);
-           hidden')) searchInIframe(adminIframe, query);
+                if (!adminBlock.classList.contains('hidden')) searchInIframe(adminIframe, query);
                 else searchInIframe(searchIframe, query);
             });
         });
 
-        logoutLink.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('krugle_user });
-        });
-
-        logoutLink.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('krugle_user'); leave'); leave(); showWelcome(); });
-        adminLogoutLink.addEventListener('click', (e) => { e.preventDefault();(); showWelcome(); });
+        logoutLink.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('krugle_user'); leave(); showWelcome(); });
         adminLogoutLink.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('krugle_user'); leave(); showWelcome(); });
 
-        settingsButton.addEventListener('click', () => localStorage.removeItem('krugle_user'); leave(); showWelcome(); });
-
-        settingsButton.addEventListener('click', () => { load { loadUserSettings(currentUser); settingsPanel.classList.add('show'); });
-        settingsClose.addEventListener('UserSettings(currentUser); settingsPanel.classList.add('show'); });
+        settingsButton.addEventListener('click', () => { loadUserSettings(currentUser); settingsPanel.classList.add('show'); });
         settingsClose.addEventListener('click', () => settingsPanel.classList.remove('show'));
         saveSettingsBtn.addEventListener('click', saveUserSettings);
 
         if (adminSettingsButton) {
             adminSettingsButton.addEventListener('click', () => {
-                if (mainclick', () => settingsPanel.classList.remove('show'));
-        saveSettingsBtn.addEventListener('click', saveUserSettings);
-
-        if (adminSettingsButton) {
-            adminSettingsButton.addEventListener('click', () => {
                 if (maintenanceCheckbox) maintenanceCheckbox.checked = localStorage.getItem(STORAGE_KEYS.MAINTENANCE) === 'true';
-                adminSettingsPaneltenanceCheckbox) maintenanceCheckbox.checked = localStorage.getItem(STORAGE_KEYS.MAINTENANCE) === 'true';
                 adminSettingsPanel.classList.add('show');
             });
         }
-        adminSettingsClose.addEventListener('click', () => adminSettingsPanel.classList.remove.classList.add('show');
-            });
-        }
         adminSettingsClose.addEventListener('click', () => adminSettingsPanel.classList.remove('show'));
-        clearAllUsers.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.('show'));
         clearAllUsers.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.USERS, '{}'); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
-        clearSearchHistory.addEventListenerUSERS, '{}'); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
-        clearSearchHistory.addEventListener('click('click', () => { localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, '[]'); renderAdminFeatures();', () => { localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, '[]'); renderAdminFeatures(); adminSettings adminSettingsPanel.classList.remove('show'); });
-        clearClickStats.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.CLICK_STATS, JSONPanel.classList.remove('show'); });
-        clearClickStats.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.CLICK_STATS, JSON.stringify({ погода: 0, еда: 0,.stringify({ погода: 0, еда: 0, майнкрафт: 0 })); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
+        clearSearchHistory.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, '[]'); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
+        clearClickStats.addEventListener('click', () => { localStorage.setItem(STORAGE_KEYS.CLICK_STATS, JSON.stringify({ погода: 0, еда: 0, майнкрафт: 0 })); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
         clearAllData.addEventListener('click', () => {
- майнкрафт: 0 })); renderAdminFeatures(); adminSettingsPanel.classList.remove('show'); });
-        clearAllData.addEventListener('click', () => {
-            localStorage.setItem(STOR            localStorage.setItem(STORAGE_KEYS.USERS, '{}');
+            localStorage.setItem(STORAGE_KEYS.USERS, '{}');
             localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, '[]');
-            localStorage.setItem(STORAGE_AGE_KEYS.USERS, '{}');
-            localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, '[]');
-            localStorage.setItem(STORAGE_KEYS.CLICK_STATS, JSON.stringify({ погода:KEYS.CLICK_STATS, JSON.stringify({ погода: 0, еда: 0, майнкрафт: 0 }));
-            localStorage.setItem 0, еда: 0, майнкрафт: 0 }));
-            localStorage.setItem(STOR(STORAGE_KEYS.ACTIONS, '[]');
-            localStorage.setItem(STORAGE_KEYS.HOURLY, '{}AGE_KEYS.ACTIONS, '[]');
+            localStorage.setItem(STORAGE_KEYS.CLICK_STATS, JSON.stringify({ погода: 0, еда: 0, майнкрафт: 0 }));
+            localStorage.setItem(STORAGE_KEYS.ACTIONS, '[]');
             localStorage.setItem(STORAGE_KEYS.HOURLY, '{}');
             renderAdminFeatures();
             adminSettingsPanel.classList.remove('show');
         });
-        saveAdmin');
-            renderAdminFeatures();
-            adminSettingsPanel.classList.remove('show');
-        });
-        saveAdminSettingsBtn.addEventListenerSettingsBtn.addEventListener('click', () => adminSettingsPanel.classList.remove('show'));
-
-        applyMaintenanceBtn.addEventListener('click', () =>('click', () => adminSettingsPanel.classList.remove('show'));
+        saveAdminSettingsBtn.addEventListener('click', () => adminSettingsPanel.classList.remove('show'));
 
         applyMaintenanceBtn.addEventListener('click', () => {
-            localStorage.setItem(STORAGE_KEYS.MAINTENANCE, maintenanceCheckbox.checked);
-            alert(maintenanceCheckbox.checked ? 'Режим обслуживания В {
             localStorage.setItem(STORAGE_KEYS.MAINTENANCE, maintenanceCheckbox.checked);
             alert(maintenanceCheckbox.checked ? 'Режим обслуживания ВКЛЮЧЕН' : 'Режим обслуживания ВЫКЛЮЧЕН');
             checkMaintenanceMode();
         });
 
-        themeToggle.addEventListener('click',КЛЮЧЕН' : 'Режим обслуживания ВЫКЛЮЧЕН');
-            checkMaintenanceMode();
-        });
-
         themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-            themeToggle.textContent = document.body.classList.contains('dark') ? ' () => {
             document.body.classList.toggle('dark');
             themeToggle.textContent = document.body.classList.contains('dark') ? '☀️ Светлая тема' : '🌙 Тёмная тема';
         });
 
         async function loadNews() {
             try {
-                const☀️ Светлая тема' : '🌙 Тёмная тема';
-        });
-
-        async function loadNews() {
-            try {
-                const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss?hl=ru&gl=RU&ceid=RU:ru');
-                const data = await response.json();
-                if (data.items && data.items.length > 0) {
-                    let html = '';
-                   /rss?hl=ru&gl=RU&ceid=RU:ru');
+                const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/rss?hl=ru&gl=RU&ceid=RU:ru');
                 const data = await response.json();
                 if (data.items && data.items.length > 0) {
                     let html = '';
                     data.items.slice(0, 6).forEach(item => {
                         html += `
                             <div class="news-card" onclick="window.open('${item.link}','_blank')">
-                                <h3>${item data.items.slice(0, 6).forEach(item => {
-                        html += `
-                            <div class="news-card" onclick="window.open('${item.link}','_blank')">
                                 <h3>${item.title}</h3>
                                 <p>${item.description?.substring(0,100) || ''}...</p>
                                 <div class="news-meta">
-                                    <small>${new Date(item.p.title}</h3>
-                                <p>${item.description?.substring(0,100) || ''}...</p>
-                                <div class="news-meta">
-                                    <small>${new Date(item.pubDateubDate).toLocaleDateString()}</small>
-                                </div>
-                                <div class=").toLocaleDateString()}</small>
+                                    <small>${new Date(item.pubDate).toLocaleDateString()}</small>
                                 </div>
                                 <div class="news-source">
-                                    Источник: <a href="${item.link}"news-source">
                                     Источник: <a href="${item.link}" target="_blank">${item.source || new URL(item.link).hostname}</a>
                                 </div>
                             </div>
                         `;
                     });
                     newsGrid.innerHTML = html;
- target="_blank">${item.source || new URL(item.link).hostname}</a>
-                                </div>
-                            </div>
-                        `;
-                    });
-                                   } else {
-                    showDemoNews();
-                }
-            } catch {
-                showDemoNews();
-            }
-        }
-
-        function showDemoNews() {
-            const demoNews = [
-                {
-                    title: " newsGrid.innerHTML = html;
                 } else {
                     showDemoNews();
                 }
@@ -1674,15 +1484,7 @@ _user', name);
             const demoNews = [
                 {
                     title: "Kolocrug AI обновился!",
-                    description: "Теперь нейросеть стала умнее и всегда указывает источникиKolocrug AI обновился!",
                     description: "Теперь нейросеть стала умнее и всегда указывает источники информации",
- информации",
-                    sourceName: "Блог Kolocrug",
-                    sourceUrl: "#",
-                    date: new Date().toISOString(),
-                    isAdminNews: true
-                },
-                {
                     sourceName: "Блог Kolocrug",
                     sourceUrl: "#",
                     date: new Date().toISOString(),
@@ -1690,31 +1492,16 @@ _user', name);
                 },
                 {
                     title: "Как указывать источники по закону",
-                    description: "Разбираем правила цитирования и указания ав                    title: "Как указывать источники по закону",
-                    description: "Разбираем правила цитирования и указаторов",
-                    sourceName: "Центр защиты прав СМИ",
-                    sourceUrl: "https://mmdc.ru/blog/2025/03/ния авторов",
+                    description: "Разбираем правила цитирования и указания авторов",
                     sourceName: "Центр защиты прав СМИ",
                     sourceUrl: "https://mmdc.ru/blog/2025/03/21/mozhno-li-kopirovat-chuzhie-teksty/",
-                    date: new Date().to21/mozhno-li-kopirovat-chuzhie-teksty/",
-                    date: new Date().toISOStringISOString(),
-                    isAdminNews: false
-                },
-                {
-                    title: "Новости от администрации",
-                    description: "Планы(),
+                    date: new Date().toISOString(),
                     isAdminNews: false
                 },
                 {
                     title: "Новости от администрации",
                     description: "Планы по развитию Kolocrug на следующий месяц",
-                    sourceName: "Администрация Kolocrug по развитию Kolocrug на следующий месяц",
                     sourceName: "Администрация Kolocrug",
-                    sourceUrl: "#",
-                    date: new Date().toISOString(),
-                    isAdminNews: true
-                }
-",
                     sourceUrl: "#",
                     date: new Date().toISOString(),
                     isAdminNews: true
@@ -1724,33 +1511,15 @@ _user', name);
             let html = '';
             demoNews.forEach(item => {
                 html += `
-                    <div class="            ];
-            
-            let html = '';
-            demoNews.forEach(item => {
-                html += `
                     <div class="news-card" onclick="window.open('${item.sourceUrl}','_blank')">
-                        <h3>${item.titlenews-card" onclick="window.open('${item.sourceUrl}','_blank')">
                         <h3>${item.title}</h3>
                         <p>${item.description}</p>
                         <div class="news-meta">
-                           }</h3>
-                        <p>${item.description}</p>
-                        <div class="news-meta">
-                            <small <small>${new Date(item.date).toLocaleDateString()}</small>
-                            ${item.isAdminNews ? '<span class="admin-b>${new Date(item.date).toLocaleDateString()}</small>
+                            <small>${new Date(item.date).toLocaleDateString()}</small>
                             ${item.isAdminNews ? '<span class="admin-badge-small">👑 Админка</span>' : ''}
                         </div>
                         <div class="news-source">
-                            Источник: <a hrefadge-small">👑 Админка</span>' : ''}
-                        </div>
-                        <div class="news-source">
-                            Источник: <a href="${item="${item.sourceUrl}" target="_blank">${item.sourceName}</a>
-                        </div>
-                    </div>
-                `;
-            });
-.sourceUrl}" target="_blank">${item.sourceName}</a>
+                            Источник: <a href="${item.sourceUrl}" target="_blank">${item.sourceName}</a>
                         </div>
                     </div>
                 `;
@@ -1759,83 +1528,39 @@ _user', name);
         }
 
         async function generateImage(prompt, container, placeholder) {
-            if (!            newsGrid.innerHTML = html;
-        }
-
-        async function generateImage(prompt, container, placeholder) {
             if (!prompt) return;
             placeholder.innerHTML = '<div class="loader"></div> Генерирую...';
-            const imageUrl = `https://image.pollprompt) return;
-            placeholder.innerHTML = '<div class="loader"></div> Генерирую...';
             const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true`;
-            currentImageUrl =inations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true`;
-            currentImage imageUrl;
-            container.innerHTML = `<img src="${imageUrl}" class="ai-image" onload="this.parentUrl = imageUrl;
+            currentImageUrl = imageUrl;
             container.innerHTML = `<img src="${imageUrl}" class="ai-image" onload="this.parentElement.nextElementSibling.innerHTML=''">`;
-            placeholder.innerHTML = '';
-        }
-        async function animateImage(prompt, container, placeholderElement.nextElementSibling.innerHTML=''">`;
             placeholder.innerHTML = '';
         }
         async function animateImage(prompt, container, placeholder) {
             if (!currentImageUrl && !prompt) { alert('Сначала создайте изображение'); return; }
-            placeholder) {
-            if (!currentImageUrl && !prompt) { alert('Сначала создайте изображение'); return; }
             placeholder.innerHTML = '<div class="loader"></div> Оживляю...';
-            const variationPrompt = (prompt || 'изображ.innerHTML = '<div class="loader"></div> Оживляю...';
-            const variationPrompt = (prompt || 'ение') + ' animated, 4k, high quality';
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIизображение') + ' animated, 4k, high quality';
+            const variationPrompt = (prompt || 'изображение') + ' animated, 4k, high quality';
             const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(variationPrompt)}?width=512&height=512&nologo=true`;
             currentImageUrl = imageUrl;
-            containerComponent(variationPrompt)}?width=512&height=512&nologo=true`;
-            currentImageUrl = imageUrl;
-            container.innerHTML = `<img src="${imageUrl}" class="ai-image" onload="this.parentElement.nextElementSibling.innerHTML='.innerHTML = `<img src="${imageUrl}" class="ai-image" onload="this.parentElement.nextElementSibling.innerHTML=''">`;
+            container.innerHTML = `<img src="${imageUrl}" class="ai-image" onload="this.parentElement.nextElementSibling.innerHTML=''">`;
             placeholder.innerHTML = '';
         }
         generateBtn.addEventListener('click', () => generateImage(promptInput.value, generatedImageContainer, resultPlaceholder));
-        animateBtn.addEventListener('click'">`;
-            placeholder.innerHTML = '';
-        }
-        generateBtn.addEventListener('click', () => generateImage(promptInput.value, generatedImageContainer, resultPlaceholder));
-        animateBtn.addEventListener('click', () => animate', () => animateImage(promptInput.value, generatedImageContainer, resultPlaceholder));
-
-        function renderAdminFeatures() {
-            cleanOfflineUsers();
-            const usersImage(promptInput.value, generatedImageContainer, resultPlaceholder));
+        animateBtn.addEventListener('click', () => animateImage(promptInput.value, generatedImageContainer, resultPlaceholder));
 
         function renderAdminFeatures() {
             cleanOfflineUsers();
             const users = getUsers();
             const onlineNames = Object.keys(users).filter(n => n !== currentUser);
-            adminOnlineList.innerHTML = onlineNames.length ? onlineNames.map(n => `<li>${n = getUsers();
-            const onlineNames = Object.keys(users).filter(n => n !== currentUser);
-            adminOnlineList.innerHTML = onlineNames.length ? onlineNames.map(n => `<li>${n}</}</li>`).join('') : '<li>🟡 Никого нет</li>';
+            adminOnlineList.innerHTML = onlineNames.length ? onlineNames.map(n => `<li>${n}</li>`).join('') : '<li>🟡 Никого нет</li>';
             const hist = getSearchHistory();
-            adminHistoryList.innerHTML = hist.length ? histli>`).join('') : '<li>🟡 Никого нет</li>';
-            const hist = getSearchHistory();
-            adminHistoryList.innerHTML = hist.length ? hist.slice(0,10).map(i => `<div>${i.time} — ${i.name}: "${i.query}"</div>`).join('') : '<div>История пуста.slice(0,10).map(i => `<div>${i.time} — ${i.name}: "${i.query}"</div>`).join('') :</div>';
+            adminHistoryList.innerHTML = hist.length ? hist.slice(0,10).map(i => `<div>${i.time} — ${i.name}: "${i.query}"</div>`).join('') : '<div>История пуста</div>';
             const stats = getClickStats();
-            adminClickStats.innerHTML = `<div>☀️ Погода: ${stats.погода '<div>История пуста</div>';
-            const stats = getClickStats();
-            adminClickStats.innerHTML = `<div>☀️ Погода: ${stats.погода}</div><div>🍳 Еда: ${stats.еда}</div><div>🍳 Еда: ${stats.еда}</div}</div><div>⛏️ Майнкрафт: ${stats.майнкрафт}</div>`;
-            const hourly = getHourly();
-            let h><div>⛏️ Майнкрафт: ${stats.майнкрафт}</div>`;
+            adminClickStats.innerHTML = `<div>☀️ Погода: ${stats.погода}</div><div>🍳 Еда: ${stats.еда}</div><div>⛏️ Майнкрафт: ${stats.майнкрафт}</div>`;
             const hourly = getHourly();
             let hh = '';
-            for (let h=0; h<24; hh = '';
-            for (let h=0; h<24; h++) if++) if (hourly[h]) hh += `<div>${h}:00 — ${hourly[h]} чел.</div>`;
-            adminHourlyStats.innerHTML = hh || '< (hourly[h]) hh += `<div>${h}:00 — ${hourly[h]} чел.</div>`;
+            for (let h=0; h<24; h++) if (hourly[h]) hh += `<div>${h}:00 — ${hourly[h]} чел.</div>`;
             adminHourlyStats.innerHTML = hh || '<div>Нет данных</div>';
-            adminOnlineCountSpan.textContent = onlineNamesdiv>Нет данных</div>';
             adminOnlineCountSpan.textContent = onlineNames.length;
-            onlineCountSpan.textContent = onlineNames.length;
-        }
-
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                adminTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                tabContents.forEach(c.length;
             onlineCountSpan.textContent = onlineNames.length;
         }
 
@@ -1851,20 +1576,7 @@ _user', name);
         setInterval(() => {
             cleanOfflineUsers();
             const cnt = Object.keys(getUsers()).length;
- => c.classList.remove('active'));
-                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-            });
-        });
-
-        setInterval(() => {
-            cleanOfflineUsers();
-            const cnt = Object.keys(getUsers()).length;
             onlineCountSpan.textContent = cnt;
-            if (!adminBlock.classList.contains('hidden')) {
-                adminOnlineCountSpan.textContent = cnt;
-                renderAdminFeatures();
-            }
-                   onlineCountSpan.textContent = cnt;
             if (!adminBlock.classList.contains('hidden')) {
                 adminOnlineCountSpan.textContent = cnt;
                 renderAdminFeatures();
@@ -1874,19 +1586,9 @@ _user', name);
         checkMaintenanceMode();
 
         // ===== СКРИПТ ДЛЯ AI ЧАТА =====
- }, 5000);
-
-        checkMaintenanceMode();
-
-        // ===== СКРИПТ ДЛЯ AI ЧАТА =====
         let chatVisible = false;
         window.toggleAIChat = function() {
-            const window = document.getElementById('ai-chat-window        let chatVisible = false;
-        window.toggleAIChat = function() {
             const window = document.getElementById('ai-chat-window');
-            chatVisible = !chatVisible;
-            window.style.display = chatVisible ? 'flex' : 'none';
-');
             chatVisible = !chatVisible;
             window.style.display = chatVisible ? 'flex' : 'none';
         }
@@ -1894,64 +1596,29 @@ _user', name);
         window.sendAIMessage = async function() {
             const input = document.getElementById('ai-input');
             const msg = input.value.trim();
-                   }
-
-        window.sendAIMessage = async function() {
-            const input = document.getElementById('ai-input');
-            const msg = input.value.trim();
             if (!msg) return;
 
             const messagesDiv = document.getElementById('ai-messages');
- if (!msg) return;
-
-            const messagesDiv = document.getElementById('ai-messages');
             
-                       
             messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
             input.value = '';
 
-            const typingId = messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
-            input.value = '';
-
             const typingId = 'typing-' + Date.now();
-            messagesDiv.innerHTML += `<div id="${typingId}" class="typing-indicator 'typing-' + Date.now();
-            messagesDiv.innerHTML += `<div id="${typingId}" class="typing-ind"><span></span><span></span><span></span></div>`;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            try {
-                const responseicator"><span></span><span></span><span></span></div>`;
+            messagesDiv.innerHTML += `<div id="${typingId}" class="typing-indicator"><span></span><span></span><span></span></div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             try {
                 const response = await fetch('https://text.pollinations.ai/', {
-                    method: 'POST',
-                    headers = await fetch('https://text.pollinations.ai/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [
                             { 
                                 role: 'system', 
-                                content: 'Ты официальный ИИ-помощник браузера Kol: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { 
-                                role: 'system', 
-                                content: 'Ты официальный ИИ-помощник браузера Kolocrug. Ты знаешь все его функции: поиск, новости, админку. Отвечай дружелюбно, какocrug. Ты знаешь все его функции: поиск, новости, админку. Отвечай дружелюбно, как старый друг. Можешь немного шутить, но по делу.' 
+                                content: 'Ты официальный ИИ-помощник браузера Kolocrug. Ты знаешь все его функции: поиск, новости, админку. Отвечай дружелюбно, как старый друг. Можешь немного шутить, но по делу.' 
                             },
                             { role: 'user', content: msg }
                         ],
-                        старый друг. Можешь немного шутить, но по делу.' 
-                            },
-                            { role: 'user', content: msg }
-                        model: 'openai'
-                    })
-                });
-                
-                const data = await response.text();
-                
-                document.getElementById(typingId)?.remove();
-                messagesDiv.innerHTML += `<div class="message assistant ],
                         model: 'openai'
                     })
                 });
@@ -1962,57 +1629,29 @@ _user', name);
                 messagesDiv.innerHTML += `<div class="message assistant">${data}</div>`;
             } catch (error) {
                 document.getElementById(typingId)?.remove();
-                messagesDiv.innerHTML += `<div class="message assistant" style="background:#f">${data}</div>`;
-            } catch (error) {
-                document.getElementById(typingId)?.remove();
                 messagesDiv.innerHTML += `<div class="message assistant" style="background:#f88; color:white;">Ошибка. Попробуй ещё раз.</div>`;
-            }
-            messagesDiv.scrollTop = messages88; color:white;">Ошибка. Попробуй ещё раз.</div>`;
             }
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // ===== СКРИПТ ДЛЯ ПОЛНОЭКDiv.scrollHeight;
-        }
-
         // ===== СКРИПТ ДЛЯ ПОЛНОЭКРАННОГО РЕЖИМА =====
         document.addEventListener('DOMContentLoaded', function() {
-            const fullscreenBtnРАННОГО РЕЖИМА =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const fullscreenBtn = = document.getElementById('fullscreen-btn');
-
-            function enterFullscreen() {
-                const element = document.documentElement;
-                document.getElementById('fullscreen-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
 
             function enterFullscreen() {
                 const element = document.documentElement;
                 if (element.requestFullscreen) {
                     element.requestFullscreen();
                 } else if (element.webkitRequestFullscreen) {
-                    if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFull {
                     element.webkitRequestFullscreen();
                 } else if (element.msRequestFullscreen) {
                     element.msRequestFullscreen();
                 } else {
                     alert('Ваш браузер не поддерживает полноэкранный режим.');
                 }
-screen();
-                } else {
-                    alert('Ваш браузер не поддерживает полноэкранный режим.');
-                }
-            }
-
             }
 
             fullscreenBtn.addEventListener('click', enterFullscreen);
-
-            document.addEventListener('fullscreenchange', function() {
-                if (document.fullscreenElement            fullscreenBtn.addEventListener('click', enterFullscreen);
 
             document.addEventListener('fullscreenchange', function() {
                 if (document.fullscreenElement) {
@@ -2020,54 +1659,57 @@ screen();
                 } else {
                     fullscreenBtn.style.display = 'flex';
                 }
-) {
-                    fullscreenBtn.style.display = 'none';
-                } else {
-                    fullscreenBtn.style.display = 'flex';
-                }
-            });
             });
         });
-    </script>
-
-    <!-- Регистрация сервис-воркера для PWA -->
-           });
     </script>
 
     <!-- Регистрация сервис-воркера для PWA -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/sw.js');
             });
         }
     </script>
 
-    <!-- ВРЕМЕННАЯ ПОЛИТ.serviceWorker.register('/sw.js');
-            });
-        }
-    </script>
+    <!-- Баннер с политикой конфиденциальности (с чекбоксом и крестиком) -->
+    <div id="privacy-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px 30px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <div style="position: relative; width: 100%;">
+            <span onclick="handleCloseBanner()" style="position: absolute; top: -5px; right: 0; font-size: 24px; cursor: pointer; color: white; background: transparent; border: none;">&times;</span>
+            <p style="margin-bottom: 5px; font-size: 14px; max-width: 90%;">
+                ⚖️ Используя сайт, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
+                Мы собираем имя пользователя, IP-адрес и данные cookie для работы сайта. Данные не передаются третьим лицам.<br>
+                <span style="color: gold;">Владелец сайта: KacERORga_CoolKroog</span>
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <input type="checkbox" id="accept-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-size: 14px;">Я принимаю условия</span>
+            </label>
+            <button onclick="acceptPrivacy()" style="background: gold; border: none; padding: 8px 25px; border-radius: 40px; font-weight: bold; cursor: pointer;">Принять</button>
+        </div>
+    </div>
 
-    <!-- ВРЕМЕННАЯ ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ (для проверки) -->
-    <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15ИКА КОНФИДЕНЦИАЛЬНОСТИ (для проверки) -->
-    <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold;">
-        <p style="margin-bottom: 10px; font-size: 14px;">
-            ⚖️ Используяpx; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold;">
-        <p style="margin-bottom: 10px; font-size: 14px;">
-            ⚖️ Используя сай сайт, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
-            Мы собираем имя пользователя, IP-т, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
-            Мы собираем имя пользователя, IP-адрес и данные cookie для работы сайта. Данные не передаются третьим лицамадрес и данные cookie для работы сайта. Данные не передаются третьим лицам.<br>
-            <span style="color: gold;">Владе.<br>
-            <span style="color: gold;">Владелец сайта: KacERORga_CoolKroog</span>
-        </p>
-        <button onclick="this.parentElement.style.display='none'" style="background: gold; border: none; padding: 8pxлец сайта: KacERORga_CoolKroog</span>
-        </p>
-        <button onclick="this.parentElement.style.display='none'" style="background: gold; border: none; padding: 8px 25px; border-radius: 40px; font-weight: bold; 25px; border-radius: 40px; font-weight: bold; cursor: pointer;">Принять</button>
-    </div>
-</ cursor: pointer;">Принять</button>
-    </div>
+    <script>
+    // Функции для работы с баннером конфиденциальности
+    function acceptPrivacy() {
+        const checkbox = document.getElementById('accept-checkbox');
+        if (checkbox && checkbox.checked) {
+            document.getElementById('privacy-banner').style.display = 'none';
+        } else {
+            alert('Пожалуйста, отметьте галочку, чтобы принять политику конфиденциальности.');
+        }
+    }
+
+    function handleCloseBanner() {
+        const checkbox = document.getElementById('accept-checkbox');
+        if (checkbox && checkbox.checked) {
+            document.getElementById('privacy-banner').style.display = 'none';
+        } else {
+            alert('Пожалуйста, сначала отметьте галочку, чтобы принять условия.');
+        }
+    }
+    </script>
 </body>
-                    </html>
+</html>
