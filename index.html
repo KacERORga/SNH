@@ -134,7 +134,7 @@
             cursor: grabbing !important;
         }
 
-        /* Кнопка сброса виджетов */
+        /* Кнопка сброса виджетов в админке */
         .reset-widgets-btn {
             background: #f88;
             color: white;
@@ -1104,11 +1104,6 @@
             </div>
         </div>
         <button id="saveSettingsBtn" style="width:100%; padding:15px; background:gold; border:none; border-radius:40px; font-weight:bold;">Сохранить настройки</button>
-        
-        <!-- Кнопка сброса виджетов (для всех) -->
-        <button id="reset-widgets-btn" class="reset-widgets-btn">
-            🧩 Сбросить позиции виджетов
-        </button>
     </div>
 
     <div class="settings-panel" id="adminSettingsPanel">
@@ -1267,6 +1262,10 @@
                             <h3>📈 По часам</h3>
                             <div id="admin-hourly-stats"></div>
                         </div>
+                        <!-- Кнопка сброса виджетов прямо в админке -->
+                        <button id="reset-widgets-btn" class="reset-widgets-btn">
+                            🧩 Сбросить позиции виджетов
+                        </button>
                     </div>
                 </div>
                 <div class="admin-tab-content" id="tab-users">
@@ -1307,6 +1306,11 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== КНОПКА РЕДАКТИРОВАНИЯ ВИДЖЕТОВ (ТЕПЕРЬ ТОЖЕ ВИДЖЕТ) ===== -->
+    <div id="edit-widget-btn" class="widget" style="position: fixed; bottom: 260px; left: 50%; transform: translateX(-50%); background: gold; color: #1a2b3c; padding: 12px 24px; border-radius: 50px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 15px rgba(255,215,0,0.3); z-index: 10000; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+    <span>✎</span> Редактировать виджеты
+</div>
 
     <!-- ===== ЧАТ С ВЕСЁЛЫМ ИИ ===== -->
     <div id="ai-chat-button" class="widget">
@@ -1421,66 +1425,30 @@
 
         // ===== РЕЖИМ РЕДАКТИРОВАНИЯ ВИДЖЕТОВ =====
         let editMode = false;
-        const editModeBtn = document.createElement('button');
-        editModeBtn.innerHTML = '✎ Редактировать виджеты';
-        editModeBtn.style.cssText = `
-            position: fixed;
-            bottom: 200px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: gold;
-            color: #1a2b3c;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: bold;
-            border: 2px solid white;
-            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
-            z-index: 10000;
-            cursor: pointer;
-            display: none;
-            transition: all 0.2s;
-        `;
-        document.body.appendChild(editModeBtn);
 
-        function toggleEditMode(show) {
-            if (show) {
-                editModeBtn.style.display = 'block';
-            } else {
-                editModeBtn.style.display = 'none';
-                if (editMode) {
-                    editMode = false;
-                    editModeBtn.style.background = 'gold';
-                    editModeBtn.innerHTML = '✎ Редактировать виджеты';
-                    document.querySelectorAll('.widget').forEach(w => {
-                        w.style.cursor = 'default';
-                        w.style.border = 'none';
-                    });
-                    // Убираем контролы размера
-                    document.querySelectorAll('.resize-controls').forEach(c => c.remove());
-                }
-            }
-        }
-
-        editModeBtn.addEventListener('click', function() {
+        function toggleEditMode() {
             editMode = !editMode;
+            const editBtn = document.getElementById('edit-widget-btn');
             if (editMode) {
-                this.style.background = '#ff6b6b';
-                this.innerHTML = '✓ Готово';
+                editBtn.style.background = '#ff6b6b';
+                editBtn.innerHTML = '<span>✓</span> Готово';
                 document.querySelectorAll('.widget').forEach(w => {
                     w.style.cursor = 'move';
                     w.style.border = '2px dashed gold';
                 });
                 addResizeControls();
             } else {
-                this.style.background = 'gold';
-                this.innerHTML = '✎ Редактировать виджеты';
+                editBtn.style.background = 'gold';
+                editBtn.innerHTML = '<span>✎</span> Редактировать виджеты';
                 document.querySelectorAll('.widget').forEach(w => {
                     w.style.cursor = 'default';
                     w.style.border = 'none';
                 });
                 document.querySelectorAll('.resize-controls').forEach(c => c.remove());
             }
-        });
+        }
+
+        document.getElementById('edit-widget-btn').addEventListener('click', toggleEditMode);
 
         // Функция для изменения размера
         function addResizeControls() {
@@ -1652,12 +1620,13 @@
         const privacyBanner = document.getElementById('privacy-banner');
         const acceptCheckbox = document.getElementById('accept-checkbox');
 
-        // Виджеты для перетаскивания
+        // Виджеты для перетаскивания (включая кнопку редактирования)
         const widgets = [
             { id: 'ai-chat-button', default: { bottom: 80, right: 20 } },
             { id: 'support-button', default: { bottom: 140, left: 20 } },
             { id: 'downloadButton', default: { top: 20, right: 120 } },
-            { id: 'fullscreen-btn', default: { bottom: 140, right: 20 } }
+            { id: 'fullscreen-btn', default: { bottom: 140, right: 20 } },
+            { id: 'edit-widget-btn', default: { bottom: 260, left: '50%' } }
         ];
 
         let currentUser = null;
@@ -1709,6 +1678,7 @@
                     if (widget.default.bottom !== undefined) el.style.bottom = widget.default.bottom + 'px';
                     if (widget.default.left !== undefined) el.style.left = widget.default.left + 'px';
                     if (widget.default.right !== undefined) el.style.right = widget.default.right + 'px';
+                    if (widget.default.left === '50%') el.style.left = '50%';
                 }
             });
         }
@@ -1731,8 +1701,6 @@
                 el.addEventListener('click', handleClick);
 
                 function startDrag(e) {
-                    if (!editMode) return;
-                    
                     e.preventDefault();
                     
                     const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
@@ -1759,7 +1727,7 @@
                 }
 
                 function drag(e) {
-                    if (!isDragging || !editMode) return;
+                    if (!isDragging) return;
                     e.preventDefault();
 
                     const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
@@ -1812,6 +1780,8 @@
                             toggleSupportWindow();
                         } else if (widget.id === 'fullscreen-btn') {
                             enterFullscreen();
+                        } else if (widget.id === 'edit-widget-btn') {
+                            toggleEditMode();
                         }
                     }
                 }
@@ -2106,21 +2076,17 @@
         if (savedName) {
             if (ADMIN_NAMES.includes(savedName)) {
                 showAdmin(savedName);
-                toggleEditMode(true);
             } else {
                 showSearch(savedName);
-                toggleEditMode(false);
             }
         } else {
             showWelcome();
-            toggleEditMode(false);
         }
 
         function showWelcome() {
             welcomeBlock.classList.remove('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
             settingsButton.style.display = 'none'; leave(); checkMaintenanceMode();
             setupAnimations();
-            toggleEditMode(false);
         }
 
         function showNameInput() {
@@ -2134,7 +2100,6 @@
             greeting.innerHTML = `С возвращением, <span>${name}</span>!`;
             searchInput.focus(); searchIframe.src = 'about:blank';
             join(name); loadUserSettings(name); loadNews();
-            toggleEditMode(false);
         }
 
         function showAdmin(name) {
@@ -2144,7 +2109,6 @@
             adminSearchInput.focus(); adminIframe.src = 'about:blank';
             join(name); renderAdminFeatures();
             renderSupportMessages();
-            toggleEditMode(true);
         }
 
         function join(name) {
@@ -2511,4 +2475,4 @@
         }
     </script>
 </body>
-                                                                       </html>
+</html>
