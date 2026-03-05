@@ -123,15 +123,15 @@
         /* Виджеты */
         .widget {
             position: fixed;
-            cursor: move;
             user-select: none;
             z-index: 1000;
-            transition: box-shadow 0.2s;
+            transition: box-shadow 0.2s, border 0.2s;
+            cursor: default;
         }
         .widget.dragging {
             opacity: 0.8;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            cursor: grabbing;
+            cursor: grabbing !important;
         }
 
         /* Кнопка сброса виджетов */
@@ -1160,7 +1160,7 @@
         <div class="container" id="app">
             <!-- Кнопка скачать приложение -->
             <a href="/app.apk" class="download-button" id="downloadButton" download>
-                <span>📲</span> Скачать приложение
+                <span>📲</span> Скачать APK
             </a>
             <button class="settings-button" id="settingsButton"></button>
 
@@ -1390,7 +1390,8 @@
             MAINTENANCE: 'maintenance_mode',
             PRIVACY_ACCEPTED: 'privacy_accepted',
             SUPPORT_MESSAGES: 'kolocrug_support_messages',
-            WIDGET_POSITIONS: 'kolocrug_widget_positions'
+            WIDGET_POSITIONS: 'kolocrug_widget_positions',
+            WIDGET_SIZES: 'kolocrug_widget_sizes'
         };
 
         if (!localStorage.getItem(STORAGE_KEYS.USERS)) localStorage.setItem(STORAGE_KEYS.USERS, '{}');
@@ -1417,6 +1418,167 @@
         }
         function updateUser(name) { const users = getUsers(); users[name] = { lastSeen: Date.now() }; setUsers(users); }
         function removeUser(name) { const users = getUsers(); if (users[name]) { delete users[name]; setUsers(users); } }
+
+        // ===== РЕЖИМ РЕДАКТИРОВАНИЯ ВИДЖЕТОВ =====
+        let editMode = false;
+        const editModeBtn = document.createElement('button');
+        editModeBtn.innerHTML = '✎ Редактировать виджеты';
+        editModeBtn.style.cssText = `
+            position: fixed;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: gold;
+            color: #1a2b3c;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+            z-index: 10000;
+            cursor: pointer;
+            display: none;
+            transition: all 0.2s;
+        `;
+        document.body.appendChild(editModeBtn);
+
+        function toggleEditMode(show) {
+            if (show) {
+                editModeBtn.style.display = 'block';
+            } else {
+                editModeBtn.style.display = 'none';
+                if (editMode) {
+                    editMode = false;
+                    editModeBtn.style.background = 'gold';
+                    editModeBtn.innerHTML = '✎ Редактировать виджеты';
+                    document.querySelectorAll('.widget').forEach(w => {
+                        w.style.cursor = 'default';
+                        w.style.border = 'none';
+                    });
+                    // Убираем контролы размера
+                    document.querySelectorAll('.resize-controls').forEach(c => c.remove());
+                }
+            }
+        }
+
+        editModeBtn.addEventListener('click', function() {
+            editMode = !editMode;
+            if (editMode) {
+                this.style.background = '#ff6b6b';
+                this.innerHTML = '✓ Готово';
+                document.querySelectorAll('.widget').forEach(w => {
+                    w.style.cursor = 'move';
+                    w.style.border = '2px dashed gold';
+                });
+                addResizeControls();
+            } else {
+                this.style.background = 'gold';
+                this.innerHTML = '✎ Редактировать виджеты';
+                document.querySelectorAll('.widget').forEach(w => {
+                    w.style.cursor = 'default';
+                    w.style.border = 'none';
+                });
+                document.querySelectorAll('.resize-controls').forEach(c => c.remove());
+            }
+        });
+
+        // Функция для изменения размера
+        function addResizeControls() {
+            if (!editMode) return;
+            
+            widgets.forEach(widget => {
+                const el = document.getElementById(widget.id);
+                if (!el) return;
+                
+                const oldControls = el.querySelector('.resize-controls');
+                if (oldControls) oldControls.remove();
+                
+                const controls = document.createElement('div');
+                controls.className = 'resize-controls';
+                controls.style.cssText = `
+                    position: absolute;
+                    top: -30px;
+                    right: 0;
+                    display: flex;
+                    gap: 5px;
+                    background: rgba(0,0,0,0.7);
+                    padding: 5px;
+                    border-radius: 20px;
+                    border: 1px solid gold;
+                    z-index: 10001;
+                `;
+                
+                const increaseBtn = document.createElement('button');
+                increaseBtn.innerHTML = '➕';
+                increaseBtn.style.cssText = `
+                    background: gold;
+                    border: none;
+                    border-radius: 50%;
+                    width: 25px;
+                    height: 25px;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+                
+                const decreaseBtn = document.createElement('button');
+                decreaseBtn.innerHTML = '➖';
+                decreaseBtn.style.cssText = increaseBtn.style.cssText;
+                
+                const resetBtn = document.createElement('button');
+                resetBtn.innerHTML = '↺';
+                resetBtn.style.cssText = increaseBtn.style.cssText;
+                
+                increaseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentScale = parseFloat(el.dataset.scale) || 1;
+                    const newScale = Math.min(currentScale + 0.1, 2);
+                    el.dataset.scale = newScale;
+                    el.style.transform = `scale(${newScale})`;
+                    saveWidgetSize(widget.id, newScale);
+                });
+                
+                decreaseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentScale = parseFloat(el.dataset.scale) || 1;
+                    const newScale = Math.max(currentScale - 0.1, 0.5);
+                    el.dataset.scale = newScale;
+                    el.style.transform = `scale(${newScale})`;
+                    saveWidgetSize(widget.id, newScale);
+                });
+                
+                resetBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    el.dataset.scale = 1;
+                    el.style.transform = 'scale(1)';
+                    saveWidgetSize(widget.id, 1);
+                });
+                
+                controls.appendChild(decreaseBtn);
+                controls.appendChild(increaseBtn);
+                controls.appendChild(resetBtn);
+                el.appendChild(controls);
+            });
+        }
+
+        function saveWidgetSize(widgetId, scale) {
+            const sizes = JSON.parse(localStorage.getItem(STORAGE_KEYS.WIDGET_SIZES) || '{}');
+            sizes[widgetId] = scale;
+            localStorage.setItem(STORAGE_KEYS.WIDGET_SIZES, JSON.stringify(sizes));
+        }
+
+        function loadWidgetSizes() {
+            const sizes = JSON.parse(localStorage.getItem(STORAGE_KEYS.WIDGET_SIZES) || '{}');
+            widgets.forEach(widget => {
+                const el = document.getElementById(widget.id);
+                if (el && sizes[widget.id]) {
+                    el.dataset.scale = sizes[widget.id];
+                    el.style.transform = `scale(${sizes[widget.id]})`;
+                }
+            });
+        }
 
         // Элементы
         const welcomeBlock = document.getElementById('welcome-block');
@@ -1503,7 +1665,7 @@
         let currentImageUrl = null;
         let userSettings = {};
 
-        // ===== ПЕРЕТАСКИВАНИЕ ВИДЖЕТОВ (ДЛЯ ВСЕХ) =====
+        // ===== ПЕРЕТАСКИВАНИЕ ВИДЖЕТОВ =====
         function loadWidgetPositions() {
             const saved = localStorage.getItem(STORAGE_KEYS.WIDGET_POSITIONS);
             return saved ? JSON.parse(saved) : {};
@@ -1533,6 +1695,7 @@
 
         function resetWidgetPositions() {
             localStorage.removeItem(STORAGE_KEYS.WIDGET_POSITIONS);
+            localStorage.removeItem(STORAGE_KEYS.WIDGET_SIZES);
             widgets.forEach(widget => {
                 const el = document.getElementById(widget.id);
                 if (el) {
@@ -1540,6 +1703,8 @@
                     el.style.bottom = '';
                     el.style.left = '';
                     el.style.right = '';
+                    el.style.transform = 'scale(1)';
+                    el.dataset.scale = 1;
                     if (widget.default.top !== undefined) el.style.top = widget.default.top + 'px';
                     if (widget.default.bottom !== undefined) el.style.bottom = widget.default.bottom + 'px';
                     if (widget.default.left !== undefined) el.style.left = widget.default.left + 'px';
@@ -1558,15 +1723,18 @@
 
                 let isDragging = false;
                 let startX, startY, startLeft, startTop;
+                let clickTimer = null;
+                const CLICK_DELAY = 200;
 
                 el.addEventListener('mousedown', startDrag);
                 el.addEventListener('touchstart', startDrag);
+                el.addEventListener('click', handleClick);
 
                 function startDrag(e) {
+                    if (!editMode) return;
+                    
                     e.preventDefault();
-                    isDragging = true;
-                    el.classList.add('dragging');
-
+                    
                     const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
                     const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
 
@@ -1579,14 +1747,19 @@
                     startLeft = rect.left;
                     startTop = rect.top;
 
-                    document.addEventListener('mousemove', drag);
-                    document.addEventListener('touchmove', drag);
-                    document.addEventListener('mouseup', stopDrag);
-                    document.addEventListener('touchend', stopDrag);
+                    clickTimer = setTimeout(() => {
+                        isDragging = true;
+                        el.classList.add('dragging');
+                        
+                        document.addEventListener('mousemove', drag);
+                        document.addEventListener('touchmove', drag);
+                        document.addEventListener('mouseup', stopDrag);
+                        document.addEventListener('touchend', stopDrag);
+                    }, CLICK_DELAY);
                 }
 
                 function drag(e) {
-                    if (!isDragging) return;
+                    if (!isDragging || !editMode) return;
                     e.preventDefault();
 
                     const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
@@ -1604,7 +1777,13 @@
                 }
 
                 function stopDrag() {
+                    if (clickTimer) {
+                        clearTimeout(clickTimer);
+                        clickTimer = null;
+                    }
+                    
                     if (!isDragging) return;
+                    
                     isDragging = false;
                     el.classList.remove('dragging');
 
@@ -1619,6 +1798,22 @@
                         left: parseFloat(el.style.left) || undefined
                     };
                     saveWidgetPositions(positions);
+                }
+
+                function handleClick(e) {
+                    if (clickTimer) {
+                        clearTimeout(clickTimer);
+                        clickTimer = null;
+                    }
+                    if (!isDragging) {
+                        if (widget.id === 'ai-chat-button') {
+                            toggleAIChat();
+                        } else if (widget.id === 'support-button') {
+                            toggleSupportWindow();
+                        } else if (widget.id === 'fullscreen-btn') {
+                            enterFullscreen();
+                        }
+                    }
                 }
             });
         }
@@ -1909,14 +2104,23 @@
 
         const savedName = localStorage.getItem('krugle_user');
         if (savedName) {
-            if (ADMIN_NAMES.includes(savedName)) showAdmin(savedName);
-            else showSearch(savedName);
-        } else showWelcome();
+            if (ADMIN_NAMES.includes(savedName)) {
+                showAdmin(savedName);
+                toggleEditMode(true);
+            } else {
+                showSearch(savedName);
+                toggleEditMode(false);
+            }
+        } else {
+            showWelcome();
+            toggleEditMode(false);
+        }
 
         function showWelcome() {
             welcomeBlock.classList.remove('hidden'); nameBlock.classList.add('hidden'); searchBlock.classList.add('hidden'); adminBlock.classList.add('hidden');
             settingsButton.style.display = 'none'; leave(); checkMaintenanceMode();
             setupAnimations();
+            toggleEditMode(false);
         }
 
         function showNameInput() {
@@ -1930,6 +2134,7 @@
             greeting.innerHTML = `С возвращением, <span>${name}</span>!`;
             searchInput.focus(); searchIframe.src = 'about:blank';
             join(name); loadUserSettings(name); loadNews();
+            toggleEditMode(false);
         }
 
         function showAdmin(name) {
@@ -1939,6 +2144,7 @@
             adminSearchInput.focus(); adminIframe.src = 'about:blank';
             join(name); renderAdminFeatures();
             renderSupportMessages();
+            toggleEditMode(true);
         }
 
         function join(name) {
@@ -1986,7 +2192,6 @@
 
         usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') enterBtn.click(); });
 
-        // Обработчик ввода ника для стрелки
         usernameInput.addEventListener('input', function() {
             const arrow = document.getElementById('swipe-arrow');
             if (this.value.trim().length > 0) {
@@ -1996,7 +2201,6 @@
             }
         });
 
-        // Свайп вправо
         document.getElementById('swipe-arrow').addEventListener('click', function() {
             if (!usernameInput.value.trim()) {
                 alert('Сначала введите имя');
@@ -2010,7 +2214,6 @@
             }, 500);
         });
 
-        // ===== ФУНКЦИЯ ПОИСКА =====
         function searchInIframe(iframe, query) {
             if (!query.trim()) return;
             let searchUrl = userSettings.searchEngine === 'yandex' ? 'https://yandex.ru/search/?text=' + encodeURIComponent(query) :
@@ -2213,7 +2416,6 @@
 
         checkMaintenanceMode();
 
-        // ===== СКРИПТ ДЛЯ AI ЧАТА =====
         let chatVisible = false;
         window.toggleAIChat = function() {
             const window = document.getElementById('ai-chat-window');
@@ -2262,47 +2464,40 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // ===== СКРИПТ ДЛЯ ПОЛНОЭКРАННОГО РЕЖИМА =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-            function enterFullscreen() {
-                const element = document.documentElement;
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) {
-                    element.webkitRequestFullscreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFullscreen();
-                } else {
-                    alert('Ваш браузер не поддерживает полноэкранный режим.');
-                }
+        function enterFullscreen() {
+            const element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            } else {
+                alert('Ваш браузер не поддерживает полноэкранный режим.');
             }
+        }
 
-            fullscreenBtn.addEventListener('click', enterFullscreen);
+        document.getElementById('fullscreen-btn').addEventListener('click', enterFullscreen);
 
-            document.addEventListener('fullscreenchange', function() {
-                if (document.fullscreenElement) {
-                    fullscreenBtn.style.display = 'none';
-                } else {
-                    fullscreenBtn.style.display = 'flex';
-                }
-            });
+        document.addEventListener('fullscreenchange', function() {
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                fullscreenBtn.style.display = 'none';
+            } else {
+                fullscreenBtn.style.display = 'flex';
+            }
         });
 
-        // Инициализация
         document.getElementById('support-button').addEventListener('click', toggleSupportWindow);
         applyWidgetPositions();
+        loadWidgetSizes();
         enableWidgetDragging();
         setupAnimations();
 
-        // Экспортируем функции для кнопок
         window.sendAdminReply = sendAdminReply;
         window.closeTicket = closeTicket;
         window.acceptPrivacy = acceptPrivacy;
         window.handleCloseBanner = handleCloseBanner;
-        window.toggleAIChat = toggleAIChat;
-        window.sendAIMessage = sendAIMessage;
         window.toggleSupportWindow = toggleSupportWindow;
         window.closeSupportWindow = closeSupportWindow;
     </script>
@@ -2316,4 +2511,4 @@
         }
     </script>
 </body>
-    </html>
+                                                                       </html>
