@@ -46,7 +46,7 @@
         }
         
         @keyframes glow {
-            0% { box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold; }
+            0% { box-shadow: 0 0 5px gold, 0 0 10px gold,  ﻿0 0 15px gold; }
             50% { box-shadow: 0 0 20px gold, 0 0 30px gold, 0 0 40px gold; }
             100% { box-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold; }
         }
@@ -124,39 +124,36 @@
             border-color: rgba(255,215,0,0.2);
         }
 
-        /* ===== СТИЛИ ДЛЯ ВСЕХ КНОПОК ===== */
-        button, .quick-link, .settings-button, .theme-toggle, .admin-tab,
-        .feature-card button, .ai-button, #next-btn, #enter-btn,
-        #logout-link, #admin-logout-link, #settingsButton, #adminSettingsButton,
-        #saveSettingsBtn, #applyMaintenanceBtn, #clearAllUsers, #clearSearchHistory,
-        #clearClickStats, #clearAllData, #saveAdminSettingsBtn, .admin-settings-button,
-        .settings-close, .name-example, .news-card, .admin-badge, .online-counter,
-        .footer a, .chat-toggle, #chatSend, .legal-links a, #fullscreen-btn {
-            pointer-events: auto !important;
-            cursor: pointer !important;
-            position: relative;
+        /* ===== КНОПКИ В ШАПКЕ (настройки и скачивание) ===== */
+        .download-button {
+            position: absolute;
+            top: 20px;
+            right: 120px; /* отступ от settings-button, которая справа 20px */
+            background: linear-gradient(135deg, gold, orange);
+            color: #1a2b3c;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
             z-index: 100;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: none;
-            outline: none;
         }
-
-        button:hover, .quick-link:hover, .settings-button:hover, .theme-toggle:hover,
-        .admin-tab:hover, .ai-button:hover, #next-btn:hover, #enter-btn:hover,
-        .footer a:hover, .chat-toggle:hover, .legal-links a:hover, #fullscreen-btn:hover {
+        .download-button:hover {
             transform: translateY(-2px);
             filter: brightness(1.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 20px rgba(255,215,0,0.5);
         }
-
-        button:active, .quick-link:active, .settings-button:active, .theme-toggle:active,
-        .admin-tab:active, .ai-button:active, #next-btn:active, #enter-btn:active,
-        .chat-toggle:active, .legal-links a:active, #fullscreen-btn:active {
+        .download-button:active {
             transform: translateY(2px) scale(0.98);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
-        /* ===== КНОПКА НАСТРОЕК (ОБЩАЯ) ===== */
         .settings-button {
             position: absolute;
             top: 20px;
@@ -177,6 +174,49 @@
         .settings-button::before {
             content: "⚙️";
             font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .download-button {
+                right: 100px;
+                padding: 8px 16px;
+                font-size: 1rem;
+            }
+            .download-button span {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== СТИЛИ ДЛЯ ВСЕХ КНОПОК ===== */
+        button, .quick-link, .theme-toggle, .admin-tab,
+        .feature-card button, .ai-button, #next-btn, #enter-btn,
+        #logout-link, #admin-logout-link, #adminSettingsButton,
+        #saveSettingsBtn, #applyMaintenanceBtn, #clearAllUsers, #clearSearchHistory,
+        #clearClickStats, #clearAllData, #saveAdminSettingsBtn, .admin-settings-button,
+        .settings-close, .name-example, .news-card, .admin-badge, .online-counter,
+        .footer a, .chat-toggle, #chatSend, .legal-links a, #fullscreen-btn {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative;
+            z-index: 100;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            outline: none;
+        }
+
+        button:hover, .quick-link:hover, .theme-toggle:hover,
+        .admin-tab:hover, .ai-button:hover, #next-btn:hover, #enter-btn:hover,
+        .footer a:hover, .chat-toggle:hover, .legal-links a:hover, #fullscreen-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active, .quick-link:active, .theme-toggle:active,
+        .admin-tab:active, .ai-button:hover, #next-btn:active, #enter-btn:active,
+        .chat-toggle:active, .legal-links a:active, #fullscreen-btn:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
         /* ===== КНОПКА АДМИН-НАСТРОЕК ===== */
@@ -1009,6 +1049,10 @@
     <!-- Основной интерфейс сайта, обёрнут в #main-interface для блокировки -->
     <div id="main-interface" class="">
         <div class="container" id="app">
+            <!-- Кнопка скачать приложение -->
+            <a href="/app.apk" class="download-button" id="downloadButton" download>
+                <span>📲</span> Скачать приложение
+            </a>
             <button class="settings-button" id="settingsButton"></button>
 
             <div id="welcome-block" class="welcome-screen">
@@ -1094,6 +1138,7 @@
                     <div class="admin-tab active" data-tab="dashboard">📊 Дашборд</div>
                     <div class="admin-tab" data-tab="users">👥 Пользователи</div>
                     <div class="admin-tab" data-tab="stats">📈 Статистика</div>
+                    <div class="admin-tab" data-tab="support">🛟 Поддержка</div>
                 </div>
                 <div class="admin-tab-content active" id="tab-dashboard">
                     <div class="features-grid">
@@ -1125,6 +1170,12 @@
                     <div class="feature-card">
                         <h3>Общая статистика</h3>
                         <div id="total-stats"></div>
+                    </div>
+                </div>
+                <div class="admin-tab-content" id="tab-support">
+                    <div class="feature-card">
+                        <h3>🛟 Обращения в поддержку</h3>
+                        <div id="support-messages-list" style="max-height: 400px; overflow-y: auto;"></div>
                     </div>
                 </div>
                 <div class="search-form">
@@ -1176,6 +1227,28 @@
         <span>⛶</span> На весь экран
     </div>
 
+    <!-- ===== КНОПКА ПОДДЕРЖКИ ===== -->
+    <div id="support-button" style="position: fixed; bottom: 140px; left: 20px; background: rgba(0,0,0,0.7); color: white; border-radius: 50px; padding: 10px 20px; font-size: 1rem; cursor: pointer; z-index: 1002; border: 2px solid gold; backdrop-filter: blur(5px); display: flex; align-items: center; gap: 5px;">
+        <span>🛟</span> Поддержка
+    </div>
+
+    <!-- Окно поддержки для пользователей -->
+    <div id="support-window" style="display: none; position: fixed; bottom: 200px; left: 20px; width: 320px; height: 450px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 2px solid gold; flex-direction: column; overflow: hidden; z-index: 1003;">
+        <div style="background: gold; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #1a2b3c;">
+            <span>🛟 Техподдержка</span>
+            <button onclick="closeSupportWindow()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #1a2b3c;">×</button>
+        </div>
+        <div id="support-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.8);">
+            <div style="align-self: center; background: #e5e5ea; color: #666; padding: 8px 12px; border-radius: 18px; max-width: 90%; font-style: italic; font-size: 0.85rem;">
+                Напишите сообщение, и администратор ответит вам.
+            </div>
+        </div>
+        <div style="display: flex; padding: 10px; border-top: 1px solid #ccc;">
+            <input type="text" id="support-input" placeholder="Ваше сообщение..." style="flex: 1; padding: 10px; border-radius: 30px; border: 1px solid #ccc; outline: none;">
+            <button onclick="sendSupportMessage()" style="width: 45px; height: 45px; margin-left: 8px; background: gold; border: none; border-radius: 50%; color: #1a2b3c; font-size: 1.2rem; cursor: pointer;">➤</button>
+        </div>
+    </div>
+
     <!-- Баннер с политикой конфиденциальности (с чекбоксом и крестиком) -->
     <div id="privacy-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px 30px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold; display: flex; flex-direction: column; align-items: center; gap: 10px;">
         <div style="position: relative; width: 100%;">
@@ -1206,7 +1279,8 @@
             HOURLY: 'krugle_hourly',
             USER_SETTINGS: 'krugle_user_settings_',
             MAINTENANCE: 'maintenance_mode',
-            PRIVACY_ACCEPTED: 'privacy_accepted'
+            PRIVACY_ACCEPTED: 'privacy_accepted',
+            SUPPORT_MESSAGES: 'kolocrug_support_messages'
         };
 
         if (!localStorage.getItem(STORAGE_KEYS.USERS)) localStorage.setItem(STORAGE_KEYS.USERS, '{}');
@@ -1309,6 +1383,197 @@
         let pingInterval = null;
         let currentImageUrl = null;
         let userSettings = {};
+
+        // ---------- ПОДДЕРЖКА ----------
+        function loadSupportMessages() {
+            const saved = localStorage.getItem(STORAGE_KEYS.SUPPORT_MESSAGES);
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveSupportMessages(messages) {
+            localStorage.setItem(STORAGE_KEYS.SUPPORT_MESSAGES, JSON.stringify(messages));
+            if (!adminBlock.classList.contains('hidden')) {
+                renderSupportMessages();
+            }
+        }
+
+        function sendSupportMessage() {
+            const input = document.getElementById('support-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = loadSupportMessages();
+            const userName = currentUser || 'Гость';
+
+            // Создаём обращение, если это первое сообщение от пользователя
+            let ticket = messages.find(t => t.userName === userName && t.status !== 'closed');
+            if (!ticket) {
+                ticket = {
+                    id: 'ticket_' + Date.now(),
+                    userName: userName,
+                    status: 'open',
+                    messages: []
+                };
+                messages.push(ticket);
+            }
+
+            ticket.messages.push({
+                type: 'user',
+                text: msg,
+                timestamp: Date.now()
+            });
+
+            saveSupportMessages(messages);
+
+            // Добавляем сообщение в окно поддержки
+            const messagesDiv = document.getElementById('support-messages');
+            messagesDiv.innerHTML += `
+                <div style="align-self: flex-end; background: #1e4d7c; color: white; padding: 8px 12px; border-radius: 18px; max-width: 80%; margin-bottom: 5px;">
+                    <small style="display: block; font-size: 0.7rem; opacity: 0.7;">${userName}</small>
+                    ${msg}
+                </div>
+            `;
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendAdminReply(ticketId) {
+            const input = document.getElementById('admin-support-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = loadSupportMessages();
+            const ticket = messages.find(t => t.id === ticketId);
+            if (!ticket) return;
+
+            ticket.messages.push({
+                type: 'admin',
+                adminName: currentUser || 'Админ',
+                text: msg,
+                timestamp: Date.now()
+            });
+
+            saveSupportMessages(messages);
+            input.value = '';
+            renderSupportMessages();
+        }
+
+        function closeTicket(ticketId) {
+            const messages = loadSupportMessages();
+            const ticket = messages.find(t => t.id === ticketId);
+            if (ticket) {
+                ticket.status = 'closed';
+                saveSupportMessages(messages);
+                renderSupportMessages();
+            }
+        }
+
+        function renderSupportMessages() {
+            const container = document.getElementById('support-messages-list');
+            if (!container) return;
+
+            const messages = loadSupportMessages();
+            let html = '';
+
+            if (messages.length === 0) {
+                html = '<p>Нет обращений</p>';
+            } else {
+                messages.forEach(ticket => {
+                    if (ticket.status !== 'closed') { // Показываем только открытые
+                        const lastMsg = ticket.messages[ticket.messages.length - 1];
+                        html += `
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <strong>${ticket.userName}</strong>
+                                    <span style="background: gold; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">открыто</span>
+                                </div>
+                                <div style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;">
+                        `;
+                        ticket.messages.forEach(msg => {
+                            const time = new Date(msg.timestamp).toLocaleTimeString();
+                            if (msg.type === 'user') {
+                                html += `
+                                    <div style="margin-bottom: 8px;">
+                                        <small>${ticket.userName} · ${time}</small>
+                                        <p style="background: #1e4d7c; color: white; padding: 8px; border-radius: 10px;">${msg.text}</p>
+                                    </div>
+                                `;
+                            } else {
+                                html += `
+                                    <div style="margin-bottom: 8px;">
+                                        <small>${msg.adminName} (админ) · ${time}</small>
+                                        <p style="background: gold; color: #1a2b3c; padding: 8px; border-radius: 10px;">${msg.text}</p>
+                                    </div>
+                                `;
+                            }
+                        });
+                        html += `
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="admin-support-input-${ticket.id}" placeholder="Ответить..." style="flex: 1; padding: 8px; border-radius: 30px; border: 1px solid #ccc;">
+                                    <button onclick="sendAdminReply('${ticket.id}')" style="background: gold; border: none; padding: 8px 15px; border-radius: 30px; font-weight: bold; cursor: pointer;">Отправить</button>
+                                    <button onclick="closeTicket('${ticket.id}')" style="background: #f88; border: none; padding: 8px 15px; border-radius: 30px; font-weight: bold; cursor: pointer;">Закрыть</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Переопределяем showAdmin для обновления поддержки
+        const originalShowAdmin = showAdmin;
+        showAdmin = function(name) {
+            originalShowAdmin(name);
+            renderSupportMessages();
+        };
+
+        function toggleSupportWindow() {
+            const window = document.getElementById('support-window');
+            if (window.style.display === 'none' || window.style.display === '') {
+                window.style.display = 'flex';
+                // Загружаем историю сообщений для этого пользователя
+                const messages = loadSupportMessages();
+                const userName = currentUser || 'Гость';
+                const ticket = messages.find(t => t.userName === userName && t.status !== 'closed');
+                const messagesDiv = document.getElementById('support-messages');
+                messagesDiv.innerHTML = ''; // Очищаем
+
+                if (ticket) {
+                    ticket.messages.forEach(msg => {
+                        if (msg.type === 'user') {
+                            messagesDiv.innerHTML += `
+                                <div style="align-self: flex-end; background: #1e4d7c; color: white; padding: 8px 12px; border-radius: 18px; max-width: 80%; margin-bottom: 5px;">
+                                    <small style="display: block; font-size: 0.7rem; opacity: 0.7;">${ticket.userName}</small>
+                                    ${msg.text}
+                                </div>
+                            `;
+                        } else {
+                            messagesDiv.innerHTML += `
+                                <div style="align-self: flex-start; background: gold; color: #1a2b3c; padding: 8px 12px; border-radius: 18px; max-width: 80%; margin-bottom: 5px;">
+                                    <small style="display: block; font-size: 0.7rem;">${msg.adminName} (админ)</small>
+                                    ${msg.text}
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    messagesDiv.innerHTML = '<div style="align-self: center; background: #e5e5ea; color: #666; padding: 8px 12px; border-radius: 18px; max-width: 90%; font-style: italic; font-size: 0.85rem;">Напишите сообщение, и администратор ответит вам.</div>';
+                }
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } else {
+                window.style.display = 'none';
+            }
+        }
+
+        function closeSupportWindow() {
+            document.getElementById('support-window').style.display = 'none';
+        }
+
+        // Инициализация поддержки
+        document.getElementById('support-button').addEventListener('click', toggleSupportWindow);
 
         // Функция для управления блокировкой интерфейса
         function setInterfaceBlocked(blocked) {
@@ -1433,6 +1698,7 @@
             adminGreeting.innerHTML = `С возвращением, <span>${name}</span>!`;
             adminSearchInput.focus(); adminIframe.src = 'about:blank';
             join(name); renderAdminFeatures();
+            renderSupportMessages(); // Добавляем рендер поддержки
         }
 
         function join(name) {
@@ -1662,6 +1928,9 @@
                 tab.classList.add('active');
                 tabContents.forEach(c => c.classList.remove('active'));
                 document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                if (tab.dataset.tab === 'support') {
+                    renderSupportMessages();
+                }
             });
         });
 
@@ -1764,4 +2033,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
