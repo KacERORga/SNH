@@ -2668,5 +2668,45 @@
             });
         }
     </script>
-</body>
+<!-- Баннер с политикой конфиденциальности (с чекбоксом и крестиком) -->
+<div id="privacy-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); color: white; padding: 15px 30px; text-align: center; z-index: 99999; font-family: sans-serif; border-top: 3px solid gold; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+    <div style="position: relative; width: 100%;">
+        <span onclick="handleCloseBanner()" style="position: absolute; top: -5px; right: 0; font-size: 24px; cursor: pointer; color: white; background: transparent; border: none;">&times;</span>
+        <p style="margin-bottom: 5px; font-size: 14px; max-width: 90%;">
+            ⚖️ Используя сайт, вы соглашаетесь с <strong>Политикой конфиденциальности</strong> и <strong>Пользовательским соглашением</strong>.<br>
+            Мы собираем имя пользователя, IP-адрес и данные cookie для работы сайта. Данные не передаются третьим лицам.<br>
+            <span style="color: gold;">Владелец сайта: KacERORga_CoolKroog</span>
+        </p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+            <input type="checkbox" id="accept-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+            <span style="font-size: 14px;">Я принимаю условия</span>
+        </label>
+        <button onclick="acceptPrivacy()" style="background: gold; border: none; padding: 8px 25px; border-radius: 40px; font-weight: bold; cursor: pointer;">Принять</button>
+    </div>
+</div>
+
+<script>
+// Функции для работы с баннером конфиденциальности
+function acceptPrivacy() {
+    const checkbox = document.getElementById('accept-checkbox');
+    if (checkbox && checkbox.checked) {
+        localStorage.setItem('privacy_accepted', 'true');
+        document.getElementById('privacy-banner').style.display = 'none';
+    } else {
+        alert('Пожалуйста, отметьте галочку, чтобы принять политику конфиденциальности.');
+    }
+}
+
+function handleCloseBanner() {
+    const checkbox = document.getElementById('accept-checkbox');
+    if (checkbox && checkbox.checked) {
+        localStorage.setItem('privacy_accepted', 'true');
+        document.getElementById('privacy-banner').style.display = 'none';
+    } else {
+        alert('Пожалуйста, сначала отметьте галочку, чтобы принять условия.');
+    }
+}
+</script></body>
 </html>
