@@ -308,7 +308,124 @@
             box-shadow: 0 2px 5px rgba(29,161,242,0.3);
         }
 
-        /* УЛУЧШЕННЫЕ КНОПКИ - ТЕПЕРЬ ВИДНЫ НА ЛЮБОМ ФОНЕ */
+        /* КНОПКА УВЕДОМЛЕНИЙ */
+        .notifications-button {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+        .notifications-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+        .notifications-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid rgba(255,255,255,0.8);
+        }
+
+        /* ПАНЕЛЬ УВЕДОМЛЕНИЙ */
+        .notifications-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 350px;
+            max-width: 90vw;
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .notifications-panel.active {
+            display: block;
+        }
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .notifications-header h3 {
+            font-size: 1.2rem;
+        }
+        .mark-read-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .notification-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .notification-item.unread {
+            background: rgba(255,215,0,0.1);
+        }
+        .notification-icon {
+            width: 30px;
+            height: 30px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .notification-content {
+            flex: 1;
+        }
+        .notification-text {
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        .notification-time {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+        }
+
         .nav-buttons {
             display: flex;
             gap: 8px;
@@ -318,17 +435,17 @@
         }
 
         .nav-button {
-            background: rgba(0, 0, 0, 0.4); /* Более тёмный фон */
-            border: 2px solid rgba(255, 255, 255, 0.8); /* Яркая белая обводка */
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.8);
             color: white;
             padding: 8px 15px;
             border-radius: 40px;
             cursor: pointer;
             white-space: nowrap;
             font-size: 0.95rem;
-            font-weight: 600; /* Жирный шрифт */
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Тень для текста */
-            backdrop-filter: blur(5px); /* Лёгкое размытие фона */
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
             transition: 0.3s;
         }
 
@@ -339,15 +456,14 @@
         }
 
         .nav-button.active {
-            background: #FFD700; /* Ярко-жёлтый для активной кнопки */
+            background: #FFD700;
             border-color: #FFD700;
             color: #1a1a1a;
             text-shadow: none;
         }
 
-        /* УЛУЧШЕННАЯ КНОПКА ВЫХОДА */
         .logout-button {
-            background: rgba(231, 76, 60, 0.5); /* Более яркий красный */
+            background: rgba(231, 76, 60, 0.5);
             border: 2px solid rgba(255, 255, 255, 0.9);
             color: white;
             padding: 8px 15px;
@@ -938,6 +1054,13 @@
                 align-self: flex-end;
             }
             
+            .notifications-panel {
+                top: 120px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+            
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -1140,7 +1263,7 @@
 
     <div class="main-content" id="mainContent">
         <div class="container">
-            <!-- ИСПРАВЛЕННАЯ ВЕРХНЯЯ ПАНЕЛЬ -->
+            <!-- ИСПРАВЛЕННАЯ ВЕРХНЯЯ ПАНЕЛЬ С УВЕДОМЛЕНИЯМИ -->
             <div class="top-bar">
                 <div class="user-info">
                     <div class="kolobok" id="userKolobok" onclick="openKolobokSelector()">🍞</div>
@@ -1154,7 +1277,24 @@
                     <button class="nav-button" id="subscriptionsBtn" onclick="showSubscriptions()">Подписки</button>
                     <button class="nav-button" onclick="showProfile(localStorage.getItem('username'))">Профиль</button>
                 </div>
-                <button class="logout-button" onclick="logout()">Выйти</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="notifications-button" id="notificationsButton" onclick="toggleNotifications()">
+                        🔔
+                        <span class="notifications-badge" id="notificationsBadge" style="display: none;">0</span>
+                    </div>
+                    <button class="logout-button" onclick="logout()">Выйти</button>
+                </div>
+            </div>
+
+            <!-- ПАНЕЛЬ УВЕДОМЛЕНИЙ -->
+            <div class="notifications-panel" id="notificationsPanel">
+                <div class="notifications-header">
+                    <h3>Уведомления</h3>
+                    <button class="mark-read-btn" onclick="markAllNotificationsRead()">Прочитать всё</button>
+                </div>
+                <div class="notifications-list" id="notificationsList">
+                    <!-- Уведомления будут добавляться сюда -->
+                </div>
             </div>
 
             <div class="admin-panel" id="adminPanel">
@@ -1230,6 +1370,148 @@
         // ===== ВАШЕ ХРАНИЛИЩЕ НА NPOINT =====
         const API_URL = 'https://api.npoint.io/3c013202cb4baa90ff63';
         
+        // ===== УВЕДОМЛЕНИЯ =====
+        let notifications = [];
+        
+        function loadNotifications() {
+            const saved = localStorage.getItem('notifications_' + localStorage.getItem('username'));
+            if (saved) {
+                notifications = JSON.parse(saved);
+            } else {
+                notifications = [];
+            }
+            updateNotificationsBadge();
+            renderNotifications();
+        }
+        
+        function saveNotifications() {
+            localStorage.setItem('notifications_' + localStorage.getItem('username'), JSON.stringify(notifications));
+            updateNotificationsBadge();
+        }
+        
+        function addNotification(type, fromUser, targetId = null) {
+            const username = localStorage.getItem('username');
+            if (!username) return;
+            
+            // Не добавляем уведомление о своих действиях
+            if (fromUser === username) return;
+            
+            const notification = {
+                id: Date.now(),
+                type: type,
+                fromUser: fromUser,
+                targetId: targetId,
+                time: new Date().toLocaleString(),
+                read: false
+            };
+            
+            notifications.unshift(notification);
+            saveNotifications();
+            renderNotifications();
+            
+            // Показываем всплывающее уведомление
+            showToastNotification(type, fromUser);
+        }
+        
+        function showToastNotification(type, fromUser) {
+            const messages = {
+                'like': `❤️ ${fromUser} лайкнул ваш пост`,
+                'subscribe': `👥 ${fromUser} подписался на вас`,
+                'comment': `💬 ${fromUser} оставил комментарий`,
+                'repost': `🔄 ${fromUser} репостнул ваш пост`
+            };
+            
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(30, 30, 40, 0.95);
+                backdrop-filter: blur(10px);
+                border: 1px solid #FFD700;
+                border-radius: 30px;
+                padding: 15px 25px;
+                color: white;
+                z-index: 10001;
+                animation: slideIn 0.3s;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            `;
+            toast.textContent = messages[type] || `🔔 Новое уведомление от ${fromUser}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        function updateNotificationsBadge() {
+            const badge = document.getElementById('notificationsBadge');
+            const unreadCount = notifications.filter(n => !n.read).length;
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            if (!list) return;
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">Нет уведомлений</div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(n => {
+                const icons = {
+                    'like': '❤️',
+                    'subscribe': '👥',
+                    'comment': '💬',
+                    'repost': '🔄'
+                };
+                const messages = {
+                    'like': 'лайкнул ваш пост',
+                    'subscribe': 'подписался на вас',
+                    'comment': 'оставил комментарий',
+                    'repost': 'репостнул ваш пост'
+                };
+                
+                return `
+                    <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})">
+                        <div class="notification-icon">${icons[n.type] || '🔔'}</div>
+                        <div class="notification-content">
+                            <div class="notification-text"><strong>${n.fromUser}</strong> ${messages[n.type] || 'совершил действие'}</div>
+                            <div class="notification-time">${n.time}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleNotifications() {
+            const panel = document.getElementById('notificationsPanel');
+            panel.classList.toggle('active');
+        }
+        
+        function markNotificationRead(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification) {
+                notification.read = true;
+                saveNotifications();
+                renderNotifications();
+            }
+        }
+        
+        function markAllNotificationsRead() {
+            notifications.forEach(n => n.read = true);
+            saveNotifications();
+            renderNotifications();
+        }
+
         // ===== МОДАЛЬНЫЕ ОКНА =====
         function openPrivacyModal() {
             document.getElementById('privacyModal').classList.add('active');
@@ -1524,6 +1806,7 @@
             
             loadSubscriptions();
             loadUserProfiles();
+            loadNotifications();
             loadPostsFromCloud();
         }
 
@@ -1621,6 +1904,8 @@
                 subscriptions.delete(username);
             } else {
                 subscriptions.add(username);
+                // Добавляем уведомление о подписке
+                addNotification('subscribe', currentUser);
             }
             saveSubscriptions();
             
@@ -1776,6 +2061,8 @@
                     delete post.likes[username];
                 } else {
                     post.likes[username] = true;
+                    // Добавляем уведомление о лайке
+                    addNotification('like', username, postId);
                 }
                 
                 await savePostsToCloud();
@@ -1809,6 +2096,10 @@
                     author: username,
                     text: text
                 });
+                
+                // Добавляем уведомление о комментарии
+                addNotification('comment', username, postId);
+                
                 await savePostsToCloud();
                 refreshView();
                 input.value = '';
@@ -1862,6 +2153,10 @@
             };
 
             posts.unshift(repostPost);
+            
+            // Добавляем уведомление о репосте
+            addNotification('repost', username, postId);
+            
             await savePostsToCloud();
             
             // Обновляем статистику профиля
@@ -2161,6 +2456,20 @@
             else document.body.className = 'night';
         }
 
+        // Добавляем стили для анимаций
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
         window.onload = async function() {
             await loadBannedWordsFromFile();
             loadUserProfiles();
@@ -2188,6 +2497,7 @@
                 }
                 
                 loadSubscriptions();
+                loadNotifications();
                 await loadPostsFromCloud();
             }
             
@@ -2200,6 +2510,13 @@
             if (event.target.classList.contains('modal-overlay')) {
                 closePrivacyModal();
                 closeLicenseModal();
+            }
+            
+            // Закрываем панель уведомлений при клике вне
+            const panel = document.getElementById('notificationsPanel');
+            const button = document.getElementById('notificationsButton');
+            if (!panel.contains(event.target) && !button.contains(event.target)) {
+                panel.classList.remove('active');
             }
         }
     </script>
