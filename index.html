@@ -757,10 +757,10 @@
     </div>
 
     <script>
-        // ===== НАСТРОЙКИ JSONBIN.IO =====
+        // ===== ВАШИ РАБОЧИЕ КЛЮЧИ JSONBIN =====
         const BIN_ID = '69b6a5a4b7ec241ddc6e0ea2';
         const API_KEY = '$2a$10$C0R5Jnbb6cr4df/WnSQ0W.H.RQe.Nx38MfY36zsyOO2nr1l0dx0Z6';
-
+        
         // ===== ВЕРИФИЦИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ =====
         let verifiedUsers = new Set(['BUBLEMERC', 'KacERORga']);
 
@@ -809,7 +809,7 @@
             return false;
         }
 
-        // ===== ОБЛАЧНОЕ ХРАНИЛИЩЕ JSONBIN =====
+        // ===== JSONBIN ХРАНИЛИЩЕ =====
         let posts = [];
         let postsDisplayed = 20;
         let currentView = 'feed';
@@ -820,14 +820,10 @@
                 document.getElementById('dynamicContent').innerHTML = '<div class="loading">Загрузка постов...</div>';
                 
                 const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: {
-                        'X-Master-Key': API_KEY
-                    }
+                    headers: { 'X-Master-Key': API_KEY }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ошибка ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ошибка ${response.status}`);
                 
                 const data = await response.json();
                 posts = data.record.posts || [];
@@ -847,7 +843,7 @@
 
         async function savePostsToCloud() {
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -855,16 +851,9 @@
                     },
                     body: JSON.stringify({ posts: posts })
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ошибка ${response.status}`);
-                }
-                
                 console.log('✅ Посты сохранены в облако');
-                return true;
             } catch (error) {
                 console.error('❌ Ошибка сохранения в облако:', error);
-                return false;
             }
         }
 
@@ -1102,7 +1091,7 @@
                 video: currentVideo,
                 likes: {},
                 comments: [],
-                time: 'только что'
+                time: new Date().toLocaleString()
             };
 
             posts.unshift(newPost);
@@ -1142,6 +1131,72 @@
         function userLiked(post) {
             const username = localStorage.getItem('username');
             return post.likes && post.likes[username];
+        }
+
+        async function addComment(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const text = input.value.trim();
+            const username = localStorage.getItem('username');
+            
+            if (text) {
+                if (containsBannedWords(text)) {
+                    alert('⚠️ Комментарий содержит запрещённые выражения');
+                    return;
+                }
+                
+                const post = posts.find(p => p.id == postId);
+                post.comments.push({
+                    author: username,
+                    text: text
+                });
+                await savePostsToCloud();
+                refreshView();
+                input.value = '';
+            }
+        }
+
+        async function deletePost(postId) {
+            if (confirm('Удалить этот пост?')) {
+                posts = posts.filter(p => p.id != postId);
+                await savePostsToCloud();
+                refreshView();
+            }
+        }
+
+        async function repost(postId) {
+            const originalPost = posts.find(p => p.id == postId);
+            const username = localStorage.getItem('username');
+            
+            if (!username) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+
+            if (originalPost.author === username) {
+                alert('Нельзя репостнуть свой собственный пост');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            const userKolobok = users[username]?.kolobok || '🍞';
+
+            const repostPost = {
+                id: Date.now(),
+                author: username,
+                authorKolobok: userKolobok,
+                content: originalPost.content,
+                image: originalPost.image,
+                video: originalPost.video,
+                likes: {},
+                comments: [],
+                time: new Date().toLocaleString(),
+                isRepost: true,
+                originalAuthor: originalPost.author
+            };
+
+            posts.unshift(repostPost);
+            await savePostsToCloud();
+            refreshView();
         }
 
         function refreshView() {
@@ -1346,72 +1401,6 @@
         function toggleComments(postId) {
             const div = document.getElementById(`comments-${postId}`);
             if (div) div.style.display = div.style.display === 'none' ? 'block' : 'none';
-        }
-
-        async function addComment(postId) {
-            const input = document.getElementById(`comment-input-${postId}`);
-            const text = input.value.trim();
-            const username = localStorage.getItem('username');
-            
-            if (text) {
-                if (containsBannedWords(text)) {
-                    alert('⚠️ Комментарий содержит запрещённые выражения');
-                    return;
-                }
-                
-                const post = posts.find(p => p.id == postId);
-                post.comments.push({
-                    author: username,
-                    text: text
-                });
-                await savePostsToCloud();
-                refreshView();
-                input.value = '';
-            }
-        }
-
-        async function deletePost(postId) {
-            if (confirm('Удалить этот пост?')) {
-                posts = posts.filter(p => p.id != postId);
-                await savePostsToCloud();
-                refreshView();
-            }
-        }
-
-        async function repost(postId) {
-            const originalPost = posts.find(p => p.id == postId);
-            const username = localStorage.getItem('username');
-            
-            if (!username) {
-                alert('Сначала войдите в систему');
-                return;
-            }
-
-            if (originalPost.author === username) {
-                alert('Нельзя репостнуть свой собственный пост');
-                return;
-            }
-
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            const userKolobok = users[username]?.kolobok || '🍞';
-
-            const repostPost = {
-                id: Date.now(),
-                author: username,
-                authorKolobok: userKolobok,
-                content: originalPost.content,
-                image: originalPost.image,
-                video: originalPost.video,
-                likes: {},
-                comments: [],
-                time: 'только что',
-                isRepost: true,
-                originalAuthor: originalPost.author
-            };
-
-            posts.unshift(repostPost);
-            await savePostsToCloud();
-            refreshView();
         }
 
         function loadMore() {
