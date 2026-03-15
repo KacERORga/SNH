@@ -715,6 +715,7 @@
             color: white;
         }
 
+        /* НОВЫЙ СТИЛЬ ДЛЯ ПРОФИЛЯ */
         .profile-header {
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(20px);
@@ -726,17 +727,77 @@
             align-items: center;
             gap: 30px;
             color: white;
+            flex-wrap: wrap;
         }
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: linear-gradient(145deg, #FFD700, #FFA500);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 3rem;
             border: 3px solid rgba(255,255,255,0.3);
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-bio {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+            max-width: 500px;
+        }
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+        .edit-profile-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .edit-profile-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .bio-edit {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 40px;
+            color: white;
+            margin: 10px 0;
+            display: none;
+        }
+        .bio-edit.active {
+            display: block;
         }
 
         .load-more {
@@ -971,6 +1032,7 @@
                 </div>
             </div>
 
+            <!-- ИСПРАВЛЕННАЯ ФОРМА С РАБОЧЕЙ ГАЛОЧКОЙ -->
             <div class="post-form">
                 <textarea id="postContent" placeholder="Что нового?" rows="3"></textarea>
                 
@@ -985,9 +1047,10 @@
                     </label>
                 </div>
 
+                <!-- ГАЛОЧКА ТЕПЕРЬ РАБОТАЕТ! -->
                 <div class="copyright-notice">
                     <label class="copyright-checkbox">
-                        <input type="checkbox" id="copyrightCheck" checked disabled>
+                        <input type="checkbox" id="copyrightCheck" required>
                         <span>Я подтверждаю, что имею права на публикуемые фото/видео и согласен с <a href="#" onclick="openLicenseModal(); return false;" style="color: #FFD700;">лицензионным соглашением</a></span>
                     </label>
                     <div class="copyright-warning" id="copyrightWarning"></div>
@@ -1134,6 +1197,73 @@
         let currentVideo = null;
         let currentImageHash = null;
 
+        // ===== ПРОФИЛИ ПОЛЬЗОВАТЕЛЕЙ =====
+        let userProfiles = {};
+
+        function loadUserProfiles() {
+            const saved = localStorage.getItem('user_profiles');
+            if (saved) {
+                userProfiles = JSON.parse(saved);
+            } else {
+                // Создаём профили для существующих пользователей
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                Object.keys(users).forEach(username => {
+                    if (!userProfiles[username]) {
+                        userProfiles[username] = {
+                            bio: '',
+                            views: 0,
+                            postsCount: 0,
+                            followersCount: 0,
+                            followingCount: 0
+                        };
+                    }
+                });
+            }
+        }
+
+        function saveUserProfiles() {
+            localStorage.setItem('user_profiles', JSON.stringify(userProfiles));
+        }
+
+        function updateProfileStats(username) {
+            if (!userProfiles[username]) {
+                userProfiles[username] = {
+                    bio: '',
+                    views: 0,
+                    postsCount: 0,
+                    followersCount: 0,
+                    followingCount: 0
+                };
+            }
+            
+            // Считаем посты
+            userProfiles[username].postsCount = posts.filter(p => p.author === username).length;
+            
+            // Считаем подписчиков
+            let followers = 0;
+            const allUsers = JSON.parse(localStorage.getItem('users') || '{}');
+            Object.keys(allUsers).forEach(user => {
+                const subs = JSON.parse(localStorage.getItem('subs_' + user) || '[]');
+                if (subs.includes(username)) {
+                    followers++;
+                }
+            });
+            userProfiles[username].followersCount = followers;
+            
+            // Считаем подписки
+            const following = JSON.parse(localStorage.getItem('subs_' + username) || '[]');
+            userProfiles[username].followingCount = following.length;
+            
+            saveUserProfiles();
+        }
+
+        function addProfileView(username) {
+            if (username && userProfiles[username]) {
+                userProfiles[username].views++;
+                saveUserProfiles();
+            }
+        }
+
         async function loadPostsFromCloud() {
             try {
                 document.getElementById('dynamicContent').innerHTML = '<div class="loading">Загрузка постов...</div>';
@@ -1146,6 +1276,11 @@
                 console.log(`✅ Загружено ${posts.length} постов из облака`);
                 
                 posts.sort((a, b) => b.id - a.id);
+                
+                // Обновляем статистику профилей
+                loadUserProfiles();
+                const uniqueAuthors = [...new Set(posts.map(p => p.author))];
+                uniqueAuthors.forEach(author => updateProfileStats(author));
                 
                 if (currentView === 'feed') showFeed();
                 return posts;
@@ -1229,6 +1364,7 @@
             }
             
             loadSubscriptions();
+            loadUserProfiles();
             loadPostsFromCloud();
         }
 
@@ -1300,6 +1436,7 @@
 
         function acceptPrivacy() {
             document.getElementById('privacyPopup').classList.add('hidden');
+            localStorage.setItem('privacyAccepted', 'true');
         }
 
         let subscriptions = new Set();
@@ -1327,6 +1464,12 @@
                 subscriptions.add(username);
             }
             saveSubscriptions();
+            
+            // Обновляем статистику профиля
+            if (userProfiles[username]) {
+                updateProfileStats(username);
+            }
+            
             refreshView();
         }
 
@@ -1390,12 +1533,20 @@
             document.getElementById('videoUpload').value = '';
         }
 
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ createPost =====
         async function createPost() {
             const content = document.getElementById('postContent').value.trim();
             const username = localStorage.getItem('username');
+            const copyrightCheck = document.getElementById('copyrightCheck');
             
             if (!username) {
                 alert('Сначала войдите в систему');
+                return;
+            }
+            
+            // ПРОВЕРЯЕМ ГАЛОЧКУ (теперь работает!)
+            if (!copyrightCheck.checked) {
+                alert('⚠️ Необходимо подтвердить, что у вас есть права на публикуемые фото/видео');
                 return;
             }
             
@@ -1431,11 +1582,17 @@
                 addToBlacklist(currentImageHash);
             }
             
+            // Обновляем статистику профиля
+            updateProfileStats(username);
+            
             document.getElementById('postContent').value = '';
             document.getElementById('mediaPreview').innerHTML = '';
             currentImage = null;
             currentVideo = null;
             currentImageHash = null;
+            
+            // Сбрасываем галочку
+            copyrightCheck.checked = false;
             
             showFeed();
         }
@@ -1494,6 +1651,13 @@
             if (confirm('Удалить этот пост?')) {
                 posts = posts.filter(p => p.id != postId);
                 await savePostsToCloud();
+                
+                // Обновляем статистику профиля автора
+                const post = posts.find(p => p.id == postId);
+                if (post) {
+                    updateProfileStats(post.author);
+                }
+                
                 refreshView();
             }
         }
@@ -1531,6 +1695,10 @@
 
             posts.unshift(repostPost);
             await savePostsToCloud();
+            
+            // Обновляем статистику профиля
+            updateProfileStats(username);
+            
             refreshView();
         }
 
@@ -1601,18 +1769,48 @@
             currentView = 'profile';
             currentProfile = username;
             
+            // Добавляем просмотр профиля
+            if (username !== localStorage.getItem('username')) {
+                addProfileView(username);
+            }
+            
             const userPosts = posts.filter(p => p.author === username);
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             const userKolobok = users[username]?.kolobok || '🍞';
             const badge = getVerifiedBadge(username);
+            const profile = userProfiles[username] || { bio: '', views: 0, postsCount: 0, followersCount: 0, followingCount: 0 };
+            const isOwnProfile = username === localStorage.getItem('username');
             
             let html = `
                 <div class="profile-header">
                     <div class="profile-avatar">${userKolobok}</div>
-                    <div>
-                        <h2>@${username} ${badge}</h2>
-                        <p>Постов: ${userPosts.length}</p>
-                        <p style="margin-top: 10px;">Колобок: ${userKolobok}</p>
+                    <div class="profile-info">
+                        <div class="profile-name">
+                            @${username} ${badge}
+                        </div>
+                        <div class="profile-bio" id="profileBio">${profile.bio || '👋 Привет! Я в Kolocrug!'}</div>
+                        ${isOwnProfile ? `
+                            <textarea id="bioEdit" class="bio-edit" placeholder="Напишите о себе...">${profile.bio || ''}</textarea>
+                            <button class="edit-profile-btn" onclick="toggleBioEdit()">✏️ Редактировать профиль</button>
+                        ` : ''}
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${profile.postsCount}</div>
+                                <div class="stat-label">постов</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${profile.followersCount}</div>
+                                <div class="stat-label">подписчиков</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${profile.followingCount}</div>
+                                <div class="stat-label">подписок</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${profile.views}</div>
+                                <div class="stat-label">просмотров</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="feed">
@@ -1628,6 +1826,27 @@
 
             html += '</div>';
             document.getElementById('dynamicContent').innerHTML = html;
+        }
+
+        function toggleBioEdit() {
+            const bioDiv = document.getElementById('profileBio');
+            const bioEdit = document.getElementById('bioEdit');
+            const username = localStorage.getItem('username');
+            
+            if (bioEdit.style.display === 'none' || !bioEdit.style.display) {
+                bioDiv.style.display = 'none';
+                bioEdit.style.display = 'block';
+                bioEdit.focus();
+            } else {
+                const newBio = bioEdit.value.trim();
+                if (newBio) {
+                    bioDiv.textContent = newBio;
+                    userProfiles[username].bio = newBio;
+                    saveUserProfiles();
+                }
+                bioDiv.style.display = 'block';
+                bioEdit.style.display = 'none';
+            }
         }
 
         function renderFeed() {
@@ -1776,6 +1995,7 @@
 
         window.onload = async function() {
             await loadBannedWordsFromFile();
+            loadUserProfiles();
             
             // Показываем всплывашку с политикой, если ещё не принимали
             if (!localStorage.getItem('privacyAccepted')) {
@@ -1816,4 +2036,4 @@
         }
     </script>
 </body>
-                </html>
+</html>
