@@ -69,7 +69,6 @@
             padding: 20px;
         }
 
-        /* Модальное окно политики */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -161,7 +160,6 @@
             box-shadow: 0 5px 15px rgba(255,215,0,0.4);
         }
 
-        /* Всплывашка с политикой */
         .privacy-popup {
             position: fixed;
             bottom: 30px;
@@ -275,7 +273,6 @@
 
         .main-content { display: none; }
 
-        /* ИСПРАВЛЕННАЯ ВЕРХНЯЯ ПАНЕЛЬ - КНОПКИ ТЕПЕРЬ ВИДНЫ */
         .top-bar {
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(20px);
@@ -350,7 +347,6 @@
             animation: pulse 2s infinite;
         }
 
-        /* КНОПКА УВЕДОМЛЕНИЙ */
         .notifications-button {
             position: relative;
             background: rgba(0, 0, 0, 0.4);
@@ -389,7 +385,6 @@
             animation: pulse 1s infinite;
         }
 
-        /* ПАНЕЛЬ УВЕДОМЛЕНИЙ */
         .notifications-panel {
             position: absolute;
             top: 70px;
@@ -605,7 +600,6 @@
             box-shadow: 0 5px 15px rgba(241,196,15,0.4);
         }
 
-        /* Кнопки для закрепления и накрутки */
         .pin-button, .boost-button, .unboost-button {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.3);
@@ -745,7 +739,6 @@
             box-shadow: 0 5px 20px rgba(255,215,0,0.5);
         }
 
-        /* Уведомление об авторских правах */
         .copyright-notice {
             margin: 15px 0;
             padding: 15px;
@@ -774,7 +767,6 @@
             margin-top: 5px;
         }
 
-        /* Ссылки в подвале */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -1076,7 +1068,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        /* НОВЫЙ СТИЛЬ ДЛЯ ПРОФИЛЯ */
         .profile-header {
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(20px);
@@ -1223,7 +1214,6 @@
             color: white;
         }
 
-        /* Медиа-запросы для маленьких экранов */
         @media (max-width: 768px) {
             .site-header h1 {
                 font-size: 2rem;
@@ -1320,6 +1310,58 @@
                 text-align: center;
             }
         }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            75% { transform: translateY(10px) rotate(-2deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 0 30px rgba(255,215,0,0.7); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
     </style>
 </head>
 <body class="day">
@@ -1327,23 +1369,19 @@
         <h1>Seti.kolokrug</h1>
     </header>
 
-    <!-- Модальное окно политики конфиденциальности -->
     <div class="modal-overlay" id="privacyModal">
         <div class="modal-content">
             <div class="modal-close" onclick="closePrivacyModal()">✕</div>
             <h2>📄 Политика конфиденциальности</h2>
             <p><strong>Последнее обновление:</strong> 15 марта 2026 г.</p>
-            
             <h3>1. Общие положения</h3>
             <p>Настоящая политика конфиденциальности (далее — Политика) действует в отношении всей информации, которую социальная сеть "Kolocrug" (Seti.KOoOlobok) может получить о пользователе во время использования сайта.</p>
-            
             <h3>2. Какие данные мы собираем</h3>
             <ul>
                 <li><strong>Данные, которые вы предоставляете:</strong> имя пользователя (username), пароль (в зашифрованном виде), сообщения в поддержку, настройки профиля, выбранный колобок.</li>
                 <li><strong>Данные автоматически:</strong> IP-адрес, тип браузера, время посещения, действия на сайте, загруженные фото и видео.</li>
                 <li><strong>Cookies:</strong> для сохранения настроек и улучшения работы сайта.</li>
             </ul>
-            
             <h3>3. Как мы используем ваши данные</h3>
             <ul>
                 <li>Для работы сайта (настройки, поиск, поддержка).</li>
@@ -1351,51 +1389,39 @@
                 <li>Для связи с вами (если вы обратились в поддержку).</li>
                 <li>Для модерации контента и соблюдения законодательства РФ.</li>
             </ul>
-            
             <h3>4. Защита данных</h3>
             <p>Мы используем современные методы шифрования и защиты данных. Все данные передаются по защищенному протоколу HTTPS. Пароли хранятся в зашифрованном виде.</p>
-            
             <h3>5. Передача данных третьим лицам</h3>
             <p>Мы не продаем и не передаем ваши личные данные третьим лицам, кроме случаев, предусмотренных законодательством РФ.</p>
-            
             <h3>6. Хранение и удаление данных</h3>
             <p>Ваши данные хранятся до тех пор, пока вы пользуетесь сайтом. Вы можете в любой момент удалить свой аккаунт, обратившись в поддержку. Посты удаляются автоматически при нажатии кнопки удаления.</p>
-            
             <h3>7. Модерация контента</h3>
             <p>Мы автоматически проверяем загружаемые фото и видео на соответствие законодательству. Запрещённый контент блокируется. Мы также ведём чёрный список файлов, нарушающих авторские права.</p>
-            
             <h3>8. Ваши права</h3>
             <ul>
                 <li>Вы можете запросить удаление ваших данных.</li>
                 <li>Вы можете отключить cookies в настройках браузера.</li>
                 <li>Вы можете обратиться в поддержку для уточнения информации.</li>
             </ul>
-            
             <h3>9. Контакты</h3>
             <p>По вопросам конфиденциальности: privacy@kolokrugl.vercel.app</p>
-            
             <h3>10. Изменения в политике</h3>
             <p>Мы можем обновлять эту политику. Актуальная версия всегда доступна на этой странице.</p>
-            
             <button class="modal-button" onclick="closePrivacyModal()">Закрыть</button>
         </div>
     </div>
 
-    <!-- Модальное окно лицензионного соглашения -->
     <div class="modal-overlay" id="licenseModal">
         <div class="modal-content">
             <div class="modal-close" onclick="closeLicenseModal()">✕</div>
             <h2>📜 Лицензионное соглашение</h2>
             <p><strong>Последнее обновление:</strong> 15 марта 2026 г.</p>
-            
             <h3>1. Термины и определения</h3>
             <p><strong>Пользователь</strong> — лицо, использующее сайт Kolocrug.<br>
             <strong>Контент</strong> — любые материалы, размещаемые Пользователем (тексты, фото, видео).<br>
             <strong>Администрация</strong> — владельцы и разработчики сайта.</p>
-            
             <h3>2. Предмет соглашения</h3>
             <p>Настоящее соглашение регулирует отношения между Пользователем и Администрацией по поводу использования сайта и размещения контента.</p>
-            
             <h3>3. Права и обязанности Пользователя</h3>
             <ul>
                 <li>Пользователь обязуется не размещать контент, нарушающий законодательство РФ.</li>
@@ -1403,17 +1429,14 @@
                 <li>Пользователь несёт полную ответственность за размещённый контент.</li>
                 <li>Пользователь имеет право удалять свои посты в любой момент.</li>
             </ul>
-            
             <h3>4. Права и обязанности Администрации</h3>
             <ul>
                 <li>Администрация имеет право модерировать и удалять контент, нарушающий правила.</li>
                 <li>Администрация обязуется обеспечивать работу сайта и сохранность данных.</li>
                 <li>Администрация не несёт ответственности за контент, размещённый пользователями.</li>
             </ul>
-            
             <h3>5. Интеллектуальная собственность</h3>
             <p>Размещая контент, Пользователь предоставляет Администрации неисключительное право на его хранение и демонстрацию в рамках сайта. Все права на контент остаются за Пользователем.</p>
-            
             <h3>6. Запрещённый контент</h3>
             <ul>
                 <li>Материалы экстремистского характера</li>
@@ -1422,21 +1445,16 @@
                 <li>Материалы, нарушающие авторские права</li>
                 <li>Оскорбления и разжигание ненависти</li>
             </ul>
-            
             <h3>7. Ответственность</h3>
             <p>За нарушение условий соглашения Администрация имеет право заблокировать Пользователя без предупреждения. Пользователь несёт административную и уголовную ответственность за размещение запрещённого контента.</p>
-            
             <h3>8. Заключительные положения</h3>
             <p>Использование сайта означает полное согласие с условиями настоящего соглашения. Администрация может изменять соглашение без уведомления Пользователя.</p>
-            
             <h3>9. Контакты для жалоб</h3>
             <p>По вопросам нарушения авторских прав: copyright@kolokrugl.vercel.app</p>
-            
             <button class="modal-button" onclick="closeLicenseModal()">Закрыть</button>
         </div>
     </div>
 
-    <!-- Всплывашка с политикой -->
     <div class="privacy-popup" id="privacyPopup">
         <p>🍞 Мы используем куки и собираем данные для работы сайта</p>
         <div>
@@ -1457,7 +1475,6 @@
 
     <div class="main-content" id="mainContent">
         <div class="container">
-            <!-- ИСПРАВЛЕННАЯ ВЕРХНЯЯ ПАНЕЛЬ С УВЕДОМЛЕНИЯМИ -->
             <div class="top-bar">
                 <div class="user-info">
                     <div class="kolobok" id="userKolobok" onclick="openKolobokSelector()">🍞</div>
@@ -1480,20 +1497,16 @@
                 </div>
             </div>
 
-            <!-- ПАНЕЛЬ УВЕДОМЛЕНИЙ -->
             <div class="notifications-panel" id="notificationsPanel">
                 <div class="notifications-header">
                     <h3>Уведомления</h3>
                     <button class="mark-read-btn" onclick="markAllNotificationsRead()">Прочитать всё</button>
                 </div>
-                <div class="notifications-list" id="notificationsList">
-                    <!-- Уведомления будут добавляться сюда -->
-                </div>
+                <div class="notifications-list" id="notificationsList"></div>
             </div>
 
             <div class="admin-panel" id="adminPanel">
                 <h3>⚡ Админ-панель</h3>
-                
                 <div class="admin-section">
                     <h4>🎨 Режим превью</h4>
                     <div class="preview-controls">
@@ -1511,7 +1524,6 @@
                     <div style="margin-top:10px; font-size:0.9rem;" id="bannedWordsCount"></div>
                 </div>
 
-                <!-- Секция управления ботами -->
                 <div class="admin-section">
                     <h4>🤖 Управление ботами</h4>
                     <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
@@ -1534,7 +1546,6 @@
                 </div>
             </div>
 
-            <!-- ФОРМА С УМНОЙ ГАЛОЧКОЙ -->
             <div class="post-form">
                 <textarea id="postContent" placeholder="Что нового?" rows="3"></textarea>
                 
@@ -1549,7 +1560,6 @@
                     </label>
                 </div>
 
-                <!-- ГАЛОЧКА ПОЯВЛЯЕТСЯ ТОЛЬКО ПРИ ЗАГРУЗКЕ ФАЙЛОВ -->
                 <div class="copyright-notice" id="copyrightNotice">
                     <label class="copyright-checkbox">
                         <input type="checkbox" id="copyrightCheck" required>
@@ -1567,7 +1577,6 @@
                 <div class="loading">Загрузка постов...</div>
             </div>
 
-            <!-- Ссылки в подвале -->
             <div class="footer-links">
                 <a class="footer-link" onclick="openPrivacyModal(); return false;">📄 Политика конфиденциальности</a>
                 <a class="footer-link" onclick="openLicenseModal(); return false;">📜 Лицензионное соглашение</a>
@@ -1583,10 +1592,38 @@
     </div>
 
     <script>
-        // ===== ВАШЕ ХРАНИЛИЩЕ НА NPOINT =====
         const API_URL = 'https://api.npoint.io/3c013202cb4baa90ff63';
         
-        // ===== ТЕСТОВЫЕ ПОСТЫ (для проверки) =====
+        const BOT_FIRST_NAMES = [
+            'Алекс', 'Миша', 'Саша', 'Дима', 'Кирилл', 'Артём', 'Никита', 'Даниил', 'Матвей', 'Тимофей',
+            'София', 'Алиса', 'Вика', 'Аня', 'Катя', 'Настя', 'Полина', 'Варя', 'Лера', 'Ксюша',
+            'Марк', 'Лев', 'Глеб', 'Егор', 'Илья', 'Рома', 'Вова', 'Петя', 'Степа', 'Федя',
+            'Таня', 'Юля', 'Оля', 'Лена', 'Наташа', 'Даша', 'Маша', 'Света', 'Инна', 'Лиза',
+            'Денис', 'Влад', 'Сергей', 'Андрей', 'Паша', 'Костя', 'Женя', 'Вадим', 'Руслан', 'Тимур'
+        ];
+
+        const BOT_LAST_NAMES = [
+            'Смирнов', 'Иванов', 'Кузнецов', 'Попов', 'Соколов', 'Лебедев', 'Козлов', 'Новиков', 'Морозов', 'Петров',
+            'Волков', 'Соловьёв', 'Васильев', 'Зайцев', 'Павлов', 'Семёнов', 'Голубев', 'Виноградов', 'Богданов', 'Воробьёв',
+            'Фёдоров', 'Михайлов', 'Беляев', 'Тарасов', 'Белов', 'Комаров', 'Орлов', 'Киселёв', 'Макаров', 'Андреев',
+            'Ковалёв', 'Ильин', 'Гусев', 'Титов', 'Кузьмин', 'Кудрявцев', 'Баранов', 'Куликов', 'Алексеев', 'Степанов'
+        ];
+
+        const BOT_NICKNAMES = [
+            'Серфер', 'Кодер', 'Геймер', 'Фотограф', 'Художник', 'Музыкант', 'Повар', 'Спортсмен', 'Блогер', 'Студент',
+            'Мечтатель', 'Путешественник', 'Космонавт', 'Пират', 'Робот', 'Волшебник', 'Рыцарь', 'Джедай', 'Эльф', 'Гном',
+            'Супермен', 'Бэтмен', 'Железный_человек', 'Тор', 'Локи', 'Халк', 'Капитан_Америка', 'Чёрная_вдова', 'Сокол', 'Зимний_солдат'
+        ];
+
+        const BOT_AVATARS = ['😎', '🥳', '😊', '🤓', '😇', '🥰', '😘', '🤠', '🦸', '🦹', '🧙', '🧝', '🧛', '🧜', '🧞', '🧟'];
+
+        const BOT_COMMENTS = [
+            'Классный пост!', 'Согласен!', 'Отличная идея!', 'Мне нравится!', 'Супер!',
+            'Интересно!', 'Полезно!', 'Красиво!', 'Здорово!', 'В точку!',
+            'Подписался!', 'Лайк!', 'Топ!', 'Лучшее!', 'Рекомендую!',
+            '🔥', '💯', '👍', '👌', '✨'
+        ];
+
         const TEST_POSTS = [
             {
                 id: 1,
@@ -1623,39 +1660,27 @@
             }
         ];
 
-        // ===== НОРМАЛЬНЫЕ ИМЕНА ДЛЯ БОТОВ =====
-        const BOT_FIRST_NAMES = [
-            'Алекс', 'Миша', 'Саша', 'Дима', 'Кирилл', 'Артём', 'Никита', 'Даниил', 'Матвей', 'Тимофей',
-            'София', 'Алиса', 'Вика', 'Аня', 'Катя', 'Настя', 'Полина', 'Варя', 'Лера', 'Ксюша',
-            'Марк', 'Лев', 'Глеб', 'Егор', 'Илья', 'Рома', 'Вова', 'Петя', 'Степа', 'Федя',
-            'Таня', 'Юля', 'Оля', 'Лена', 'Наташа', 'Даша', 'Маша', 'Света', 'Инна', 'Лиза',
-            'Денис', 'Влад', 'Сергей', 'Андрей', 'Паша', 'Костя', 'Женя', 'Вадим', 'Руслан', 'Тимур'
-        ];
-
-        const BOT_LAST_NAMES = [
-            'Смирнов', 'Иванов', 'Кузнецов', 'Попов', 'Соколов', 'Лебедев', 'Козлов', 'Новиков', 'Морозов', 'Петров',
-            'Волков', 'Соловьёв', 'Васильев', 'Зайцев', 'Павлов', 'Семёнов', 'Голубев', 'Виноградов', 'Богданов', 'Воробьёв',
-            'Фёдоров', 'Михайлов', 'Беляев', 'Тарасов', 'Белов', 'Комаров', 'Орлов', 'Киселёв', 'Макаров', 'Андреев',
-            'Ковалёв', 'Ильин', 'Гусев', 'Титов', 'Кузьмин', 'Кудрявцев', 'Баранов', 'Куликов', 'Алексеев', 'Степанов'
-        ];
-
-        const BOT_NICKNAMES = [
-            'Серфер', 'Кодер', 'Геймер', 'Фотограф', 'Художник', 'Музыкант', 'Повар', 'Спортсмен', 'Блогер', 'Студент',
-            'Мечтатель', 'Путешественник', 'Космонавт', 'Пират', 'Робот', 'Волшебник', 'Рыцарь', 'Джедай', 'Эльф', 'Гном',
-            'Супермен', 'Бэтмен', 'Железный_человек', 'Тор', 'Локи', 'Халк', 'Капитан_Америка', 'Чёрная_вдова', 'Сокол', 'Зимний_солдат'
-        ];
-
-        const BOT_AVATARS = ['😎', '🥳', '😊', '🤓', '😇', '🥰', '😘', '🤠', '🦸', '🦹', '🧙', '🧝', '🧛', '🧜', '🧞', '🧟'];
-
-        // ===== УМНЫЕ КОММЕНТАРИИ =====
-        const BOT_COMMENTS = [
-            'Классный пост!', 'Согласен!', 'Отличная идея!', 'Мне нравится!', 'Супер!',
-            'Интересно!', 'Полезно!', 'Красиво!', 'Здорово!', 'В точку!',
-            'Подписался!', 'Лайк!', 'Топ!', 'Лучшее!', 'Рекомендую!',
-            '🔥', '💯', '👍', '👌', '✨'
-        ];
-
+        let posts = [];
+        let postsDisplayed = 20;
+        let currentView = 'feed';
+        let currentProfile = null;
+        let currentImage = null;
+        let currentVideo = null;
+        let currentImageHash = null;
+        let notifications = [];
+        let subscriptions = new Set();
+        let userProfiles = {};
+        let verifiedUsers = new Set(['BUBLEMERC', 'KacERORga']);
+        let BANNED_WORDS = ['хуй', 'пизда', 'блядь', 'сука', 'гандон', 'пидор', 'мудак', 'тварь', 'мразь', 'гнида'];
         let botTimeouts = [];
+
+        const BOT_TYPES = {
+            UNIVERSAL: 'universal',
+            VIEW: 'view',
+            LIKE: 'like',
+            SUBSCRIBE: 'subscribe',
+            COMMENT: 'comment'
+        };
 
         function generateBotName() {
             const firstName = BOT_FIRST_NAMES[Math.floor(Math.random() * BOT_FIRST_NAMES.length)];
@@ -1672,14 +1697,6 @@
             
             return formats[Math.floor(Math.random() * formats.length)];
         }
-
-        const BOT_TYPES = {
-            UNIVERSAL: 'universal',
-            VIEW: 'view',
-            LIKE: 'like',
-            SUBSCRIBE: 'subscribe',
-            COMMENT: 'comment'
-        };
 
         function createBot(type = BOT_TYPES.UNIVERSAL) {
             return {
@@ -1761,25 +1778,31 @@
             botTimeouts.push(timeout);
         }
 
+        // ИСПРАВЛЕННАЯ ФУНКЦИЯ - БОТЫ НЕ ПИШУТ ПОСТЫ!
         async function performBotActivity(bot) {
             if (posts.length === 0) return;
             
             switch(bot.type) {
                 case BOT_TYPES.UNIVERSAL:
-                    const rand = Math.floor(Math.random() * 3);
+                    const rand = Math.floor(Math.random() * 4);
                     if (rand === 0) await botLike(bot);
                     else if (rand === 1) await botSubscribe(bot);
                     else if (rand === 2) await botViewProfile(bot);
+                    else if (rand === 3) await botComment(bot);
                     break;
+                    
                 case BOT_TYPES.VIEW:
                     await botViewProfile(bot);
                     break;
+                    
                 case BOT_TYPES.LIKE:
                     await botLike(bot);
                     break;
+                    
                 case BOT_TYPES.SUBSCRIBE:
                     await botSubscribe(bot);
                     break;
+                    
                 case BOT_TYPES.COMMENT:
                     await botComment(bot);
                     break;
@@ -1857,161 +1880,6 @@
             }
         }
 
-        // ===== УВЕДОМЛЕНИЯ =====
-        let notifications = [];
-        
-        function loadNotifications() {
-            const saved = localStorage.getItem('notifications_' + localStorage.getItem('username'));
-            if (saved) {
-                notifications = JSON.parse(saved);
-            } else {
-                notifications = [];
-            }
-            updateNotificationsBadge();
-            renderNotifications();
-        }
-        
-        function saveNotifications() {
-            localStorage.setItem('notifications_' + localStorage.getItem('username'), JSON.stringify(notifications));
-            updateNotificationsBadge();
-        }
-        
-        function addNotification(type, fromUser, targetId = null) {
-            const username = localStorage.getItem('username');
-            if (!username) return;
-            if (fromUser === username) return;
-            
-            const notification = {
-                id: Date.now(),
-                type: type,
-                fromUser: fromUser,
-                targetId: targetId,
-                time: new Date().toLocaleString(),
-                read: false
-            };
-            
-            notifications.unshift(notification);
-            saveNotifications();
-            renderNotifications();
-        }
-        
-        function updateNotificationsBadge() {
-            const badge = document.getElementById('notificationsBadge');
-            const unreadCount = notifications.filter(n => !n.read).length;
-            
-            if (unreadCount > 0) {
-                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-        
-        function renderNotifications() {
-            const list = document.getElementById('notificationsList');
-            if (!list) return;
-            
-            if (notifications.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">Нет уведомлений</div>';
-                return;
-            }
-            
-            list.innerHTML = notifications.map(n => `
-                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})">
-                    <div class="notification-icon">🔔</div>
-                    <div class="notification-content">
-                        <div class="notification-text"><strong>${n.fromUser}</strong> ${n.type === 'like' ? 'лайкнул ваш пост' : n.type === 'subscribe' ? 'подписался на вас' : n.type === 'comment' ? 'оставил комментарий' : 'сделал действие'}</div>
-                        <div class="notification-time">${n.time}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function toggleNotifications() {
-            document.getElementById('notificationsPanel').classList.toggle('active');
-        }
-        
-        function markNotificationRead(id) {
-            const notification = notifications.find(n => n.id === id);
-            if (notification) {
-                notification.read = true;
-                saveNotifications();
-                renderNotifications();
-            }
-        }
-        
-        function markAllNotificationsRead() {
-            notifications.forEach(n => n.read = true);
-            saveNotifications();
-            renderNotifications();
-        }
-
-        // ===== МОДАЛЬНЫЕ ОКНА =====
-        function openPrivacyModal() {
-            document.getElementById('privacyModal').classList.add('active');
-        }
-        function closePrivacyModal() {
-            document.getElementById('privacyModal').classList.remove('active');
-        }
-        function openLicenseModal() {
-            document.getElementById('licenseModal').classList.add('active');
-        }
-        function closeLicenseModal() {
-            document.getElementById('licenseModal').classList.remove('active');
-        }
-
-        // ===== ПРОВЕРКА ФАЙЛОВ =====
-        async function checkFile(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const hash = btoa(e.target.result.slice(0, 1000));
-                    const blacklist = JSON.parse(localStorage.getItem('copyright_blacklist') || '[]');
-                    
-                    if (file.size > 10 * 1024 * 1024) {
-                        resolve({ ok: false, reason: 'Файл слишком большой (макс. 10MB)' });
-                        return;
-                    }
-                    
-                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm'];
-                    if (!allowedTypes.includes(file.type)) {
-                        resolve({ ok: false, reason: 'Неподдерживаемый формат файла' });
-                        return;
-                    }
-                    
-                    if (blacklist.includes(hash)) {
-                        resolve({ ok: false, reason: 'Этот файл уже был отмечен как защищённый авторским правом' });
-                    } else {
-                        resolve({ ok: true, hash: hash });
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function addToBlacklist(hash) {
-            const blacklist = JSON.parse(localStorage.getItem('copyright_blacklist') || '[]');
-            if (!blacklist.includes(hash)) {
-                blacklist.push(hash);
-                localStorage.setItem('copyright_blacklist', JSON.stringify(blacklist));
-            }
-        }
-
-        function checkFilesAndShowCopyright() {
-            const imageFile = document.getElementById('imageUpload').files[0];
-            const videoFile = document.getElementById('videoUpload').files[0];
-            const copyrightNotice = document.getElementById('copyrightNotice');
-            
-            if (imageFile || videoFile) {
-                copyrightNotice.style.display = 'block';
-            } else {
-                copyrightNotice.style.display = 'none';
-            }
-        }
-
-        // ===== ВЕРИФИЦИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ =====
-        let verifiedUsers = new Set(['BUBLEMERC', 'KacERORga']);
-
         function isVerified(username) {
             return verifiedUsers.has(username);
         }
@@ -2019,9 +1887,6 @@
         function getVerifiedBadge(username) {
             return isVerified(username) ? '<span class="verified-badge">✓</span>' : '';
         }
-
-        // ===== ЗАГРУЗКА ЗАПРЕЩЁННЫХ СЛОВ =====
-        let BANNED_WORDS = ['хуй', 'пизда', 'блядь', 'сука', 'гандон', 'пидор', 'мудак', 'тварь', 'мразь', 'гнида'];
 
         async function loadBannedWordsFromFile() {
             try {
@@ -2055,18 +1920,6 @@
             }
             return false;
         }
-
-        // ===== ОБЛАЧНОЕ ХРАНИЛИЩЕ NPOINT =====
-        let posts = [];
-        let postsDisplayed = 20;
-        let currentView = 'feed';
-        let currentProfile = null;
-        let currentImage = null;
-        let currentVideo = null;
-        let currentImageHash = null;
-
-        // ===== ПРОФИЛИ ПОЛЬЗОВАТЕЛЕЙ =====
-        let userProfiles = {};
 
         function loadUserProfiles() {
             const saved = localStorage.getItem('user_profiles');
@@ -2119,7 +1972,6 @@
                 const data = await response.json();
                 posts = data.posts || [];
                 
-                // Если нет постов, добавляем тестовые
                 if (posts.length === 0) {
                     posts = TEST_POSTS;
                 }
@@ -2159,7 +2011,6 @@
             }
         }
 
-        // ===== ПОЛЬЗОВАТЕЛИ И ПАРОЛИ =====
         const ADMIN_USERNAMES = ['BUBLEMERC', 'KacERORga'];
         const ADMIN_PASSWORD = '6369';
 
@@ -2218,7 +2069,6 @@
             loadPostsFromCloud();
         }
 
-        // ===== КОЛОБКИ =====
         function generateKolobokEmojis() {
             return ['🍞', '🥖', '🥨', '🥯', '🍩', '🍪', '🎂', '🧁', '🍰', '🥧'];
         }
@@ -2263,7 +2113,69 @@
             localStorage.setItem('privacyAccepted', 'true');
         }
 
-        let subscriptions = new Set();
+        function openPrivacyModal() {
+            document.getElementById('privacyModal').classList.add('active');
+        }
+
+        function closePrivacyModal() {
+            document.getElementById('privacyModal').classList.remove('active');
+        }
+
+        function openLicenseModal() {
+            document.getElementById('licenseModal').classList.add('active');
+        }
+
+        function closeLicenseModal() {
+            document.getElementById('licenseModal').classList.remove('active');
+        }
+
+        async function checkFile(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const hash = btoa(e.target.result.slice(0, 1000));
+                    const blacklist = JSON.parse(localStorage.getItem('copyright_blacklist') || '[]');
+                    
+                    if (file.size > 10 * 1024 * 1024) {
+                        resolve({ ok: false, reason: 'Файл слишком большой (макс. 10MB)' });
+                        return;
+                    }
+                    
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm'];
+                    if (!allowedTypes.includes(file.type)) {
+                        resolve({ ok: false, reason: 'Неподдерживаемый формат файла' });
+                        return;
+                    }
+                    
+                    if (blacklist.includes(hash)) {
+                        resolve({ ok: false, reason: 'Этот файл уже был отмечен как защищённый авторским правом' });
+                    } else {
+                        resolve({ ok: true, hash: hash });
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function addToBlacklist(hash) {
+            const blacklist = JSON.parse(localStorage.getItem('copyright_blacklist') || '[]');
+            if (!blacklist.includes(hash)) {
+                blacklist.push(hash);
+                localStorage.setItem('copyright_blacklist', JSON.stringify(blacklist));
+            }
+        }
+
+        function checkFilesAndShowCopyright() {
+            const imageFile = document.getElementById('imageUpload').files[0];
+            const videoFile = document.getElementById('videoUpload').files[0];
+            const copyrightNotice = document.getElementById('copyrightNotice');
+            
+            if (imageFile || videoFile) {
+                copyrightNotice.style.display = 'block';
+            } else {
+                copyrightNotice.style.display = 'none';
+            }
+        }
 
         function loadSubscriptions() {
             const saved = localStorage.getItem('subs_' + localStorage.getItem('username'));
@@ -2361,7 +2273,6 @@
             checkFilesAndShowCopyright();
         }
 
-        // ===== ФУНКЦИИ ДЛЯ АДМИНОВ =====
         async function togglePin(postId) {
             const username = localStorage.getItem('username');
             if (!ADMIN_USERNAMES.includes(username)) {
@@ -2418,7 +2329,6 @@
             }
         }
 
-        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ createPost =====
         async function createPost() {
             console.log('📝 Начинаем публикацию поста...');
             
@@ -2428,35 +2338,29 @@
             const imageFile = document.getElementById('imageUpload').files[0];
             const videoFile = document.getElementById('videoUpload').files[0];
             
-            // ПРОВЕРКА ВХОДА
             if (!username) {
                 alert('❌ Сначала войдите в систему');
                 return;
             }
             
-            // ПРОВЕРКА ГАЛОЧКИ
             if ((imageFile || videoFile) && copyrightCheck && !copyrightCheck.checked) {
                 alert('⚠️ Необходимо подтвердить, что у вас есть права на публикуемые фото/видео');
                 return;
             }
             
-            // ПРОВЕРКА ЗАПРЕЩЁННЫХ СЛОВ
             if (containsBannedWords(content)) {
                 alert('⚠️ Пост содержит запрещённые выражения и не может быть опубликован');
                 return;
             }
             
-            // ПРОВЕРКА НА ПУСТОТУ
             if (!content && !imageFile && !videoFile) {
                 alert('📝 Напишите что-нибудь или добавьте медиа!');
                 return;
             }
 
-            // ПОЛУЧАЕМ КОЛОБКА ПОЛЬЗОВАТЕЛЯ
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             const userKolobok = users[username]?.kolobok || '🍞';
 
-            // СОЗДАЁМ НОВЫЙ ПОСТ
             const newPost = {
                 id: Date.now(),
                 author: username,
@@ -2471,40 +2375,31 @@
                 time: new Date().toLocaleString()
             };
 
-            // ДОБАВЛЯЕМ В НАЧАЛО МАССИВА
             posts.unshift(newPost);
             console.log('✅ Пост добавлен в массив:', newPost);
             
-            // СОХРАНЯЕМ В ОБЛАКО
             await savePostsToCloud();
             
-            // ДОБАВЛЯЕМ В ЧЁРНЫЙ СПИСОК ЕСЛИ БЫЛО ФОТО
             if (currentImageHash) {
                 addToBlacklist(currentImageHash);
             }
             
-            // ОБНОВЛЯЕМ СТАТИСТИКУ ПРОФИЛЯ
             updateProfileStats(username);
             
-            // ОЧИЩАЕМ ФОРМУ
             document.getElementById('postContent').value = '';
             document.getElementById('mediaPreview').innerHTML = '';
             document.getElementById('imageUpload').value = '';
             document.getElementById('videoUpload').value = '';
             
-            // СБРАСЫВАЕМ ПЕРЕМЕННЫЕ
             currentImage = null;
             currentVideo = null;
             currentImageHash = null;
             
-            // СКРЫВАЕМ ГАЛОЧКУ
             const notice = document.getElementById('copyrightNotice');
             if (notice) notice.style.display = 'none';
             
-            // СБРАСЫВАЕМ ГАЛОЧКУ
             if (copyrightCheck) copyrightCheck.checked = false;
             
-            // ПОКАЗЫВАЕМ ЛЕНТУ
             showFeed();
             
             console.log('🎉 Пост успешно опубликован!');
@@ -2611,7 +2506,6 @@
             refreshView();
         }
 
-        // ===== АВТОМАТИЧЕСКИЙ ПОДСЧЁТ ПРОСМОТРОВ =====
         const viewedPosts = new Set();
 
         function observePosts() {
@@ -2892,6 +2786,92 @@
             }
         }
 
+        function loadNotifications() {
+            const saved = localStorage.getItem('notifications_' + localStorage.getItem('username'));
+            if (saved) {
+                notifications = JSON.parse(saved);
+            } else {
+                notifications = [];
+            }
+            updateNotificationsBadge();
+            renderNotifications();
+        }
+
+        function saveNotifications() {
+            localStorage.setItem('notifications_' + localStorage.getItem('username'), JSON.stringify(notifications));
+            updateNotificationsBadge();
+        }
+
+        function addNotification(type, fromUser, targetId = null) {
+            const username = localStorage.getItem('username');
+            if (!username) return;
+            if (fromUser === username) return;
+            
+            const notification = {
+                id: Date.now(),
+                type: type,
+                fromUser: fromUser,
+                targetId: targetId,
+                time: new Date().toLocaleString(),
+                read: false
+            };
+            
+            notifications.unshift(notification);
+            saveNotifications();
+            renderNotifications();
+        }
+
+        function updateNotificationsBadge() {
+            const badge = document.getElementById('notificationsBadge');
+            const unreadCount = notifications.filter(n => !n.read).length;
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            if (!list) return;
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">Нет уведомлений</div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(n => `
+                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})">
+                    <div class="notification-icon">🔔</div>
+                    <div class="notification-content">
+                        <div class="notification-text"><strong>${n.fromUser}</strong> ${n.type === 'like' ? 'лайкнул ваш пост' : n.type === 'subscribe' ? 'подписался на вас' : n.type === 'comment' ? 'оставил комментарий' : 'сделал действие'}</div>
+                        <div class="notification-time">${n.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleNotifications() {
+            document.getElementById('notificationsPanel').classList.toggle('active');
+        }
+
+        function markNotificationRead(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification) {
+                notification.read = true;
+                saveNotifications();
+                renderNotifications();
+            }
+        }
+
+        function markAllNotificationsRead() {
+            notifications.forEach(n => n.read = true);
+            saveNotifications();
+            renderNotifications();
+        }
+
         function logout() {
             localStorage.removeItem('username');
             localStorage.removeItem('isAdmin');
@@ -2959,4 +2939,4 @@
         }
     </script>
 </body>
-    </html> 6
+</html>
