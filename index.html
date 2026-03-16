@@ -2667,8 +2667,15 @@
             const imageFile = document.getElementById('imageUpload').files[0];
             const videoFile = document.getElementById('videoUpload').files[0];
             
+            // ПРОВЕРКА ВХОДА
             if (!username) {
                 alert('Сначала войдите в систему');
+                return;
+            }
+            
+            // ПРОВЕРКА ГАЛОЧКИ ТОЛЬКО ЕСЛИ ЕСТЬ ФАЙЛЫ
+            if ((imageFile || videoFile) && !copyrightCheck) {
+                alert('⚠️ Системная ошибка: чекбокс не найден');
                 return;
             }
             
@@ -2677,19 +2684,23 @@
                 return;
             }
             
+            // ПРОВЕРКА ЗАПРЕЩЁННЫХ СЛОВ
             if (containsBannedWords(content)) {
                 alert('⚠️ Пост содержит запрещённые выражения и не может быть опубликован');
                 return;
             }
             
+            // ПРОВЕРКА НА ПУСТОТУ
             if (!content && !imageFile && !videoFile) {
                 alert('Напишите что-нибудь или добавьте медиа!');
                 return;
             }
 
+            // ПОЛУЧАЕМ КОЛОБКА ПОЛЬЗОВАТЕЛЯ
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             const userKolobok = users[username]?.kolobok || '🍞';
 
+            // СОЗДАЁМ НОВЫЙ ПОСТ
             const newPost = {
                 id: Date.now(),
                 author: username,
@@ -2704,27 +2715,42 @@
                 time: new Date().toLocaleString()
             };
 
+            // ДОБАВЛЯЕМ В НАЧАЛО МАССИВА
             posts.unshift(newPost);
+            
+            // СОХРАНЯЕМ В ОБЛАКО
             await savePostsToCloud();
             
+            // ДОБАВЛЯЕМ В ЧЁРНЫЙ СПИСОК ЕСЛИ БЫЛО ФОТО
             if (currentImageHash) {
                 addToBlacklist(currentImageHash);
             }
             
+            // ОБНОВЛЯЕМ СТАТИСТИКУ ПРОФИЛЯ
             updateProfileStats(username);
             
+            // ОЧИЩАЕМ ФОРМУ
             document.getElementById('postContent').value = '';
             document.getElementById('mediaPreview').innerHTML = '';
             document.getElementById('imageUpload').value = '';
             document.getElementById('videoUpload').value = '';
+            
+            // СБРАСЫВАЕМ ПЕРЕМЕННЫЕ
             currentImage = null;
             currentVideo = null;
             currentImageHash = null;
             
-            document.getElementById('copyrightNotice').style.display = 'none';
-            copyrightCheck.checked = false;
+            // СКРЫВАЕМ ГАЛОЧКУ
+            const notice = document.getElementById('copyrightNotice');
+            if (notice) notice.style.display = 'none';
             
+            // СБРАСЫВАЕМ ГАЛОЧКУ
+            if (copyrightCheck) copyrightCheck.checked = false;
+            
+            // ПОКАЗЫВАЕМ ЛЕНТУ
             showFeed();
+            
+            console.log('✅ Пост успешно опубликован!');
         }
 
         async function toggleLike(postId) {
@@ -3252,4 +3278,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
