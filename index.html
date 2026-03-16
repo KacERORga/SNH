@@ -669,6 +669,38 @@
             box-shadow: 0 5px 15px rgba(241,196,15,0.4);
         }
 
+        /* Кнопки для закрепления и накрутки */
+        .pin-button, .boost-button, .unboost-button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            margin-left: 5px;
+        }
+        .pin-button:hover, .boost-button:hover, .unboost-button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        .pin-button.active {
+            background: #FFD700;
+            color: #1a1a1a;
+            border-color: #FFD700;
+        }
+        .pinned-label {
+            display: inline-block;
+            background: #FFD700;
+            color: #1a1a1a;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
         .post-form {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(20px);
@@ -922,6 +954,11 @@
             position: relative;
             animation: fadeIn 0.5s ease;
             transition: 0.3s;
+            border-left: 3px solid transparent;
+        }
+        .post-card.pinned {
+            border-left: 3px solid #FFD700;
+            background: rgba(255,215,0,0.05);
         }
         .post-card:hover {
             transform: translateY(-5px) scale(1.01);
@@ -934,6 +971,7 @@
             gap: 12px;
             margin-bottom: 12px;
             cursor: pointer;
+            flex-wrap: wrap;
         }
         .post-author { 
             font-weight: 600; 
@@ -1936,7 +1974,12 @@
                 posts = data.posts || [];
                 console.log(`✅ Загружено ${posts.length} постов из облака`);
                 
-                posts.sort((a, b) => b.id - a.id);
+                // Сортируем: сначала закрепленные, потом по дате
+                posts.sort((a, b) => {
+                    if (a.pinned && !b.pinned) return -1;
+                    if (!a.pinned && b.pinned) return 1;
+                    return b.id - a.id;
+                });
                 
                 // Обновляем статистику профилей
                 loadUserProfiles();
@@ -2201,6 +2244,65 @@
             checkFilesAndShowCopyright();
         }
 
+        // ===== ФУНКЦИИ ДЛЯ АДМИНОВ =====
+        async function togglePin(postId) {
+            const username = localStorage.getItem('username');
+            if (!ADMIN_USERNAMES.includes(username)) {
+                alert('Только админы могут закреплять посты');
+                return;
+            }
+            
+            const post = posts.find(p => p.id == postId);
+            if (post) {
+                post.pinned = !post.pinned;
+                // Пересортировываем посты
+                posts.sort((a, b) => {
+                    if (a.pinned && !b.pinned) return -1;
+                    if (!a.pinned && b.pinned) return 1;
+                    return b.id - a.id;
+                });
+                await savePostsToCloud();
+                refreshView();
+            }
+        }
+
+        async function boostViews(postId) {
+            const username = localStorage.getItem('username');
+            if (!ADMIN_USERNAMES.includes(username)) {
+                alert('Только админы могут накручивать просмотры');
+                return;
+            }
+            
+            const post = posts.find(p => p.id == postId);
+            if (post) {
+                if (!post.views) post.views = 0;
+                post.views += 100; // Добавляем 100 просмотров за раз
+                await savePostsToCloud();
+                refreshView();
+            }
+        }
+
+        // Новая функция для убирания накрутки
+        async function unboostViews(postId) {
+            const username = localStorage.getItem('username');
+            if (!ADMIN_USERNAMES.includes(username)) {
+                alert('Только админы могут убирать накрутку');
+                return;
+            }
+            
+            const post = posts.find(p => p.id == postId);
+            if (post) {
+                if (!post.views) post.views = 0;
+                if (post.views >= 100) {
+                    post.views -= 100; // Убираем 100 просмотров
+                } else {
+                    post.views = 0; // Если меньше 100, обнуляем
+                }
+                await savePostsToCloud();
+                refreshView();
+            }
+        }
+
         // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ createPost =====
         async function createPost() {
             const content = document.getElementById('postContent').value.trim();
@@ -2242,7 +2344,8 @@
                 video: currentVideo,
                 likes: {},
                 comments: [],
-                views: 0, // Добавляем счётчик просмотров
+                views: 0,
+                pinned: false, // По умолчанию не закреплён
                 time: new Date().toLocaleString()
             };
 
@@ -2369,6 +2472,7 @@
                 likes: {},
                 comments: [],
                 views: 0,
+                pinned: false,
                 time: new Date().toLocaleString(),
                 isRepost: true,
                 originalAuthor: originalPost.author
@@ -2471,7 +2575,7 @@
             subPosts.slice(0, postsDisplayed).forEach(post => {
                 const badge = getVerifiedBadge(post.author);
                 html += `
-                    <div class="post-card" data-post-id="${post.id}">
+                    <div class="post-card ${post.pinned ? 'pinned' : ''}" data-post-id="${post.id}">
                         <div class="post-header" onclick="showProfile('${post.author}')">
                             <div class="kolobok-small">${post.authorKolobok || '🍞'}</div>
                             <div>
@@ -2582,6 +2686,7 @@
                 const likesCount = getLikesCount(post);
                 const liked = userLiked(post);
                 const views = post.views || 0;
+                const isAdmin = ADMIN_USERNAMES.includes(username);
                 
                 let mediaHtml = '';
                 if (post.image) {
@@ -2605,13 +2710,29 @@
                 const deleteButton = (post.author === username || ADMIN_USERNAMES.includes(username)) ? 
                     `<div class="delete-button" onclick="deletePost(${post.id})">✕</div>` : '';
 
+                // Админские кнопки (только для админов)
+                const adminButtons = isAdmin ? `
+                    <span class="pin-button ${post.pinned ? 'active' : ''}" onclick="event.stopPropagation(); togglePin(${post.id})">
+                        📌 ${post.pinned ? 'Открепить' : 'Закрепить'}
+                    </span>
+                    <span class="boost-button" onclick="event.stopPropagation(); boostViews(${post.id})">
+                        🚀 +100
+                    </span>
+                    <span class="unboost-button" onclick="event.stopPropagation(); unboostViews(${post.id})">
+                        ⬇️ -100
+                    </span>
+                ` : '';
+
                 html += `
-                    <div class="post-card" data-post-id="${post.id}">
+                    <div class="post-card ${post.pinned ? 'pinned' : ''}" data-post-id="${post.id}">
                         ${deleteButton}
                         <div class="post-header" onclick="event.stopPropagation(); showProfile('${post.author}')">
                             <div class="kolobok-small">${post.authorKolobok || '🍞'}</div>
                             <div>
-                                <div class="post-author">@${post.author} ${badge}</div>
+                                <div class="post-author">
+                                    @${post.author} ${badge}
+                                    ${post.pinned ? '<span class="pinned-label">📌 Закреплено</span>' : ''}
+                                </div>
                                 <div class="post-time">${post.time}</div>
                             </div>
                         </div>
@@ -2630,6 +2751,7 @@
                             </span>
                             ${subscribeButton}
                             ${repostButton}
+                            ${adminButtons}
                         </div>
                         <div class="comments-section" id="comments-${post.id}" style="display: none;" onclick="event.stopPropagation()">
                             ${post.comments.map(c => {
