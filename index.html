@@ -41,6 +41,70 @@
             color: #f0f0f0;
         }
 
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            75% { transform: translateY(10px) rotate(-2deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 0 30px rgba(255,215,0,0.7); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
         .site-header {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px) saturate(180%);
@@ -50,6 +114,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            animation: fadeIn 1s ease;
         }
 
         .site-header h1 {
@@ -59,6 +124,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            animation: pulse 3s infinite ease-in-out;
         }
 
         .container {
@@ -80,6 +146,7 @@
             display: none;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease;
         }
         .modal-overlay.active {
             display: flex;
@@ -96,6 +163,7 @@
             overflow-y: auto;
             color: white;
             position: relative;
+            animation: popIn 0.5s ease;
         }
         .modal-content h2 {
             font-size: 2rem;
@@ -138,6 +206,7 @@
         }
         .modal-close:hover {
             background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
         }
         .modal-button {
             background: #FFD700;
@@ -149,6 +218,11 @@
             font-weight: bold;
             margin: 20px 0 0;
             width: 100%;
+            transition: 0.3s;
+        }
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
         }
 
         /* Всплывашка с политикой */
@@ -171,6 +245,7 @@
             max-width: 90%;
             color: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease;
         }
         .privacy-popup.hidden { display: none; }
         .privacy-popup p { color: white; }
@@ -181,11 +256,20 @@
             border-radius: 40px;
             cursor: pointer;
             color: white;
+            transition: 0.3s;
+        }
+        .privacy-popup button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
         }
         .privacy-popup button.accept {
             background: #FFD700;
             color: #1a1a1a;
             border: none;
+        }
+        .privacy-popup button.accept:hover {
+            background: #ffed4a;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
         }
 
         .login-modal {
@@ -200,6 +284,7 @@
             justify-content: center;
             align-items: center;
             z-index: 9000;
+            animation: fadeIn 0.3s ease;
         }
         .login-card {
             background: rgba(30, 30, 40, 0.9);
@@ -209,6 +294,7 @@
             padding: 40px;
             width: 90%;
             max-width: 400px;
+            animation: popIn 0.5s ease;
         }
         .login-card h2 {
             color: white;
@@ -223,6 +309,12 @@
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 60px;
             color: white;
+            transition: 0.3s;
+        }
+        .login-card input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+            outline: none;
         }
         .login-card button {
             width: 100%;
@@ -233,6 +325,11 @@
             color: white;
             cursor: pointer;
             margin-top: 20px;
+            transition: 0.3s;
+        }
+        .login-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29,161,242,0.4);
         }
         .login-error {
             color: #ff6b6b;
@@ -256,6 +353,7 @@
             align-items: center;
             justify-content: space-between;
             color: white;
+            animation: slideIn 0.5s ease;
         }
 
         .user-info {
@@ -277,9 +375,11 @@
             cursor: pointer;
             transition: 0.3s;
             flex-shrink: 0;
+            animation: float 5s infinite ease-in-out;
         }
         .kolobok:hover {
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
         }
 
         .kolobok-small {
@@ -292,6 +392,11 @@
             justify-content: center;
             font-size: 1.4rem;
             flex-shrink: 0;
+            transition: 0.3s;
+        }
+        .kolobok-small:hover {
+            transform: rotate(360deg);
+            transition: transform 0.5s;
         }
 
         .verified-badge {
@@ -306,6 +411,7 @@
             font-size: 11px;
             margin-left: 5px;
             box-shadow: 0 2px 5px rgba(29,161,242,0.3);
+            animation: pulse 2s infinite;
         }
 
         /* КНОПКА УВЕДОМЛЕНИЙ */
@@ -326,7 +432,7 @@
         }
         .notifications-button:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
         }
         .notifications-badge {
             position: absolute;
@@ -344,6 +450,7 @@
             justify-content: center;
             padding: 0 4px;
             border: 2px solid rgba(255,255,255,0.8);
+            animation: pulse 1s infinite;
         }
 
         /* ПАНЕЛЬ УВЕДОМЛЕНИЙ */
@@ -361,6 +468,7 @@
             z-index: 1000;
             display: none;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: popIn 0.3s ease;
         }
         .notifications-panel.active {
             display: block;
@@ -383,6 +491,11 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .mark-read-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
         }
         .notifications-list {
             max-height: 400px;
@@ -396,9 +509,11 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
             transition: 0.3s;
+            animation: slideIn 0.3s ease;
         }
         .notification-item:hover {
             background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
         }
         .notification-item.unread {
             background: rgba(255,215,0,0.1);
@@ -412,6 +527,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1rem;
+            animation: pulse 2s infinite;
         }
         .notification-content {
             flex: 1;
@@ -452,7 +568,8 @@
         .nav-button:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: white;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
         }
 
         .nav-button.active {
@@ -460,6 +577,7 @@
             border-color: #FFD700;
             color: #1a1a1a;
             text-shadow: none;
+            animation: glow 2s infinite;
         }
 
         .logout-button {
@@ -481,7 +599,8 @@
         .logout-button:hover {
             background: rgba(231, 76, 60, 0.8);
             border-color: white;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(231,76,60,0.4);
         }
 
         .admin-panel {
@@ -493,6 +612,7 @@
             margin-bottom: 30px;
             color: white;
             display: none;
+            animation: slideIn 0.5s ease;
         }
         .admin-panel.visible {
             display: block;
@@ -527,6 +647,11 @@
             color: white;
             cursor: pointer;
             white-space: nowrap;
+            transition: 0.3s;
+        }
+        .preview-button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
         }
         .admin-button {
             background: #f1c40f;
@@ -537,6 +662,11 @@
             cursor: pointer;
             font-weight: bold;
             margin: 5px;
+            transition: 0.3s;
+        }
+        .admin-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(241,196,15,0.4);
         }
 
         .post-form {
@@ -546,6 +676,7 @@
             border-radius: 60px;
             padding: 25px;
             margin-bottom: 25px;
+            animation: fadeIn 0.5s ease;
         }
         .post-form textarea {
             width: 100%;
@@ -556,6 +687,12 @@
             color: white;
             margin-bottom: 15px;
             resize: vertical;
+            transition: 0.3s;
+        }
+        .post-form textarea:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 20px rgba(255,215,0,0.3);
+            outline: none;
         }
         .post-form textarea::placeholder {
             color: rgba(255,255,255,0.6);
@@ -577,9 +714,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: 0.3s;
         }
         .media-button:hover {
             background: rgba(255,255,255,0.2);
+            transform: scale(1.05) translateY(-2px);
         }
         .media-preview {
             display: flex;
@@ -593,6 +732,7 @@
             border-radius: 20px;
             object-fit: cover;
             border: 2px solid #FFD700;
+            animation: popIn 0.3s ease;
         }
         .video-preview {
             width: 200px;
@@ -618,10 +758,23 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .post-form button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
         }
         .post-form button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.5);
         }
 
         /* Уведомление об авторских правах */
@@ -634,6 +787,7 @@
             color: white;
             border: 1px solid rgba(255,215,0,0.3);
             display: none;
+            animation: fadeIn 0.3s ease;
         }
         .copyright-checkbox {
             display: flex;
@@ -673,6 +827,7 @@
         }
         .footer-link:hover {
             background: rgba(255,255,255,0.2);
+            transform: translateY(-2px) scale(1.05);
         }
 
         .kolobok-selector {
@@ -691,6 +846,7 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+            animation: popIn 0.5s ease;
         }
         .kolobok-selector.active {
             display: block;
@@ -714,10 +870,12 @@
             transition: 0.3s;
             border: 3px solid rgba(255,255,255,0.3);
             margin: 0 auto;
+            animation: popIn 0.3s ease;
         }
         .kolobok-option:hover {
-            transform: scale(1.1);
+            transform: scale(1.2) rotate(10deg);
             border-color: white;
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
         }
         .kolobok-selector h3 {
             color: white;
@@ -740,6 +898,11 @@
             justify-content: center;
             cursor: pointer;
             font-size: 1.5rem;
+            transition: 0.3s;
+        }
+        .close-selector:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
         }
 
         .grid {
@@ -757,6 +920,13 @@
             margin-bottom: 20px;
             color: white;
             position: relative;
+            animation: fadeIn 0.5s ease;
+            transition: 0.3s;
+        }
+        .post-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: rgba(255,215,0,0.5);
         }
         .post-header {
             display: flex;
@@ -793,7 +963,7 @@
         }
         .delete-button:hover {
             background: rgba(231, 76, 60, 0.5);
-            transform: scale(1.1);
+            transform: scale(1.2) rotate(90deg);
         }
         
         .repost-label {
@@ -815,6 +985,11 @@
             max-height: 350px;
             border-radius: 25px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+        .post-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
         .post-video {
             width: 100%;
@@ -831,13 +1006,29 @@
             padding-top: 12px;
             flex-wrap: wrap;
         }
-        .like-button, .comment-button, .subscribe-button, .repost-button {
+        .like-button, .comment-button, .subscribe-button, .repost-button, .views-button {
             cursor: pointer;
             padding: 5px 8px;
             border-radius: 20px;
             font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .like-button:hover, .comment-button:hover, .subscribe-button:hover, .repost-button:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.1);
         }
         .liked { color: #ff6b6b; }
+        .views-button {
+            cursor: default;
+            color: rgba(255,255,255,0.7);
+        }
+        .views-button:hover {
+            background: transparent;
+            transform: none;
+        }
 
         .comments-section {
             margin-top: 15px;
@@ -849,6 +1040,7 @@
             border-radius: 30px;
             padding: 12px;
             margin: 8px 0;
+            animation: slideIn 0.3s ease;
         }
         .comment-author {
             display: flex;
@@ -872,6 +1064,12 @@
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 30px;
             color: white;
+            transition: 0.3s;
+        }
+        .comment-input input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+            outline: none;
         }
         .comment-input button {
             background: #FFD700;
@@ -881,6 +1079,11 @@
             cursor: pointer;
             font-weight: bold;
             white-space: nowrap;
+            transition: 0.3s;
+        }
+        .comment-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
         }
 
         .sidebar-card {
@@ -891,6 +1094,12 @@
             padding: 20px;
             margin-bottom: 20px;
             color: white;
+            animation: slideIn 0.5s ease;
+            transition: 0.3s;
+        }
+        .sidebar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         /* НОВЫЙ СТИЛЬ ДЛЯ ПРОФИЛЯ */
@@ -906,6 +1115,7 @@
             align-items: center;
             gap: 25px;
             color: white;
+            animation: slideIn 0.5s ease;
         }
         .profile-avatar {
             width: 90px;
@@ -918,6 +1128,7 @@
             font-size: 2.8rem;
             border: 3px solid rgba(255,255,255,0.3);
             flex-shrink: 0;
+            animation: float 5s infinite ease-in-out;
         }
         .profile-info {
             flex: 1;
@@ -944,6 +1155,10 @@
         }
         .stat-item {
             text-align: center;
+            transition: 0.3s;
+        }
+        .stat-item:hover {
+            transform: scale(1.1);
         }
         .stat-value {
             font-size: 1.3rem;
@@ -964,9 +1179,11 @@
             margin-top: 8px;
             display: inline-block;
             font-size: 0.9rem;
+            transition: 0.3s;
         }
         .edit-profile-btn:hover {
             background: rgba(255,255,255,0.3);
+            transform: scale(1.05) translateY(-2px);
         }
         .bio-edit {
             width: 100%;
@@ -993,6 +1210,12 @@
             padding: 12px 30px;
             border-radius: 60px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+        .load-more button:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.2);
         }
 
         .welcome-message {
@@ -1003,6 +1226,7 @@
             backdrop-filter: blur(20px);
             border-radius: 60px;
             margin: 30px 0;
+            animation: fadeIn 0.5s ease;
         }
         .welcome-message h2 {
             font-size: 2.2rem;
@@ -1016,11 +1240,7 @@
         .welcome-message .kolobok-big {
             font-size: 4.5rem;
             margin: 15px 0;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            animation: bounce 2s infinite ease-in-out;
         }
 
         .loading {
@@ -2022,6 +2242,7 @@
                 video: currentVideo,
                 likes: {},
                 comments: [],
+                views: 0, // Добавляем счётчик просмотров
                 time: new Date().toLocaleString()
             };
 
@@ -2147,6 +2368,7 @@
                 video: originalPost.video,
                 likes: {},
                 comments: [],
+                views: 0,
                 time: new Date().toLocaleString(),
                 isRepost: true,
                 originalAuthor: originalPost.author
@@ -2163,6 +2385,40 @@
             updateProfileStats(username);
             
             refreshView();
+        }
+
+        // ===== АВТОМАТИЧЕСКИЙ ПОДСЧЁТ ПРОСМОТРОВ =====
+        const viewedPosts = new Set(); // Множество просмотренных постов
+
+        function observePosts() {
+            const postCards = document.querySelectorAll('.post-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const postId = entry.target.dataset.postId;
+                        if (postId && !viewedPosts.has(postId)) {
+                            viewedPosts.add(postId);
+                            incrementView(parseInt(postId));
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5, // Пост считается просмотренным, если видно 50%
+                rootMargin: '0px'
+            });
+
+            postCards.forEach(card => observer.observe(card));
+        }
+
+        // Функция для увеличения счётчика просмотров
+        function incrementView(postId) {
+            const post = posts.find(p => p.id == postId);
+            if (post) {
+                if (!post.views) post.views = 0;
+                post.views++;
+                savePostsToCloud();
+            }
         }
 
         function refreshView() {
@@ -2189,6 +2445,9 @@
             }
             
             renderFeed();
+            
+            // Запускаем наблюдение за постами после их отрисовки
+            setTimeout(observePosts, 100);
         }
 
         function showSubscriptions() {
@@ -2212,7 +2471,7 @@
             subPosts.slice(0, postsDisplayed).forEach(post => {
                 const badge = getVerifiedBadge(post.author);
                 html += `
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="${post.id}">
                         <div class="post-header" onclick="showProfile('${post.author}')">
                             <div class="kolobok-small">${post.authorKolobok || '🍞'}</div>
                             <div>
@@ -2226,6 +2485,8 @@
             });
             html += '</div>';
             document.getElementById('dynamicContent').innerHTML = html;
+            
+            setTimeout(observePosts, 100);
         }
 
         function showProfile(username) {
@@ -2271,7 +2532,7 @@
                             </div>
                             <div class="stat-item">
                                 <div class="stat-value">${profile.views}</div>
-                                <div class="stat-label">просмотров</div>
+                                <div class="stat-label">просмотров профиля</div>
                             </div>
                         </div>
                     </div>
@@ -2320,6 +2581,7 @@
                 const badge = getVerifiedBadge(post.author);
                 const likesCount = getLikesCount(post);
                 const liked = userLiked(post);
+                const views = post.views || 0;
                 
                 let mediaHtml = '';
                 if (post.image) {
@@ -2344,9 +2606,9 @@
                     `<div class="delete-button" onclick="deletePost(${post.id})">✕</div>` : '';
 
                 html += `
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="${post.id}">
                         ${deleteButton}
-                        <div class="post-header" onclick="showProfile('${post.author}')">
+                        <div class="post-header" onclick="event.stopPropagation(); showProfile('${post.author}')">
                             <div class="kolobok-small">${post.authorKolobok || '🍞'}</div>
                             <div>
                                 <div class="post-author">@${post.author} ${badge}</div>
@@ -2357,16 +2619,19 @@
                         <div class="post-content">${post.content}</div>
                         ${mediaHtml}
                         <div class="post-stats">
-                            <span class="like-button ${liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            <span class="like-button ${liked ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLike(${post.id})">
                                 ❤️ ${likesCount}
                             </span>
-                            <span class="comment-button" onclick="toggleComments(${post.id})">
+                            <span class="comment-button" onclick="event.stopPropagation(); toggleComments(${post.id})">
                                 💬 ${post.comments.length}
+                            </span>
+                            <span class="views-button" onclick="event.stopPropagation()">
+                                👁️ ${views} ${views === 1 ? 'просмотр' : views < 5 ? 'просмотра' : 'просмотров'}
                             </span>
                             ${subscribeButton}
                             ${repostButton}
                         </div>
-                        <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                        <div class="comments-section" id="comments-${post.id}" style="display: none;" onclick="event.stopPropagation()">
                             ${post.comments.map(c => {
                                 const commentBadge = getVerifiedBadge(c.author);
                                 return `
