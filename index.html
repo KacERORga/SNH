@@ -1578,13 +1578,22 @@
                 <!-- Секция управления ботами -->
                 <div class="admin-section">
                     <h4>🤖 Управление ботами</h4>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                        <input type="number" id="botCount" min="1" max="50" value="5" style="width: 80px; padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 40px; color: white;">
-                        <button class="admin-button" onclick="addBots()">➕ Добавить ботов</button>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <input type="number" id="botCount" min="1" max="500" value="10" style="width: 80px; padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 40px; color: white;">
+                        <select id="botType" style="padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 40px; color: white;">
+                            <option value="universal">🦸 Универсальные (всё)</option>
+                            <option value="view">👁️ Просмотр-боты</option>
+                            <option value="like">❤️ Лайк-боты</option>
+                            <option value="subscribe">👥 Подпис-боты</option>
+                            <option value="comment">💬 Коммент-боты</option>
+                        </select>
+                        <button class="admin-button" onclick="addBots()">➕ Добавить</button>
                     </div>
-                    <button class="admin-button" onclick="startBots()">▶️ Запустить ботов</button>
-                    <button class="admin-button" onclick="stopBots()">⏸️ Остановить ботов</button>
-                    <button class="admin-button" onclick="resetBots()">🔄 Перезапустить ботов</button>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <button class="admin-button" onclick="startBots()">▶️ Запустить всех</button>
+                        <button class="admin-button" onclick="stopBots()">⏸️ Остановить всех</button>
+                        <button class="admin-button" onclick="resetBots()">🔄 Перезапустить</button>
+                    </div>
                     <div style="margin-top:10px; font-size:0.9rem;" id="botsCount"></div>
                 </div>
             </div>
@@ -1665,6 +1674,37 @@
 
         const BOT_AVATARS = ['😎', '🥳', '😊', '🤓', '😇', '🥰', '😘', '🤠', '🦸', '🦹', '🧙', '🧝', '🧛', '🧜', '🧞', '🧟'];
 
+        // ===== УМНЫЕ КОММЕНТАРИИ =====
+        const BOT_COMMENTS = [
+            'Классный пост!', 'Согласен!', 'Отличная идея!', 'Мне нравится!', 'Супер!',
+            'Интересно!', 'Полезно!', 'Красиво!', 'Здорово!', 'В точку!',
+            'Подписался!', 'Лайк!', 'Топ!', 'Лучшее!', 'Рекомендую!',
+            '🔥', '💯', '👍', '👌', '✨'
+        ];
+
+        const THEMED_COMMENTS = {
+            'фото': 'Отличный кадр!',
+            'путешествие': 'Классное место!',
+            'музыка': 'Хороший вкус!',
+            'кино': 'Тоже смотрел!',
+            'книги': 'Надо почитать!',
+            'спорт': 'Молодец!',
+            'еда': 'Вкусно выглядит!',
+            'технологии': 'Будущее близко!',
+            'искусство': 'Прекрасно!',
+            'наука': 'Познавательно!',
+            'йога': 'Гармония!',
+            'психология': 'Глубоко!',
+            'бизнес': 'Успехов!',
+            'крипта': 'Ходл!',
+            'нейросети': 'Технологии!',
+            'космос': 'Космос зовёт!',
+            'авто': 'Тачка огонь!',
+            'фитнес': 'В здоровом теле!',
+            'рецепты': 'Надо попробовать!',
+            'кафе': 'Уютно!'
+        };
+
         let botTimeouts = [];
 
         // Функция для генерации нормального имени бота
@@ -1685,43 +1725,53 @@
             return formats[Math.floor(Math.random() * formats.length)];
         }
 
-        function initBots(count = 10) {
-            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
-            if (bots.length === 0) {
-                // Создаём ботов при первом запуске
-                for (let i = 0; i < count; i++) {
-                    bots.push(createBot());
-                }
-                localStorage.setItem('bots', JSON.stringify(bots));
-            }
-            return bots;
-        }
+        // Типы ботов
+        const BOT_TYPES = {
+            UNIVERSAL: 'universal',
+            VIEW: 'view',
+            LIKE: 'like',
+            SUBSCRIBE: 'subscribe',
+            COMMENT: 'comment'
+        };
 
-        function createBot() {
+        const BOT_TYPE_NAMES = {
+            [BOT_TYPES.UNIVERSAL]: '🦸 Универсальный',
+            [BOT_TYPES.VIEW]: '👁️ Просмотрщик',
+            [BOT_TYPES.LIKE]: '❤️ Лайкер',
+            [BOT_TYPES.SUBSCRIBE]: '👥 Подписчик',
+            [BOT_TYPES.COMMENT]: '💬 Комментатор'
+        };
+
+        function createBot(type = BOT_TYPES.UNIVERSAL) {
             return {
                 id: 'bot_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
                 name: generateBotName(),
                 avatar: BOT_AVATARS[Math.floor(Math.random() * BOT_AVATARS.length)],
+                type: type,
                 active: true,
                 lastActivity: Date.now(),
                 activityInterval: Math.floor(Math.random() * 30000) + 30000, // 30-60 секунд
-                likes: 0,
-                follows: 0,
-                views: 0
+                stats: {
+                    likes: 0,
+                    follows: 0,
+                    views: 0,
+                    comments: 0
+                }
             };
         }
 
         function addBots() {
-            const count = parseInt(document.getElementById('botCount').value) || 5;
+            const count = parseInt(document.getElementById('botCount').value) || 10;
+            const type = document.getElementById('botType').value;
             const bots = JSON.parse(localStorage.getItem('bots') || '[]');
             
             for (let i = 0; i < count; i++) {
-                bots.push(createBot());
+                bots.push(createBot(type));
             }
             
             localStorage.setItem('bots', JSON.stringify(bots));
             updateBotsCount();
-            alert(`✅ Добавлено ${count} новых ботов!`);
+            alert(`✅ Добавлено ${count} ботов типа ${BOT_TYPE_NAMES[type]}`);
             
             // Перезапускаем ботов
             stopBots();
@@ -1757,9 +1807,8 @@
         function resetBots() {
             localStorage.removeItem('bots');
             stopBots();
-            startBots();
             updateBotsCount();
-            alert('🤖 Боты перезапущены с новыми именами!');
+            alert('🤖 Все боты удалены');
         }
 
         function updateBotsCount() {
@@ -1767,7 +1816,18 @@
             const countEl = document.getElementById('botsCount');
             if (countEl) {
                 const activeCount = bots.filter(b => b.active).length;
-                countEl.textContent = `🤖 Всего ботов: ${bots.length} | Активных: ${activeCount}`;
+                const universalCount = bots.filter(b => b.type === BOT_TYPES.UNIVERSAL).length;
+                const viewCount = bots.filter(b => b.type === BOT_TYPES.VIEW).length;
+                const likeCount = bots.filter(b => b.type === BOT_TYPES.LIKE).length;
+                const subscribeCount = bots.filter(b => b.type === BOT_TYPES.SUBSCRIBE).length;
+                const commentCount = bots.filter(b => b.type === BOT_TYPES.COMMENT).length;
+                
+                countEl.innerHTML = `
+                    🤖 Всего ботов: ${bots.length} | Активных: ${activeCount}<br>
+                    🦸 Универсальных: ${universalCount} | 👁️ Просмотр: ${viewCount}<br>
+                    ❤️ Лайкеров: ${likeCount} | 👥 Подписчиков: ${subscribeCount}<br>
+                    💬 Комментаторов: ${commentCount}
+                `;
             }
         }
 
@@ -1785,23 +1845,83 @@
         async function performBotActivity(bot) {
             if (posts.length === 0) return;
             
-            const activityType = Math.floor(Math.random() * 3); // 0,1,2
-            
-            switch(activityType) {
-                case 0: // Лайк
+            switch(bot.type) {
+                case BOT_TYPES.UNIVERSAL:
+                    // Делаем всё
+                    const rand = Math.floor(Math.random() * 4);
+                    if (rand === 0) await botLike(bot);
+                    else if (rand === 1) await botSubscribe(bot);
+                    else if (rand === 2) await botViewProfile(bot);
+                    else if (rand === 3) await botComment(bot);
+                    break;
+                    
+                case BOT_TYPES.VIEW:
+                    await botViewProfile(bot);
+                    break;
+                    
+                case BOT_TYPES.LIKE:
                     await botLike(bot);
                     break;
-                case 1: // Подписка
+                    
+                case BOT_TYPES.SUBSCRIBE:
                     await botSubscribe(bot);
                     break;
-                case 2: // Просмотр профиля
-                    await botViewProfile(bot);
+                    
+                case BOT_TYPES.COMMENT:
+                    await botComment(bot);
                     break;
             }
         }
 
+        function getThemedComment(content) {
+            const lowerContent = content.toLowerCase();
+            
+            // Ищем ключевые слова
+            for (let [keyword, comment] of Object.entries(THEMED_COMMENTS)) {
+                if (lowerContent.includes(keyword)) {
+                    return comment;
+                }
+            }
+            
+            // Если ничего не нашли, случайный комментарий
+            return BOT_COMMENTS[Math.floor(Math.random() * BOT_COMMENTS.length)];
+        }
+
+        async function botComment(bot) {
+            const userPosts = posts.filter(p => !p.author.startsWith('bot_'));
+            if (userPosts.length === 0) return;
+            
+            const randomPost = userPosts[Math.floor(Math.random() * userPosts.length)];
+            
+            // Генерируем комментарий по теме
+            const commentText = getThemedComment(randomPost.content);
+            
+            // Добавляем комментарий
+            if (!randomPost.comments) randomPost.comments = [];
+            
+            // Проверяем, не оставлял ли уже бот комментарий
+            const alreadyCommented = randomPost.comments.some(c => c.author === bot.name);
+            
+            if (!alreadyCommented) {
+                randomPost.comments.push({
+                    author: bot.name,
+                    text: commentText
+                });
+                
+                bot.stats.comments++;
+                console.log(`💬 ${bot.name} оставил комментарий под постом @${randomPost.author}: "${commentText}"`);
+                
+                // Добавляем уведомление для автора
+                addNotification('comment', bot.name, randomPost.id);
+                
+                await savePostsToCloud();
+                
+                // Обновляем ленту, если открыта
+                if (currentView === 'feed') refreshView();
+            }
+        }
+
         async function botLike(bot) {
-            // Выбираем случайный пост (не свой)
             const userPosts = posts.filter(p => !p.author.startsWith('bot_'));
             if (userPosts.length === 0) return;
             
@@ -1811,8 +1931,8 @@
             if (!randomPost.likes) randomPost.likes = {};
             if (!randomPost.likes[bot.name]) {
                 randomPost.likes[bot.name] = true;
-                bot.likes++;
-                console.log(`🤖 ${bot.name} лайкнул пост @${randomPost.author}`);
+                bot.stats.likes++;
+                console.log(`❤️ ${bot.name} лайкнул пост @${randomPost.author}`);
                 
                 // Добавляем уведомление для автора
                 addNotification('like', bot.name, randomPost.id);
@@ -1825,7 +1945,6 @@
         }
 
         async function botSubscribe(bot) {
-            // Выбираем случайного пользователя (не бота)
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             const realUsers = Object.keys(users).filter(u => !u.startsWith('bot_'));
             
@@ -1833,20 +1952,18 @@
             
             const randomUser = realUsers[Math.floor(Math.random() * realUsers.length)];
             
-            // Получаем подписки бота
             const botSubs = JSON.parse(localStorage.getItem('subs_' + bot.name) || '[]');
             
             if (!botSubs.includes(randomUser)) {
                 botSubs.push(randomUser);
                 localStorage.setItem('subs_' + bot.name, JSON.stringify(botSubs));
-                bot.follows++;
+                bot.stats.follows++;
                 
-                console.log(`🤖 ${bot.name} подписался на @${randomUser}`);
+                console.log(`👥 ${bot.name} подписался на @${randomUser}`);
                 
                 // Добавляем уведомление
                 addNotification('subscribe', bot.name);
                 
-                // Обновляем статистику профиля
                 if (userProfiles[randomUser]) {
                     userProfiles[randomUser].followersCount++;
                     saveUserProfiles();
@@ -1855,7 +1972,6 @@
         }
 
         async function botViewProfile(bot) {
-            // Выбираем случайного пользователя
             const users = JSON.parse(localStorage.getItem('users') || '{}');
             const allUsers = Object.keys(users);
             
@@ -1863,12 +1979,11 @@
             
             const randomUser = allUsers[Math.floor(Math.random() * allUsers.length)];
             
-            // Добавляем просмотр профиля
             if (userProfiles[randomUser]) {
                 userProfiles[randomUser].views++;
-                bot.views++;
+                bot.stats.views++;
                 saveUserProfiles();
-                console.log(`🤖 ${bot.name} посетил профиль @${randomUser}`);
+                console.log(`👁️ ${bot.name} посетил профиль @${randomUser}`);
             }
         }
 
@@ -2309,9 +2424,6 @@
             
             if (ADMIN_USERNAMES.includes(username)) {
                 document.getElementById('adminPanel').classList.add('visible');
-                // Запускаем ботов для админа
-                initBots(10);
-                startBots();
                 updateBotsCount();
             }
             
@@ -2415,12 +2527,10 @@
                 subscriptions.delete(username);
             } else {
                 subscriptions.add(username);
-                // Добавляем уведомление о подписке
                 addNotification('subscribe', currentUser);
             }
             saveSubscriptions();
             
-            // Обновляем статистику профиля
             if (userProfiles[username]) {
                 updateProfileStats(username);
             }
@@ -2503,7 +2613,6 @@
             const post = posts.find(p => p.id == postId);
             if (post) {
                 post.pinned = !post.pinned;
-                // Пересортировываем посты
                 posts.sort((a, b) => {
                     if (a.pinned && !b.pinned) return -1;
                     if (!a.pinned && b.pinned) return 1;
@@ -2524,7 +2633,7 @@
             const post = posts.find(p => p.id == postId);
             if (post) {
                 if (!post.views) post.views = 0;
-                post.views += 100; // Добавляем 100 просмотров за раз
+                post.views += 100;
                 await savePostsToCloud();
                 refreshView();
             }
@@ -2541,9 +2650,9 @@
             if (post) {
                 if (!post.views) post.views = 0;
                 if (post.views >= 100) {
-                    post.views -= 100; // Убираем 100 просмотров
+                    post.views -= 100;
                 } else {
-                    post.views = 0; // Если меньше 100, обнуляем
+                    post.views = 0;
                 }
                 await savePostsToCloud();
                 refreshView();
@@ -2563,7 +2672,6 @@
                 return;
             }
             
-            // ПРОВЕРЯЕМ ГАЛОЧКУ ТОЛЬКО ЕСЛИ ЕСТЬ ФАЙЛЫ
             if ((imageFile || videoFile) && !copyrightCheck.checked) {
                 alert('⚠️ Необходимо подтвердить, что у вас есть права на публикуемые фото/видео');
                 return;
@@ -2592,7 +2700,7 @@
                 likes: {},
                 comments: [],
                 views: 0,
-                pinned: false, // По умолчанию не закреплён
+                pinned: false,
                 time: new Date().toLocaleString()
             };
 
@@ -2603,7 +2711,6 @@
                 addToBlacklist(currentImageHash);
             }
             
-            // Обновляем статистику профиля
             updateProfileStats(username);
             
             document.getElementById('postContent').value = '';
@@ -2614,7 +2721,6 @@
             currentVideo = null;
             currentImageHash = null;
             
-            // Скрываем галочку
             document.getElementById('copyrightNotice').style.display = 'none';
             copyrightCheck.checked = false;
             
@@ -2632,7 +2738,6 @@
                     delete post.likes[username];
                 } else {
                     post.likes[username] = true;
-                    // Добавляем уведомление о лайке
                     addNotification('like', username, postId);
                 }
                 
@@ -2668,7 +2773,6 @@
                     text: text
                 });
                 
-                // Добавляем уведомление о комментарии
                 addNotification('comment', username, postId);
                 
                 await savePostsToCloud();
@@ -2682,7 +2786,6 @@
                 posts = posts.filter(p => p.id != postId);
                 await savePostsToCloud();
                 
-                // Обновляем статистику профиля автора
                 const post = posts.find(p => p.id == postId);
                 if (post) {
                     updateProfileStats(post.author);
@@ -2727,19 +2830,17 @@
 
             posts.unshift(repostPost);
             
-            // Добавляем уведомление о репосте
             addNotification('repost', username, postId);
             
             await savePostsToCloud();
             
-            // Обновляем статистику профиля
             updateProfileStats(username);
             
             refreshView();
         }
 
         // ===== АВТОМАТИЧЕСКИЙ ПОДСЧЁТ ПРОСМОТРОВ =====
-        const viewedPosts = new Set(); // Множество просмотренных постов
+        const viewedPosts = new Set();
 
         function observePosts() {
             const postCards = document.querySelectorAll('.post-card');
@@ -2755,14 +2856,13 @@
                     }
                 });
             }, {
-                threshold: 0.5, // Пост считается просмотренным, если видно 50%
+                threshold: 0.5,
                 rootMargin: '0px'
             });
 
             postCards.forEach(card => observer.observe(card));
         }
 
-        // Функция для увеличения счётчика просмотров
         function incrementView(postId) {
             const post = posts.find(p => p.id == postId);
             if (post) {
@@ -2797,7 +2897,6 @@
             
             renderFeed();
             
-            // Запускаем наблюдение за постами после их отрисовки
             setTimeout(observePosts, 100);
         }
 
@@ -2844,7 +2943,6 @@
             currentView = 'profile';
             currentProfile = username;
             
-            // Добавляем просмотр профиля
             if (username !== localStorage.getItem('username')) {
                 addProfileView(username);
             }
@@ -2957,7 +3055,6 @@
                 const deleteButton = (post.author === username || ADMIN_USERNAMES.includes(username)) ? 
                     `<div class="delete-button" onclick="deletePost(${post.id})">✕</div>` : '';
 
-                // Админские кнопки (только для админов)
                 const adminButtons = isAdmin ? `
                     <span class="pin-button ${post.pinned ? 'active' : ''}" onclick="event.stopPropagation(); togglePin(${post.id})">
                         📌 ${post.pinned ? 'Открепить' : 'Закрепить'}
@@ -3079,7 +3176,6 @@
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('adminPanel').classList.remove('visible');
             
-            // Останавливаем ботов при выходе
             stopBots();
         }
 
@@ -3111,7 +3207,6 @@
             await loadBannedWordsFromFile();
             loadUserProfiles();
             
-            // Показываем всплывашку с политикой, если ещё не принимали
             if (!localStorage.getItem('privacyAccepted')) {
                 document.getElementById('privacyPopup').classList.remove('hidden');
             }
@@ -3126,9 +3221,6 @@
                 
                 if (ADMIN_USERNAMES.includes(username)) {
                     document.getElementById('adminPanel').classList.add('visible');
-                    // Запускаем ботов для админа
-                    initBots(10);
-                    startBots();
                     updateBotsCount();
                 }
                 
@@ -3146,14 +3238,12 @@
             setInterval(updateTime, 60000);
         };
 
-        // Закрытие модальных окон по клику вне
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 closePrivacyModal();
                 closeLicenseModal();
             }
             
-            // Закрываем панель уведомлений при клике вне
             const panel = document.getElementById('notificationsPanel');
             const button = document.getElementById('notificationsButton');
             if (!panel.contains(event.target) && !button.contains(event.target)) {
