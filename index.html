@@ -1574,6 +1574,19 @@
                     <button class="admin-button" onclick="reloadBannedWords()">🔄 Перезагрузить список слов</button>
                     <div style="margin-top:10px; font-size:0.9rem;" id="bannedWordsCount"></div>
                 </div>
+
+                <!-- Секция управления ботами -->
+                <div class="admin-section">
+                    <h4>🤖 Управление ботами</h4>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <input type="number" id="botCount" min="1" max="50" value="5" style="width: 80px; padding: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 40px; color: white;">
+                        <button class="admin-button" onclick="addBots()">➕ Добавить ботов</button>
+                    </div>
+                    <button class="admin-button" onclick="startBots()">▶️ Запустить ботов</button>
+                    <button class="admin-button" onclick="stopBots()">⏸️ Остановить ботов</button>
+                    <button class="admin-button" onclick="resetBots()">🔄 Перезапустить ботов</button>
+                    <div style="margin-top:10px; font-size:0.9rem;" id="botsCount"></div>
+                </div>
             </div>
 
             <!-- ФОРМА С УМНОЙ ГАЛОЧКОЙ -->
@@ -1628,6 +1641,237 @@
         // ===== ВАШЕ ХРАНИЛИЩЕ НА NPOINT =====
         const API_URL = 'https://api.npoint.io/3c013202cb4baa90ff63';
         
+        // ===== НОРМАЛЬНЫЕ ИМЕНА ДЛЯ БОТОВ =====
+        const BOT_FIRST_NAMES = [
+            'Алекс', 'Миша', 'Саша', 'Дима', 'Кирилл', 'Артём', 'Никита', 'Даниил', 'Матвей', 'Тимофей',
+            'София', 'Алиса', 'Вика', 'Аня', 'Катя', 'Настя', 'Полина', 'Варя', 'Лера', 'Ксюша',
+            'Марк', 'Лев', 'Глеб', 'Егор', 'Илья', 'Рома', 'Вова', 'Петя', 'Степа', 'Федя',
+            'Таня', 'Юля', 'Оля', 'Лена', 'Наташа', 'Даша', 'Маша', 'Света', 'Инна', 'Лиза',
+            'Денис', 'Влад', 'Сергей', 'Андрей', 'Паша', 'Костя', 'Женя', 'Вадим', 'Руслан', 'Тимур'
+        ];
+
+        const BOT_LAST_NAMES = [
+            'Смирнов', 'Иванов', 'Кузнецов', 'Попов', 'Соколов', 'Лебедев', 'Козлов', 'Новиков', 'Морозов', 'Петров',
+            'Волков', 'Соловьёв', 'Васильев', 'Зайцев', 'Павлов', 'Семёнов', 'Голубев', 'Виноградов', 'Богданов', 'Воробьёв',
+            'Фёдоров', 'Михайлов', 'Беляев', 'Тарасов', 'Белов', 'Комаров', 'Орлов', 'Киселёв', 'Макаров', 'Андреев',
+            'Ковалёв', 'Ильин', 'Гусев', 'Титов', 'Кузьмин', 'Кудрявцев', 'Баранов', 'Куликов', 'Алексеев', 'Степанов'
+        ];
+
+        const BOT_NICKNAMES = [
+            'Серфер', 'Кодер', 'Геймер', 'Фотограф', 'Художник', 'Музыкант', 'Повар', 'Спортсмен', 'Блогер', 'Студент',
+            'Мечтатель', 'Путешественник', 'Космонавт', 'Пират', 'Робот', 'Волшебник', 'Рыцарь', 'Джедай', 'Эльф', 'Гном',
+            'Супермен', 'Бэтмен', 'Железный_человек', 'Тор', 'Локи', 'Халк', 'Капитан_Америка', 'Чёрная_вдова', 'Сокол', 'Зимний_солдат'
+        ];
+
+        const BOT_AVATARS = ['😎', '🥳', '😊', '🤓', '😇', '🥰', '😘', '🤠', '🦸', '🦹', '🧙', '🧝', '🧛', '🧜', '🧞', '🧟'];
+
+        let botTimeouts = [];
+
+        // Функция для генерации нормального имени бота
+        function generateBotName() {
+            const firstName = BOT_FIRST_NAMES[Math.floor(Math.random() * BOT_FIRST_NAMES.length)];
+            const lastName = BOT_LAST_NAMES[Math.floor(Math.random() * BOT_LAST_NAMES.length)];
+            const nickname = BOT_NICKNAMES[Math.floor(Math.random() * BOT_NICKNAMES.length)];
+            
+            // Случайный формат имени
+            const formats = [
+                `${firstName} ${lastName}`,
+                `${firstName}_${nickname}`,
+                `${nickname}_${firstName}`,
+                `${firstName}${lastName}`,
+                `${firstName}.${lastName}`
+            ];
+            
+            return formats[Math.floor(Math.random() * formats.length)];
+        }
+
+        function initBots(count = 10) {
+            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
+            if (bots.length === 0) {
+                // Создаём ботов при первом запуске
+                for (let i = 0; i < count; i++) {
+                    bots.push(createBot());
+                }
+                localStorage.setItem('bots', JSON.stringify(bots));
+            }
+            return bots;
+        }
+
+        function createBot() {
+            return {
+                id: 'bot_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                name: generateBotName(),
+                avatar: BOT_AVATARS[Math.floor(Math.random() * BOT_AVATARS.length)],
+                active: true,
+                lastActivity: Date.now(),
+                activityInterval: Math.floor(Math.random() * 30000) + 30000, // 30-60 секунд
+                likes: 0,
+                follows: 0,
+                views: 0
+            };
+        }
+
+        function addBots() {
+            const count = parseInt(document.getElementById('botCount').value) || 5;
+            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
+            
+            for (let i = 0; i < count; i++) {
+                bots.push(createBot());
+            }
+            
+            localStorage.setItem('bots', JSON.stringify(bots));
+            updateBotsCount();
+            alert(`✅ Добавлено ${count} новых ботов!`);
+            
+            // Перезапускаем ботов
+            stopBots();
+            startBots();
+        }
+
+        function startBots() {
+            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
+            // Очищаем старые таймауты
+            botTimeouts.forEach(timeout => clearTimeout(timeout));
+            botTimeouts = [];
+            
+            bots.forEach(bot => {
+                bot.active = true;
+                scheduleBotActivity(bot);
+            });
+            localStorage.setItem('bots', JSON.stringify(bots));
+            updateBotsCount();
+            console.log(`✅ Запущено ${bots.length} ботов для активности`);
+        }
+
+        function stopBots() {
+            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
+            bots.forEach(bot => bot.active = false);
+            localStorage.setItem('bots', JSON.stringify(bots));
+            // Очищаем таймауты
+            botTimeouts.forEach(timeout => clearTimeout(timeout));
+            botTimeouts = [];
+            updateBotsCount();
+            console.log('🤖 Боты остановлены');
+        }
+
+        function resetBots() {
+            localStorage.removeItem('bots');
+            stopBots();
+            startBots();
+            updateBotsCount();
+            alert('🤖 Боты перезапущены с новыми именами!');
+        }
+
+        function updateBotsCount() {
+            const bots = JSON.parse(localStorage.getItem('bots') || '[]');
+            const countEl = document.getElementById('botsCount');
+            if (countEl) {
+                const activeCount = bots.filter(b => b.active).length;
+                countEl.textContent = `🤖 Всего ботов: ${bots.length} | Активных: ${activeCount}`;
+            }
+        }
+
+        function scheduleBotActivity(bot) {
+            if (!bot.active) return;
+            
+            const timeout = setTimeout(async () => {
+                await performBotActivity(bot);
+                scheduleBotActivity(bot); // Запланировать следующую активность
+            }, bot.activityInterval);
+            
+            botTimeouts.push(timeout);
+        }
+
+        async function performBotActivity(bot) {
+            if (posts.length === 0) return;
+            
+            const activityType = Math.floor(Math.random() * 3); // 0,1,2
+            
+            switch(activityType) {
+                case 0: // Лайк
+                    await botLike(bot);
+                    break;
+                case 1: // Подписка
+                    await botSubscribe(bot);
+                    break;
+                case 2: // Просмотр профиля
+                    await botViewProfile(bot);
+                    break;
+            }
+        }
+
+        async function botLike(bot) {
+            // Выбираем случайный пост (не свой)
+            const userPosts = posts.filter(p => !p.author.startsWith('bot_'));
+            if (userPosts.length === 0) return;
+            
+            const randomPost = userPosts[Math.floor(Math.random() * userPosts.length)];
+            
+            // Ставим лайк
+            if (!randomPost.likes) randomPost.likes = {};
+            if (!randomPost.likes[bot.name]) {
+                randomPost.likes[bot.name] = true;
+                bot.likes++;
+                console.log(`🤖 ${bot.name} лайкнул пост @${randomPost.author}`);
+                
+                // Добавляем уведомление для автора
+                addNotification('like', bot.name, randomPost.id);
+                
+                await savePostsToCloud();
+                
+                // Обновляем ленту, если открыта
+                if (currentView === 'feed') refreshView();
+            }
+        }
+
+        async function botSubscribe(bot) {
+            // Выбираем случайного пользователя (не бота)
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            const realUsers = Object.keys(users).filter(u => !u.startsWith('bot_'));
+            
+            if (realUsers.length === 0) return;
+            
+            const randomUser = realUsers[Math.floor(Math.random() * realUsers.length)];
+            
+            // Получаем подписки бота
+            const botSubs = JSON.parse(localStorage.getItem('subs_' + bot.name) || '[]');
+            
+            if (!botSubs.includes(randomUser)) {
+                botSubs.push(randomUser);
+                localStorage.setItem('subs_' + bot.name, JSON.stringify(botSubs));
+                bot.follows++;
+                
+                console.log(`🤖 ${bot.name} подписался на @${randomUser}`);
+                
+                // Добавляем уведомление
+                addNotification('subscribe', bot.name);
+                
+                // Обновляем статистику профиля
+                if (userProfiles[randomUser]) {
+                    userProfiles[randomUser].followersCount++;
+                    saveUserProfiles();
+                }
+            }
+        }
+
+        async function botViewProfile(bot) {
+            // Выбираем случайного пользователя
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            const allUsers = Object.keys(users);
+            
+            if (allUsers.length === 0) return;
+            
+            const randomUser = allUsers[Math.floor(Math.random() * allUsers.length)];
+            
+            // Добавляем просмотр профиля
+            if (userProfiles[randomUser]) {
+                userProfiles[randomUser].views++;
+                bot.views++;
+                saveUserProfiles();
+                console.log(`🤖 ${bot.name} посетил профиль @${randomUser}`);
+            }
+        }
+
         // ===== УВЕДОМЛЕНИЯ =====
         let notifications = [];
         
@@ -2065,6 +2309,10 @@
             
             if (ADMIN_USERNAMES.includes(username)) {
                 document.getElementById('adminPanel').classList.add('visible');
+                // Запускаем ботов для админа
+                initBots(10);
+                startBots();
+                updateBotsCount();
             }
             
             loadSubscriptions();
@@ -2282,7 +2530,6 @@
             }
         }
 
-        // Новая функция для убирания накрутки
         async function unboostViews(postId) {
             const username = localStorage.getItem('username');
             if (!ADMIN_USERNAMES.includes(username)) {
@@ -2831,6 +3078,9 @@
             document.getElementById('loginModal').style.display = 'flex';
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('adminPanel').classList.remove('visible');
+            
+            // Останавливаем ботов при выходе
+            stopBots();
         }
 
         function updateTime() {
@@ -2876,6 +3126,10 @@
                 
                 if (ADMIN_USERNAMES.includes(username)) {
                     document.getElementById('adminPanel').classList.add('visible');
+                    // Запускаем ботов для админа
+                    initBots(10);
+                    startBots();
+                    updateBotsCount();
                 }
                 
                 const users = JSON.parse(localStorage.getItem('users') || '{}');
