@@ -3,12 +3,717 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SNH - Социальная сеть</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SNH - Социальная сеть | Liquid Glass Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #0D0D0D;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background: #c084fc;
+            color: #0D0D0D;
+        }
+
+        .app-container {
+            position: relative;
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 50%, rgba(30, 30, 40, 0.8) 0%, #0D0D0D 100%);
+            overflow-x: hidden;
+        }
+
+        .app-container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(100, 100, 150, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(150, 100, 200, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff, #a0a0ff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+            border-left: 2px solid #c084fc;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.1);
+        }
+
+        .nav-item .icon {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.3));
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page {
+            display: none;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-header {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .feed-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #e0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .empty-feed {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(18, 18, 18, 0.5);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-feed .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-feed h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-feed p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-feed button {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .empty-feed button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(192, 132, 252, 0.3);
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .video-card {
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(192, 132, 252, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
+        }
+
+        .delete-video {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 2;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-video:hover {
+            background: #ff4444;
+            transform: scale(1.1);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            padding-bottom: 177.78%;
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            overflow: hidden;
+        }
+
+        .video-thumbnail video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 1.2rem;
+        }
+
+        .video-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-user strong {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .upload-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .upload-container h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(192, 132, 252, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            background: rgba(18, 18, 18, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: #c084fc;
+            background: rgba(192, 132, 252, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .upload-area:hover::before {
+            left: 100%;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.5));
+        }
+
+        .upload-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(192, 132, 252, 0.3);
+        }
+
+        .upload-preview video {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 20px;
+            margin: 1rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .upload-details input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(18, 18, 18, 0.8);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .upload-details input:focus {
+            outline: none;
+            border-color: #c084fc;
+            background: rgba(18, 18, 18, 0.95);
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #ff4444;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 24px;
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .profile-header:hover::before {
+            left: 100%;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 10px 30px rgba(192, 132, 252, 0.3);
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .profile-stats div {
+            text-align: center;
+        }
+
+        .profile-stats strong {
+            font-size: 1.5rem;
+            display: block;
+            color: #c084fc;
+        }
+
+        .edit-profile-btn {
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .edit-profile-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            transform: translateY(-2px);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 40px;
+            width: fit-content;
+        }
+
+        .profile-tab {
+            padding: 0.6rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .profile-tab.active {
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            color: white;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.3);
+        }
+
+        .profile-videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(18, 18, 18, 0.95);
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 28px;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #c084fc;
+            transform: rotate(90deg);
+        }
+
+        #modal-video {
+            width: 100%;
+            max-height: 500px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .video-actions button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .video-actions button:hover {
+            background: #c084fc;
+            transform: translateY(-2px);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #c084fc;
+            background: rgba(18, 18, 18, 0.9);
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+        }
+
+        .search-bar button {
+            padding: 0 2rem;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(192, 132, 252, 0.4);
+        }
+
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .notifications-container h2 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .notification-item {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: rgba(192, 132, 252, 0.1);
+            transform: translateX(5px);
+        }
+
+        .notification-placeholder {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(18, 18, 18, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c084fc;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar .logo h2,
+            .sidebar .nav-item span:last-child {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+                padding: 1rem;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 0.8rem;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .videos-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .feed-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar Navigation -->
         <nav class="sidebar">
             <div class="logo">
                 <h2>SNH</h2>
@@ -37,43 +742,29 @@
             </ul>
         </nav>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Feed Page -->
             <div id="feed-page" class="page active">
                 <div class="feed-container">
                     <div class="feed-header">
                         <h1>Для вас</h1>
-                        <div class="feed-tabs">
-                            <button class="tab-btn active">Рекомендации</button>
-                            <button class="tab-btn">Подписки</button>
-                        </div>
                     </div>
-                    <div class="videos-grid" id="videos-grid">
-                        <!-- Videos will be loaded dynamically -->
-                    </div>
+                    <div class="videos-grid" id="videos-grid"></div>
                 </div>
             </div>
 
-            <!-- Explore Page -->
             <div id="explore-page" class="page">
                 <div class="explore-container">
                     <div class="search-bar">
-                        <input type="text" placeholder="Поиск пользователей, видео, хэштегов..." id="search-input">
+                        <input type="text" placeholder="Поиск видео..." id="search-input">
                         <button id="search-btn">🔍</button>
-                    </div>
-                    <div class="trending-hashtags">
-                        <h3>Актуальные хэштеги</h3>
-                        <div class="hashtags-list" id="hashtags-list"></div>
                     </div>
                     <div class="explore-grid" id="explore-grid"></div>
                 </div>
             </div>
 
-            <!-- Upload Page -->
             <div id="upload-page" class="page">
                 <div class="upload-container">
-                    <h2>Загрузить видео</h2>
+                    <h2>✨ Загрузить видео</h2>
                     <div class="upload-area" id="upload-area">
                         <div class="upload-icon">📹</div>
                         <p>Нажмите или перетащите видео для загрузки</p>
@@ -84,26 +775,22 @@
                         <video id="preview-video" controls></video>
                         <div class="upload-details">
                             <input type="text" placeholder="Описание видео" id="video-description">
-                            <input type="text" placeholder="Хэштеги (через пробел)" id="video-hashtags">
-                            <button id="publish-btn">Опубликовать</button>
+                            <div id="description-error" class="error-message" style="display:none;"></div>
+                            <button class="upload-btn" id="publish-btn">Опубликовать</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Notifications Page -->
             <div id="notifications-page" class="page">
                 <div class="notifications-container">
-                    <h2>Уведомления</h2>
+                    <h2>🔔 Уведомления</h2>
                     <div id="notifications-list">
-                        <div class="notification-placeholder">
-                            Здесь будут ваши уведомления
-                        </div>
+                        <div class="notification-placeholder">✨ Здесь будут ваши уведомления</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Page -->
             <div id="profile-page" class="page">
                 <div class="profile-container">
                     <div class="profile-header">
@@ -114,16 +801,10 @@
                             <h2 id="profile-name">Пользователь</h2>
                             <p id="profile-username">@user</p>
                             <div class="profile-stats">
-                                <div><strong id="followers-count">0</strong> подписчиков</div>
-                                <div><strong id="following-count">0</strong> подписок</div>
                                 <div><strong id="videos-count">0</strong> видео</div>
                             </div>
-                            <button class="edit-profile-btn" id="edit-profile-btn">Редактировать профиль</button>
+                            <button class="edit-profile-btn" id="edit-profile-btn">✏️ Редактировать профиль</button>
                         </div>
-                    </div>
-                    <div class="profile-tabs">
-                        <button class="profile-tab active" data-tab="videos">Видео</button>
-                        <button class="profile-tab" data-tab="liked">Понравилось</button>
                     </div>
                     <div class="profile-videos-grid" id="profile-videos"></div>
                 </div>
@@ -131,7 +812,6 @@
         </main>
     </div>
 
-    <!-- Video Modal -->
     <div id="video-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -139,18 +819,498 @@
             <div class="video-info">
                 <div class="video-user">
                     <strong id="modal-username">@user</strong>
-                    <button class="follow-btn">Подписаться</button>
                 </div>
-                <p id="modal-description"></p>
+                <p id="modal-description" style="margin-top: 10px;"></p>
                 <div class="video-actions">
                     <button class="like-btn">❤️ <span id="modal-likes">0</span></button>
-                    <button class="comment-btn">💬 <span id="modal-comments">0</span></button>
-                    <button class="share-btn">📤 Поделиться</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Запрещенные слова из файла banned_words.txt
+        const BANNED_WORDS = [
+            "хуй", "хуя", "хуе", "хую", "хуём", "хуйня", "хуйло", "хули", "похуй",
+            "пизда", "пизды", "пизде", "пизду", "пиздой", "пиздец", "пиздос", "распиздяй",
+            "бля", "блядь", "бляди", "блядство", "блядский", "блядовать",
+            "ёб", "еба", "ебу", "ебёт", "ебут", "ебал", "ебала", "ебало", "ебать", "ёбан", "ёбаный", "ёбнутый",
+            "заебал", "заебала", "наебал", "наебалово", "выебон", "подъеб", "приеб", "отъебись", "отъебал",
+            "поебать", "проебал", "разъеб", "съебал", "съебаться", "уебище",
+            "хер", "хера", "херня", "залупа", "залупень", "залупинка", "залупный",
+            "мудак", "мудачьё", "мудацкий", "мудозвон", "гандон", "гандонский", "гандонство",
+            "пидор", "пидорас", "пидоры", "пидорский", "пидорня", "шлюха", "шлюхи", "шлюшка", "шлюховатый",
+            "проститутка", "проститутки", "проститутский", "сука", "суки", "сучка", "сучонок", "сучье", "сукин",
+            "падла", "падлюка", "падлючий", "падлючество", "мразь", "мразота", "мразотный",
+            "тварь", "тварюга", "тварюка", "гнида", "гнидушный", "гнидство",
+            "чмо", "чмошник", "чмошница", "урод", "уродина", "уродливый", "уродство",
+            "пиздобратия", "пиздобрат", "пиздюк", "пиздючка", "хуесос", "хуесосство", "хуесосный",
+            "хуеплёт", "хуепутало", "мудоёб", "мудоёбина", "мудоёбство",
+            "головка", "головку", "член", "члена", "членом", "трахал", "трахала", "трахать",
+            "перетрахал", "вытрахал", "сперма", "спермой", "сперматозоид", "вагина", "вагиной", "вагинальный",
+            "оральный", "орал", "оралка", "анальный", "анал", "аналом",
+            "путин", "путина", "путину", "путиным", "путинский", "президент", "президента", "президенту",
+            "правительство", "кремль", "кремля", "медведев", "навальный", "собчак", "жириновский",
+            "террор", "терроризм", "террорист", "взрыв", "бомба", "бомбить", "убийство", "убийца", "киллер",
+            "смерть", "насилие", "оружие", "нож", "пистолет", "автомат", "граната", "динамит", "тротил",
+            "наркотик", "наркота", "героин", "кокаин", "марихуана", "гашиш", "спайс", "амфетамин",
+            "водка", "пиво", "алкоголь", "бухло", "дурак", "идиот", "тупой", "лох", "дебил", "кретин",
+            "чурка", "хач", "жид", "хохол", "кацап", "москаль", "секс", "порно", "голый", "коронавирус",
+            "ковид", "пандемия", "чип", "зомби", "апокалипсис"
+        ];
+
+        // Функция проверки текста на запрещенные слова
+        function containsBannedWords(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            for (const word of BANNED_WORDS) {
+                if (lowerText.includes(word.toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Функция получения списка найденных запрещенных слов
+        function getBannedWordsFound(text) {
+            if (!text) return [];
+            const lowerText = text.toLowerCase();
+            const found = [];
+            for (const word of BANNED_WORDS) {
+                if (lowerText.includes(word.toLowerCase())) {
+                    found.push(word);
+                }
+            }
+            return found;
+        }
+
+        let videos = [];
+        let currentUser = {
+            id: 'user1',
+            username: '@user',
+            name: 'Пользователь',
+            avatar: null
+        };
+        let notifications = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            setupEventListeners();
+            renderFeed();
+            updateProfile();
+            renderExplore();
+            renderNotifications();
+        });
+
+        function loadFromLocalStorage() {
+            const savedVideos = localStorage.getItem('snh_videos');
+            if (savedVideos) {
+                videos = JSON.parse(savedVideos);
+            }
+            
+            const savedUser = localStorage.getItem('snh_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+            
+            const savedNotifications = localStorage.getItem('snh_notifications');
+            if (savedNotifications) {
+                notifications = JSON.parse(savedNotifications);
+            }
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    switchPage(page);
+                });
+            });
+            
+            const uploadArea = document.getElementById('upload-area');
+            const triggerUpload = document.getElementById('trigger-upload');
+            const videoUpload = document.getElementById('video-upload');
+            
+            if (triggerUpload) {
+                triggerUpload.addEventListener('click', () => videoUpload.click());
+            }
+            
+            if (uploadArea) {
+                uploadArea.addEventListener('click', () => videoUpload.click());
+            }
+            
+            if (videoUpload) {
+                videoUpload.addEventListener('change', handleVideoUpload);
+            }
+            
+            const publishBtn = document.getElementById('publish-btn');
+            if (publishBtn) {
+                publishBtn.addEventListener('click', publishVideo);
+            }
+            
+            const searchBtn = document.getElementById('search-btn');
+            const searchInput = document.getElementById('search-input');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => performSearch(searchInput.value));
+            }
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') performSearch(searchInput.value);
+                });
+            }
+            
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', editProfile);
+            }
+            
+            const modal = document.getElementById('video-modal');
+            const closeModal = document.querySelector('.close-modal');
+            if (closeModal) {
+                closeModal.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    const video = document.getElementById('modal-video');
+                    if (video) video.pause();
+                });
+            }
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    const video = document.getElementById('modal-video');
+                    if (video) video.pause();
+                }
+            });
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === page) item.classList.add('active');
+            });
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${page}-page`).classList.add('active');
+            
+            if (page === 'feed') {
+                renderFeed();
+            } else if (page === 'explore') {
+                renderExplore();
+            } else if (page === 'profile') {
+                updateProfile();
+                renderProfileVideos();
+            } else if (page === 'notifications') {
+                renderNotifications();
+            }
+        }
+
+        function renderFeed() {
+            const grid = document.getElementById('videos-grid');
+            if (!grid) return;
+            
+            if (videos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-feed">
+                        <div class="icon">📹</div>
+                        <h3>Нет видео</h3>
+                        <p>Будьте первым, кто загрузит видео!</p>
+                        <button onclick="switchPage('upload')">Загрузить видео</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = '';
+            videos.forEach(video => {
+                const card = createVideoCard(video);
+                grid.appendChild(card);
+            });
+        }
+
+        function createVideoCard(video) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            
+            card.innerHTML = `
+                <button class="delete-video" data-id="${video.id}" onclick="event.stopPropagation(); deleteVideo('${video.id}')">🗑️</button>
+                <div class="video-thumbnail" onclick="openVideoModal('${video.id}')">
+                    <video src="${video.videoUrl}" poster="${video.thumbnail}"></video>
+                </div>
+                <div class="video-info">
+                    <div class="video-user">
+                        <strong>${escapeHtml(video.username)}</strong>
+                    </div>
+                    <p>${escapeHtml(video.description.substring(0, 60))}${video.description.length > 60 ? '...' : ''}</p>
+                    <div class="video-stats">
+                        <span>❤️ ${video.likes}</span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function openVideoModal(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (!video) return;
+            
+            const modal = document.getElementById('video-modal');
+            const modalVideo = document.getElementById('modal-video');
+            const modalUsername = document.getElementById('modal-username');
+            const modalDescription = document.getElementById('modal-description');
+            const modalLikes = document.getElementById('modal-likes');
+            
+            modalVideo.src = video.videoUrl;
+            modalUsername.textContent = video.username;
+            modalDescription.textContent = video.description;
+            modalLikes.textContent = video.likes;
+            
+            modal.style.display = 'block';
+            
+            const likeBtn = document.querySelector('.like-btn');
+            likeBtn.onclick = () => likeVideo(video.id);
+            
+            modalVideo.play();
+        }
+
+        function deleteVideo(videoId) {
+            if (confirm('Удалить это видео?')) {
+                videos = videos.filter(v => v.id !== videoId);
+                saveToLocalStorage();
+                renderFeed();
+                updateProfile();
+                renderProfileVideos();
+                renderExplore();
+                addNotification('Видео удалено');
+            }
+        }
+
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('video/')) {
+                alert('Пожалуйста, выберите видео файл');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const videoUrl = e.target.result;
+                const preview = document.getElementById('upload-preview');
+                const previewVideo = document.getElementById('preview-video');
+                
+                previewVideo.src = videoUrl;
+                preview.style.display = 'block';
+                
+                window.tempVideo = {
+                    url: videoUrl,
+                    file: file
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function publishVideo() {
+            const description = document.getElementById('video-description').value;
+            const errorDiv = document.getElementById('description-error');
+            
+            if (!window.tempVideo) {
+                alert('Сначала выберите видео');
+                return;
+            }
+            
+            // Проверка на запрещенные слова
+            if (containsBannedWords(description)) {
+                const foundWords = getBannedWordsFound(description);
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = `⚠️ Описание содержит запрещенные слова: ${foundWords.slice(0, 5).join(', ')}${foundWords.length > 5 ? ' и др.' : ''}. Пожалуйста, исправьте описание.`;
+                return;
+            }
+            
+            errorDiv.style.display = 'none';
+            
+            const newVideo = {
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                username: currentUser.username,
+                userAvatar: currentUser.avatar || '👤',
+                videoUrl: window.tempVideo.url,
+                thumbnail: window.tempVideo.url,
+                description: description || 'Новое видео',
+                likes: 0,
+                timestamp: new Date().toISOString()
+            };
+            
+            videos.unshift(newVideo);
+            saveToLocalStorage();
+            
+            document.getElementById('video-description').value = '';
+            document.getElementById('upload-preview').style.display = 'none';
+            document.getElementById('video-upload').value = '';
+            window.tempVideo = null;
+            
+            switchPage('feed');
+            addNotification('Видео опубликовано! 🎉');
+        }
+
+        function likeVideo(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (video) {
+                video.likes++;
+                saveToLocalStorage();
+                
+                const modalLikes = document.getElementById('modal-likes');
+                if (modalLikes) modalLikes.textContent = video.likes;
+                
+                renderFeed();
+                renderExplore();
+                renderProfileVideos();
+            }
+        }
+
+        function addNotification(message) {
+            notifications.unshift({
+                id: Date.now(),
+                message: message,
+                timestamp: new Date().toLocaleString()
+            });
+            
+            if (notifications.length > 20) notifications.pop();
+            
+            renderNotifications();
+            saveToLocalStorage();
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notifications-list');
+            if (!list) return;
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="notification-placeholder">✨ Нет уведомлений</div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(notif => `
+                <div class="notification-item">
+                    <p>${escapeHtml(notif.message)}</p>
+                    <small style="color: rgba(255,255,255,0.5);">${notif.timestamp}</small>
+                </div>
+            `).join('');
+        }
+
+        function performSearch(query) {
+            if (!query.trim()) {
+                renderExplore();
+                return;
+            }
+            
+            const filtered = videos.filter(video => 
+                video.description.toLowerCase().includes(query.toLowerCase()) ||
+                video.username.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            const exploreGrid = document.getElementById('explore-grid');
+            if (exploreGrid) {
+                exploreGrid.innerHTML = '';
+                filtered.forEach(video => {
+                    const card = createVideoCard(video);
+                    exploreGrid.appendChild(card);
+                });
+            }
+        }
+
+        function renderExplore() {
+            const exploreGrid = document.getElementById('explore-grid');
+            if (!exploreGrid) return;
+            
+            if (videos.length === 0) {
+                exploreGrid.innerHTML = '<div class="empty-feed"><div class="icon">🔍</div><h3>Нет видео для поиска</h3><p>Загрузите первое видео</p></div>';
+                return;
+            }
+            
+            exploreGrid.innerHTML = '';
+            videos.forEach(video => {
+                const card = createVideoCard(video);
+                exploreGrid.appendChild(card);
+            });
+        }
+
+        function updateProfile() {
+            document.getElementById('profile-name').textContent = currentUser.name;
+            document.getElementById('profile-username').textContent = currentUser.username;
+            const userVideosCount = videos.filter(v => v.userId === currentUser.id).length;
+            document.getElementById('videos-count').textContent = userVideosCount;
+        }
+
+        function renderProfileVideos() {
+            const grid = document.getElementById('profile-videos');
+            if (!grid) return;
+            
+            const userVideos = videos.filter(v => v.userId === currentUser.id);
+            
+            if (userVideos.length === 0) {
+                grid.innerHTML = '<div class="empty-feed"><div class="icon">📹</div><h3>Нет видео</h3><p>Загрузите ваше первое видео</p></div>';
+                return;
+            }
+            
+            grid.innerHTML = '';
+            userVideos.forEach(video => {
+                const card = createVideoCard(video);
+                grid.appendChild(card);
+            });
+        }
+
+        function editProfile() {
+            const newName = prompt('Введите новое имя:', currentUser.name);
+            if (newName && newName.trim()) {
+                if (containsBannedWords(newName)) {
+                    alert('Имя содержит запрещенные слова!');
+                    return;
+                }
+                currentUser.name = newName;
+                saveToLocalStorage();
+                updateProfile();
+            }
+            
+            const newUsername = prompt('Введите новый username (начинайте с @):', currentUser.username);
+            if (newUsername && newUsername.trim()) {
+                const cleanUsername = newUsername.startsWith('@') ? newUsername : '@' + newUsername;
+                if (containsBannedWords(cleanUsername)) {
+                    alert('Username содержит запрещенные слова!');
+                    return;
+                }
+                currentUser.username = cleanUsername;
+                saveToLocalStorage();
+                updateProfile();
+                
+                videos.forEach(v => {
+                    if (v.userId === currentUser.id) {
+                        v.username = currentUser.username;
+                    }
+                });
+                saveToLocalStorage();
+                renderFeed();
+                renderExplore();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('snh_videos', JSON.stringify(videos));
+            localStorage.setItem('snh_user', JSON.stringify(currentUser));
+            localStorage.setItem('snh_notifications', JSON.stringify(notifications));
+        }
+
+        window.switchPage = switchPage;
+        window.openVideoModal = openVideoModal;
+        window.deleteVideo = deleteVideo;
+        window.likeVideo = likeVideo;
+    </script>
 </body>
 </html>
