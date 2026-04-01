@@ -202,18 +202,18 @@
         /* Всплывающее уведомление о cookies */
         .cookie-notice {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(18, 18, 18, 0.98);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 1rem 1.5rem;
+            padding: 1.2rem 1.5rem;
             max-width: 500px;
             width: 90%;
             z-index: 10001;
-            border: 1px solid rgba(192, 132, 252, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(192, 132, 252, 0.2);
             animation: slideUp 0.5s ease;
             display: none;
         }
@@ -233,10 +233,26 @@
             display: block;
         }
 
+        .cookie-notice-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .cookie-notice-header span {
+            font-size: 1.5rem;
+        }
+
+        .cookie-notice-header h4 {
+            font-size: 1rem;
+            color: #c084fc;
+        }
+
         .cookie-notice p {
             font-size: 0.85rem;
-            margin-bottom: 0.8rem;
-            line-height: 1.4;
+            margin-bottom: 1rem;
+            line-height: 1.5;
             color: rgba(255, 255, 255, 0.8);
         }
 
@@ -244,6 +260,7 @@
             color: #c084fc;
             text-decoration: none;
             cursor: pointer;
+            font-weight: 500;
         }
 
         .cookie-notice a:hover {
@@ -257,18 +274,18 @@
         }
 
         .cookie-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 30px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
+            border: none;
         }
 
         .cookie-btn-accept {
             background: linear-gradient(135deg, #c084fc, #a855f7);
-            border: none;
             color: white;
             flex: 1;
         }
@@ -276,7 +293,7 @@
         .cookie-btn-settings {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             flex: 1;
         }
 
@@ -287,7 +304,7 @@
 
         .cookie-btn-accept:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(192, 132, 252, 0.3);
+            box-shadow: 0 5px 15px rgba(192, 132, 252, 0.4);
         }
 
         /* Основное приложение */
@@ -902,7 +919,7 @@
             }
             .cookie-notice {
                 bottom: 10px;
-                padding: 0.8rem 1rem;
+                padding: 1rem;
             }
             .cookie-buttons {
                 flex-direction: column;
@@ -944,11 +961,15 @@
         </div>
     </div>
 
-    <!-- Всплывающее уведомление о cookies -->
+    <!-- Всплывающее уведомление о cookies (ВИДИМОЕ) -->
     <div id="cookie-notice" class="cookie-notice">
-        <p>🍪 Мы используем cookie-файлы для улучшения работы сайта, анализа трафика и персонализации контента. Продолжая использовать сайт, вы соглашаетесь с нашей <a onclick="showPrivacyModal()">Политикой конфиденциальности</a> и <a onclick="showTermsModal()">Условиями использования</a>.</p>
+        <div class="cookie-notice-header">
+            <span>🍪</span>
+            <h4>Мы используем cookie-файлы</h4>
+        </div>
+        <p>Мы используем cookie-файлы для улучшения работы сайта, анализа трафика и персонализации контента. Продолжая использовать сайт, вы соглашаетесь с нашей <a onclick="showPrivacyModalFromCookie()">Политикой конфиденциальности</a> и <a onclick="showTermsModalFromCookie()">Условиями использования</a>.</p>
         <div class="cookie-buttons">
-            <button class="cookie-btn cookie-btn-accept" id="accept-cookie-btn">✅ Принимаю</button>
+            <button class="cookie-btn cookie-btn-accept" id="accept-cookie-btn">✅ Принимаю все cookie</button>
             <button class="cookie-btn cookie-btn-settings" id="cookie-settings-btn">⚙️ Настройки</button>
         </div>
     </div>
@@ -1427,6 +1448,14 @@
             document.getElementById('privacy-modal').style.display = 'flex';
         }
 
+        function showTermsModalFromCookie() {
+            document.getElementById('terms-modal').style.display = 'flex';
+        }
+
+        function showPrivacyModalFromCookie() {
+            document.getElementById('privacy-modal').style.display = 'flex';
+        }
+
         function showCookieSettings() {
             document.getElementById('cookie-settings-modal').style.display = 'flex';
         }
@@ -1457,20 +1486,16 @@
             
             // Показываем cookie уведомление после входа
             setTimeout(() => {
-                showCookieNotice();
+                const cookieAccepted = localStorage.getItem('snh_cookie_accepted');
+                if (!cookieAccepted) {
+                    document.getElementById('cookie-notice').classList.add('show');
+                }
             }, 500);
         }
 
         function declineConsent() {
             if (confirm('Вы не приняли Условия использования. Без принятия условий использование сервиса невозможно. Покинуть страницу?')) {
                 document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0D0D0D;color:white;text-align:center;"><div><h1>❌</h1><h2>Доступ запрещен</h2><p>Вы не приняли Условия использования сервиса.</p><button onclick="location.reload()" style="margin-top:1rem;padding:0.5rem 1rem;background:#c084fc;border:none;border-radius:20px;color:white;cursor:pointer;">Попробовать снова</button></div></div>';
-            }
-        }
-
-        function showCookieNotice() {
-            const cookieAccepted = localStorage.getItem('snh_cookie_accepted');
-            if (!cookieAccepted) {
-                document.getElementById('cookie-notice').classList.add('show');
             }
         }
 
@@ -1499,7 +1524,12 @@
                 renderFeed();
                 updateProfile();
                 renderNotifications();
-                showCookieNotice();
+                
+                // Показываем cookie уведомление если не принято
+                const cookieAccepted = localStorage.getItem('snh_cookie_accepted');
+                if (!cookieAccepted) {
+                    document.getElementById('cookie-notice').classList.add('show');
+                }
             } else {
                 document.getElementById('consent-overlay').style.display = 'flex';
             }
@@ -1538,6 +1568,8 @@
         window.removeMedia = removeMedia;
         window.showTermsModal = showTermsModal;
         window.showPrivacyModal = showPrivacyModal;
+        window.showTermsModalFromCookie = showTermsModalFromCookie;
+        window.showPrivacyModalFromCookie = showPrivacyModalFromCookie;
         window.showCookieSettings = showCookieSettings;
     </script>
 </body>
