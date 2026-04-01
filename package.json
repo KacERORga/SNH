@@ -1,0 +1,19 @@
+{
+  "name": "snh",
+  "version": "1.0.0",
+  "description": "SNH - Социальная сеть",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "keywords": ["social", "network", "snh"],
+  "author": "SNH",
+  "license": "MIT"
+}
