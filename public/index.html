@@ -3,729 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SNH - Социальная сеть</title>
+    <title>SNH — Децентрализованная соцсеть на блокчейне</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        /* Окно авторизации */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .auth-card h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .auth-card h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 1.2rem;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
-        }
-
-        .switch-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        .switch-link a {
-            color: #667eea;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .error-msg {
-            background: #fee;
-            color: #c33;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        /* Основное приложение */
-        .app-container {
-            display: none;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .app-header {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .logout-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        /* Форма создания поста */
-        .create-post {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .create-post textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            resize: vertical;
-            font-family: inherit;
-            margin-bottom: 10px;
-        }
-
-        .media-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .media-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .post-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Посты */
-        .post {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .post-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .post-info {
-            flex: 1;
-        }
-
-        .post-username {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .verified-badge {
-            background: #1DA1F2;
-            color: white;
-            font-size: 12px;
-            padding: 2px 6px;
-            border-radius: 20px;
-            margin-left: 5px;
-        }
-
-        .post-time {
-            font-size: 12px;
-            color: #999;
-            margin-top: 3px;
-        }
-
-        .post-text {
-            margin-bottom: 15px;
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #ffffff;
             line-height: 1.5;
         }
-
-        .post-media {
-            margin-bottom: 15px;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(88, 28, 135, 0.2) 0%, rgba(0, 0, 0, 0) 60%),
+                        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 60%);
+            pointer-events: none;
+            z-index: 0;
         }
-
-        .post-media img, .post-media video {
-            max-width: 100%;
-            border-radius: 10px;
+        .container { max-width: 720px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
+        .glass-card {
+            background: rgba(18, 18, 24, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease, border-color 0.2s;
         }
-
-        .post-actions {
+        .logo-section { text-align: center; padding: 32px 24px 24px; }
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #c084fc, #a855f7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .sub { color: #a1a1aa; margin-top: 8px; font-size: 0.9rem; }
+        .auth-box { padding: 28px 24px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px; color: #c4b5fd; }
+        input, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: #0c0c0f;
+            border: 1.5px solid #2a2a2e;
+            border-radius: 24px;
+            font-size: 1rem;
+            color: #ffffff;
+            font-family: 'Inter', monospace;
+            transition: all 0.2s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2); }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            background: linear-gradient(95deg, #7c3aed, #a855f7);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.5); }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #a855f7;
+            color: #c4b5fd;
+            box-shadow: none;
+        }
+        .btn-outline:hover { background: rgba(168, 85, 247, 0.1); }
+        .warning-box {
+            background: rgba(251, 191, 36, 0.12);
+            border-left: 3px solid #f59e0b;
+            padding: 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 20px 0;
+            color: #fde047;
+        }
+        .key-badge {
+            background: #1a1a1f;
+            padding: 12px 16px;
+            border-radius: 28px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            word-break: break-all;
+            border: 1px solid #2e2e3a;
+            margin: 12px 0;
+        }
+        .feed-header { display: flex; justify-content: space-between; align-items: baseline; margin: 20px 0 16px; }
+        .post-card {
+            background: rgba(12, 12, 16, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.2s;
+        }
+        .post-card:hover { border-color: rgba(139, 92, 246, 0.5); background: rgba(20, 20, 28, 0.8); }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(145deg, #7c3aed, #a855f7);
+            border-radius: 100px;
             display: flex;
-            gap: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
-
-        .like-btn {
+        .user-meta { flex: 1; }
+        .username { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .verified { background: #1d9bf0; font-size: 10px; padding: 2px 8px; border-radius: 40px; color: white; }
+        .time { font-size: 0.7rem; color: #8b8b9b; }
+        .post-content { font-size: 1rem; line-height: 1.5; margin: 12px 0; white-space: pre-wrap; }
+        .post-stats { display: flex; gap: 24px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #2a2a2e; }
+        .stat-btn {
             background: none;
             border: none;
+            color: #aaa;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             cursor: pointer;
-            color: #666;
-            font-size: 16px;
+            transition: 0.2s;
+            font-size: 0.85rem;
         }
-
-        .like-btn.liked {
-            color: #ff4444;
+        .stat-btn:hover { color: #c084fc; }
+        .empty-feed { text-align: center; padding: 56px 20px; color: #6b7280; font-size: 0.9rem; }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #18181b;
+            backdrop-filter: blur(12px);
+            border: 1px solid #a855f7;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            z-index: 200;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: none;
         }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #999;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
-
-        .delete-btn:hover {
-            color: #ff4444;
+        .modal-card {
+            max-width: 460px;
+            width: 90%;
+            background: #0f0f12;
+            border-radius: 40px;
+            padding: 28px;
+            border: 1px solid #a855f7;
         }
-
-        .empty-posts {
-            text-align: center;
-            padding: 50px;
-            background: white;
-            border-radius: 15px;
-            color: #999;
-        }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 560px) { .container { padding: 12px; } .post-card { padding: 16px; } }
     </style>
 </head>
 <body>
-    <!-- Окно авторизации -->
-    <div id="auth-container" class="auth-container">
-        <div class="auth-card">
-            <h1>SNH</h1>
-            <h2 id="auth-title">Вход в аккаунт</h2>
-            <div id="auth-error" class="error-msg" style="display:none;"></div>
-            
-            <div id="login-form">
-                <div class="input-group">
-                    <input type="text" id="login-email" placeholder="Имя пользователя">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="login-password" placeholder="Пароль">
-                </div>
-                <button class="btn btn-primary" onclick="login()">Войти</button>
+
+<div class="container">
+    <!-- панель аутентификации -->
+    <div id="authPanel" class="glass-card">
+        <div class="logo-section">
+            <div class="logo">SNH</div>
+            <div class="sub">децентрализованная сеть на блокчейне</div>
+        </div>
+        <div class="auth-box">
+            <div class="warning-box">
+                🔐 Ваш приватный ключ — единственный способ входа. Сохраните его! Потеря = потеря аккаунта.
             </div>
-            
-            <div id="register-form" style="display:none;">
-                <div class="input-group">
-                    <input type="text" id="reg-email" placeholder="Имя пользователя">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="reg-password" placeholder="Пароль">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="reg-name" placeholder="Ваше имя">
-                </div>
-                <button class="btn btn-primary" onclick="register()">Зарегистрироваться</button>
+            <div class="input-group">
+                <label>👤 Никнейм (только при создании нового аккаунта)</label>
+                <input type="text" id="nicknameInput" placeholder="Ваше имя (будет видно всем)">
             </div>
-            
-            <div class="switch-link">
-                <a id="switch-link" onclick="switchForm()">Нет аккаунта? Зарегистрироваться</a>
+            <div class="input-group">
+                <label>🔑 Приватный ключ (или оставьте пустым для нового)</label>
+                <input type="text" id="privateKeyInput" placeholder="nsec1... / npub1... / оставьте пустым">
+            </div>
+            <button class="btn" id="loginBtn">🚀 Войти / Создать аккаунт</button>
+            <div style="margin-top: 20px; text-align: center; font-size: 0.75rem; color: #6b7280;">
+                📡 Посты хранятся в блокчейне Nostr<br>
+                🌍 Все видят всё. Бесплатно. Навсегда.
             </div>
         </div>
     </div>
 
-    <!-- Основное приложение -->
-    <div id="app-container" class="app-container">
-        <div class="app-header">
-            <div class="user-info">
-                <div class="user-avatar" id="user-avatar">👤</div>
-                <div>
-                    <div id="user-name">Пользователь</div>
-                    <div id="user-email" style="font-size:12px;color:#999;"></div>
-                </div>
+    <!-- основное приложение -->
+    <div id="appPanel" style="display: none;">
+        <div class="glass-card" style="padding: 20px 24px;">
+            <div class="flex-between">
+                <div class="logo" style="font-size: 1.8rem;">SNH</div>
+                <button id="logoutBtn" class="btn-outline" style="width: auto; padding: 8px 18px;">🚪 Выйти</button>
             </div>
-            <button class="logout-btn" onclick="logout()">Выйти</button>
+            <div id="userInfo" class="key-badge" style="margin-top: 12px;"></div>
         </div>
 
-        <div class="create-post">
-            <textarea id="post-text" placeholder="Что у вас нового?"></textarea>
-            <div class="media-buttons">
-                <button class="media-btn" onclick="attachPhoto()">📷 Фото</button>
-                <button class="media-btn" onclick="attachVideo()">🎬 Видео</button>
-            </div>
-            <div id="media-preview" style="display:none;"></div>
-            <button class="post-btn" onclick="publishPost()">Опубликовать</button>
+        <div class="glass-card" style="margin-top: 20px; padding: 20px 24px;">
+            <label>📝 Что нового?</label>
+            <textarea id="postContent" rows="3" placeholder="Напишите пост..."></textarea>
+            <button id="publishBtn" class="btn" style="margin-top: 16px;">✨ Опубликовать в блокчейн</button>
+            <div id="publishStatus" style="font-size: 0.7rem; margin-top: 8px; color: #a78bfa;"></div>
         </div>
 
-        <div id="posts-container"></div>
+        <div class="feed-header">
+            <h3 style="font-weight: 600;">🌐 Глобальная лента</h3>
+            <button id="refreshFeedBtn" class="btn-outline" style="width: auto; padding: 6px 16px;">🔄 Обновить</button>
+        </div>
+        <div id="feedContainer" class="glass-card" style="padding: 8px 0; background: transparent; backdrop-filter: none;">
+            <div class="empty-feed">⏳ Загрузка постов из блокчейна...</div>
+        </div>
     </div>
+</div>
 
-    <script>
-        // API URL (на Vercel)
-        const API_URL = '/api';
-        
-        let currentUser = null;
-        let posts = [];
-        let tempMedia = null;
-        let tempMediaType = null;
+<div id="toastMessage" class="toast"></div>
 
-        // Проверка авторизации при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('snh_token');
-            const user = localStorage.getItem('snh_user');
-            if (token && user) {
-                currentUser = JSON.parse(user);
-                showApp();
-                loadPosts();
+<!-- модалка для отображения приватного ключа -->
+<div id="keyModal" class="modal">
+    <div class="modal-card">
+        <div class="flex-between">
+            <h3>🔐 Ваш секретный ключ</h3>
+            <button id="closeModalBtn" style="background: none; border: none; color: white; font-size: 28px; cursor: pointer;">&times;</button>
+        </div>
+        <p style="margin: 16px 0 8px;">Сохраните этот ключ. Это ваш пароль и доступ к аккаунту навсегда.</p>
+        <div id="modalKeyText" class="key-badge" style="background: #00000055;"></div>
+        <button id="copyKeyBtn" class="btn" style="margin-top: 12px;">📋 Копировать ключ</button>
+        <button id="confirmKeyBtn" class="btn-outline" style="margin-top: 12px;">✅ Я сохранил, войти</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/nostr-tools@1.17.0/lib/nostr.bundle.js"></script>
+<script>
+    const RELAYS = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.nostr.band', 'wss://relay.snort.social', 'wss://relay.primal.net', 'wss://offchain.pub'];
+    let currentPrivateKey = null, currentPublicKey = null, currentNickname = null;
+
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toastMessage');
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        toast.style.background = isError ? '#991b1bdd' : '#18181bdd';
+        toast.style.borderColor = isError ? '#ef4444' : '#a855f7';
+        setTimeout(() => { toast.style.display = 'none'; }, 2800);
+    }
+
+    function generatePrivateKey() { return window.nostr.generatePrivateKey(); }
+    function derivePublicKey(priv) { try { return window.nostr.getPublicKey(priv); } catch(e) { return null; } }
+    function isValidHexKey(str) { return /^[0-9a-fA-F]{64}$/.test(str); }
+    function normalizePrivateKey(input) {
+        if (!input) return null;
+        input = input.trim();
+        if (isValidHexKey(input)) return input;
+        try {
+            if (input.startsWith('nsec1')) {
+                const decoded = window.nostr.nip19.decode(input);
+                if (decoded.type === 'nsec') return decoded.data;
             }
-        });
+        } catch(e) {}
+        return null;
+    }
 
-        // Переключение между входом и регистрацией
-        function switchForm() {
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            const authTitle = document.getElementById('auth-title');
-            const switchLink = document.getElementById('switch-link');
-            
-            if (loginForm.style.display !== 'none') {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-                authTitle.textContent = 'Регистрация';
-                switchLink.innerHTML = 'Уже есть аккаунт? Войти';
-            } else {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                authTitle.textContent = 'Вход в аккаунт';
-                switchLink.innerHTML = 'Нет аккаунта? Зарегистрироваться';
-            }
-            document.getElementById('auth-error').style.display = 'none';
+    async function publishProfile(nickname) {
+        if (!currentPrivateKey || !currentPublicKey) return false;
+        const profileEvent = {
+            kind: 0,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [],
+            content: JSON.stringify({ name: nickname, display_name: nickname }),
+            pubkey: currentPublicKey
+        };
+        profileEvent.id = await window.nostr.getEventHash(profileEvent);
+        profileEvent.sig = await window.nostr.signEvent(profileEvent, currentPrivateKey);
+        for (const url of RELAYS) {
+            try { const relay = await window.nostr.relayConnect(url); await relay.publish(profileEvent); } catch(e) {}
         }
+        return true;
+    }
 
-        // Регистрация
-        async function register() {
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const name = document.getElementById('reg-name').value.trim() || email;
-            
-            if (!email || !password) {
-                showError('Заполните все поля');
-                return;
-            }
-            
+    async function fetchProfiles(pubkeys) {
+        const profiles = {};
+        for (const url of RELAYS) {
             try {
-                const response = await fetch(`${API_URL}/auth/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, name })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    alert('Регистрация успешна! Теперь войдите.');
-                    switchForm();
-                } else {
-                    showError(data.error || 'Ошибка регистрации');
+                const relay = await window.nostr.relayConnect(url);
+                const events = await relay.list([{ kinds: [0], authors: pubkeys }]);
+                for (const ev of events) {
+                    if (ev.kind === 0 && ev.pubkey) {
+                        try {
+                            const meta = JSON.parse(ev.content);
+                            if (meta.name || meta.display_name) profiles[ev.pubkey] = meta.name || meta.display_name;
+                        } catch(e) {}
+                    }
                 }
-            } catch (error) {
-                showError('Ошибка соединения');
-            }
+            } catch(e) {}
         }
+        return profiles;
+    }
 
-        // Вход
-        async function login() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            
-            if (!email || !password) {
-                showError('Заполните все поля');
-                return;
-            }
-            
+    async function publishPost(content) {
+        if (!currentPrivateKey || !currentPublicKey) { showToast('Ошибка авторизации', true); return false; }
+        if (!content.trim()) { showToast('Напишите текст', true); return false; }
+        const event = {
+            kind: 1, created_at: Math.floor(Date.now() / 1000), tags: [], content: content.trim(), pubkey: currentPublicKey
+        };
+        event.id = await window.nostr.getEventHash(event);
+        event.sig = await window.nostr.signEvent(event, currentPrivateKey);
+        let ok = 0;
+        for (const url of RELAYS) {
+            try { const relay = await window.nostr.relayConnect(url); await relay.publish(event); ok++; } catch(e) {}
+        }
+        if (ok) { showToast(`✅ Пост опубликован через ${ok} релеев`); return true; }
+        else { showToast('❌ Не удалось опубликовать', true); return false; }
+    }
+
+    async function fetchGlobalFeed() {
+        if (!currentPublicKey) return [];
+        const postsMap = new Map();
+        const authorsSet = new Set();
+        for (const url of RELAYS) {
             try {
-                const response = await fetch(`${API_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    currentUser = data.user;
-                    localStorage.setItem('snh_token', data.token);
-                    localStorage.setItem('snh_user', JSON.stringify(currentUser));
-                    showApp();
-                    loadPosts();
-                } else {
-                    showError(data.error || 'Неверный логин или пароль');
+                const relay = await window.nostr.relayConnect(url);
+                const events = await relay.list([{ kinds: [1], limit: 120 }]);
+                for (const ev of events) {
+                    const isValid = await window.nostr.verifyEvent(ev);
+                    if (isValid && ev.kind === 1 && ev.content && ev.pubkey && !postsMap.has(ev.id)) {
+                        postsMap.set(ev.id, { id: ev.id, pubkey: ev.pubkey, content: ev.content, created_at: ev.created_at });
+                        authorsSet.add(ev.pubkey);
+                    }
                 }
-            } catch (error) {
-                showError('Ошибка соединения');
-            }
+            } catch(e) {}
         }
+        const profiles = await fetchProfiles(Array.from(authorsSet));
+        const postsArray = Array.from(postsMap.values());
+        postsArray.sort((a,b) => b.created_at - a.created_at);
+        return postsArray.map(p => ({ ...p, displayName: profiles[p.pubkey] || p.pubkey.slice(0,8)+'…'+p.pubkey.slice(-8) }));
+    }
 
-        function showError(msg) {
-            const errorDiv = document.getElementById('auth-error');
-            errorDiv.textContent = msg;
-            errorDiv.style.display = 'block';
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 3000);
-        }
-
-        // Показать основное приложение
-        function showApp() {
-            document.getElementById('auth-container').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
-            document.getElementById('user-name').textContent = currentUser.name || currentUser.email;
-            document.getElementById('user-email').textContent = currentUser.email;
-            document.getElementById('user-avatar').textContent = currentUser.avatar || '👤';
-        }
-
-        // Выход
-        function logout() {
-            localStorage.removeItem('snh_token');
-            localStorage.removeItem('snh_user');
-            currentUser = null;
-            document.getElementById('auth-container').style.display = 'flex';
-            document.getElementById('app-container').style.display = 'none';
-            document.getElementById('login-email').value = '';
-            document.getElementById('login-password').value = '';
-        }
-
-        // Загрузка постов
-        async function loadPosts() {
-            try {
-                const response = await fetch(`${API_URL}/posts`);
-                posts = await response.json();
-                renderPosts();
-            } catch (error) {
-                console.error('Ошибка загрузки постов:', error);
-            }
-        }
-
-        // Публикация поста
-        async function publishPost() {
-            const text = document.getElementById('post-text').value.trim();
-            
-            if (!text && !tempMedia) {
-                alert('Напишите текст или добавьте медиа');
-                return;
-            }
-            
-            const postData = {
-                userId: currentUser.id,
-                username: currentUser.email,
-                userAvatar: currentUser.avatar || '👤',
-                text: text,
-                mediaType: tempMediaType,
-                mediaUrl: tempMedia
-            };
-            
-            try {
-                const response = await fetch(`${API_URL}/posts`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(postData)
-                });
-                
-                if (response.ok) {
-                    document.getElementById('post-text').value = '';
-                    document.getElementById('media-preview').style.display = 'none';
-                    document.getElementById('media-preview').innerHTML = '';
-                    tempMedia = null;
-                    tempMediaType = null;
-                    loadPosts();
-                } else {
-                    alert('Ошибка публикации');
-                }
-            } catch (error) {
-                alert('Ошибка соединения');
-            }
-        }
-
-        // Лайк
-        async function likePost(postId) {
-            try {
-                const response = await fetch(`${API_URL}/likes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ postId, userId: currentUser.id })
-                });
-                
-                if (response.ok) {
-                    loadPosts();
-                }
-            } catch (error) {
-                console.error('Ошибка лайка:', error);
-            }
-        }
-
-        // Удаление поста
-        async function deletePost(postId) {
-            if (!confirm('Удалить пост?')) return;
-            
-            try {
-                const response = await fetch(`${API_URL}/posts`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: postId, userId: currentUser.id })
-                });
-                
-                if (response.ok) {
-                    loadPosts();
-                }
-            } catch (error) {
-                console.error('Ошибка удаления:', error);
-            }
-        }
-
-        // Прикрепление фото
-        function attachPhoto() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    tempMedia = ev.target.result;
-                    tempMediaType = 'photo';
-                    const preview = document.getElementById('media-preview');
-                    preview.style.display = 'block';
-                    preview.innerHTML = `
-                        <div style="position:relative;">
-                            <img src="${tempMedia}" style="max-width:100%; border-radius:10px;">
-                            <button onclick="removeMedia()" style="position:absolute;top:5px;right:5px;background:red;color:white;border:none;border-radius:50%;width:25px;height:25px;">✕</button>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            };
-            input.click();
-        }
-
-        // Прикрепление видео
-        function attachVideo() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'video/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    tempMedia = ev.target.result;
-                    tempMediaType = 'video';
-                    const preview = document.getElementById('media-preview');
-                    preview.style.display = 'block';
-                    preview.innerHTML = `
-                        <div style="position:relative;">
-                            <video src="${tempMedia}" controls style="max-width:100%; border-radius:10px;"></video>
-                            <button onclick="removeMedia()" style="position:absolute;top:5px;right:5px;background:red;color:white;border:none;border-radius:50%;width:25px;height:25px;">✕</button>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            };
-            input.click();
-        }
-
-        function removeMedia() {
-            tempMedia = null;
-            tempMediaType = null;
-            document.getElementById('media-preview').style.display = 'none';
-            document.getElementById('media-preview').innerHTML = '';
-        }
-
-        // Отображение постов
-        function renderPosts() {
-            const container = document.getElementById('posts-container');
-            if (!container) return;
-            
-            if (posts.length === 0) {
-                container.innerHTML = '<div class="empty-posts">📝 Нет постов. Будьте первым!</div>';
-                return;
-            }
-            
-            container.innerHTML = '';
-            
-            posts.forEach(post => {
-                const isLiked = post.liked_by?.includes(currentUser.id);
-                const isVerified = post.username === '@KacERORga' || post.username === 'KacERORga';
-                
-                let mediaHtml = '';
-                if (post.media_type === 'photo' && post.media_url) {
-                    mediaHtml = `<div class="post-media"><img src="${post.media_url}" onclick="openMedia('${post.media_url}', 'image')"></div>`;
-                } else if (post.media_type === 'video' && post.media_url) {
-                    mediaHtml = `<div class="post-media"><video src="${post.media_url}" controls onclick="openMedia('${post.media_url}', 'video')"></video></div>`;
-                }
-                
-                const postDiv = document.createElement('div');
-                postDiv.className = 'post';
-                postDiv.innerHTML = `
+    function renderFeed(posts) {
+        const container = document.getElementById('feedContainer');
+        if (!container) return;
+        if (!posts.length) { container.innerHTML = `<div class="empty-feed">✨ Пока нет постов. Напишите первый!</div>`; return; }
+        let html = '';
+        for (const post of posts) {
+            const isMine = (post.pubkey === currentPublicKey);
+            const timeStr = new Date(post.created_at * 1000).toLocaleString();
+            html += `
+                <div class="post-card">
                     <div class="post-header">
-                        <div class="post-avatar">${post.user_avatar || '👤'}</div>
-                        <div class="post-info">
-                            <div class="post-username">
-                                ${escapeHtml(post.username)}
-                                ${isVerified ? '<span class="verified-badge">✓</span>' : ''}
-                            </div>
-                            <div class="post-time">${new Date(post.created_at).toLocaleString()}</div>
+                        <div class="avatar">${isMine ? '👤' : '🌐'}</div>
+                        <div class="user-meta">
+                            <div class="username">${escapeHtml(post.displayName)} ${isMine ? '<span style="background:#3b3b5e; padding:2px 8px; border-radius:40px; font-size:10px;">вы</span>' : ''}</div>
+                            <div class="time">${timeStr}</div>
                         </div>
-                        ${post.user_id === currentUser.id ? `<button class="delete-btn" onclick="deletePost('${post.id}')">🗑️ Удалить</button>` : ''}
                     </div>
-                    <div class="post-text">${escapeHtml(post.text)}</div>
-                    ${mediaHtml}
-                    <div class="post-actions">
-                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="likePost('${post.id}')">
-                            ❤️ ${post.likes || 0}
-                        </button>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-stats">
+                        <button class="stat-btn share-post" data-postid="${post.id}">🔗 Поделиться</button>
                     </div>
-                `;
-                container.appendChild(postDiv);
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+        document.querySelectorAll('.share-post').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const post = posts.find(p => p.id === btn.getAttribute('data-postid'));
+                if(post) { navigator.clipboard.writeText(`📡 Пост в SNH: "${post.content.substring(0,80)}"`); showToast('📎 Ссылка скопирована!'); }
             });
-        }
+        });
+    }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+    async function refreshFeed() { document.getElementById('feedContainer').innerHTML = `<div class="empty-feed">🌀 Синхронизация...</div>`; const fresh = await fetchGlobalFeed(); renderFeed(fresh); }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
+    function saveToStorage(priv, nick) { localStorage.setItem('snh_private_key', priv); if (nick) localStorage.setItem('snh_nickname', nick); }
+    function loadPrivateKey() { return localStorage.getItem('snh_private_key'); }
+    function loadNickname() { return localStorage.getItem('snh_nickname'); }
 
-        function openMedia(url, type) {
-            const modal = document.createElement('div');
-            modal.style.position = 'fixed';
-            modal.style.top = '0';
-            modal.style.left = '0';
-            modal.style.width = '100%';
-            modal.style.height = '100%';
-            modal.style.background = 'rgba(0,0,0,0.9)';
-            modal.style.zIndex = '1000';
-            modal.style.display = 'flex';
-            modal.style.alignItems = 'center';
-            modal.style.justifyContent = 'center';
-            modal.onclick = () => modal.remove();
-            
-            if (type === 'image') {
-                modal.innerHTML = `<img src="${url}" style="max-width:90%; max-height:90%;">`;
-            } else {
-                modal.innerHTML = `<video src="${url}" controls style="max-width:90%; max-height:90%;" autoplay></video>`;
-            }
-            document.body.appendChild(modal);
-        }
-    </script>
+    async function initWithPrivateKey(priv, desiredNick = null) {
+        const pub = derivePublicKey(priv);
+        if (!pub) return false;
+        currentPrivateKey = priv;
+        currentPublicKey = pub;
+        let nick = desiredNick || loadNickname() || `user_${pub.slice(0,6)}`;
+        currentNickname = nick;
+        saveToStorage(priv, nick);
+        await publishProfile(nick);
+        document.getElementById('authPanel').style.display = 'none';
+        document.getElementById('appPanel').style.display = 'block';
+        document.getElementById('userInfo').innerHTML = `<span>👤 ${escapeHtml(currentNickname)}</span><br><span style="font-size:0.7rem;">🔑 ID: ${pub.slice(0,8)}…${pub.slice(-8)}</span>`;
+        await refreshFeed();
+        return true;
+    }
+
+    async function registerNewUser(nickname) {
+        if (!nickname.trim()) { showToast('❌ Укажите никнейм', true); return; }
+        const newPriv = generatePrivateKey();
+        const modal = document.getElementById('keyModal');
+        document.getElementById('modalKeyText').innerText = newPriv;
+        modal.style.display = 'flex';
+
+        const cleanup = () => {
+            document.getElementById('copyKeyBtn').removeEventListener('click', copyHandler);
+            document.getElementById('confirmKeyBtn').removeEventListener('click', confirmHandler);
+            document.getElementById('closeModalBtn').removeEventListener('click', closeHandler);
+            modal.style.display = 'none';
+        };
+        const copyHandler = () => { navigator.clipboard.writeText(newPriv); showToast('🔑 Ключ скопирован!'); };
+        const confirmHandler = async () => {
+            cleanup();
+            await initWithPrivateKey(newPriv, nickname.trim());
+            showToast('✅ Аккаунт создан! Добро пожаловать.');
+        };
+        const closeHandler = () => { cleanup(); };
+        document.getElementById('copyKeyBtn').addEventListener('click', copyHandler);
+        document.getElementById('confirmKeyBtn').addEventListener('click', confirmHandler);
+        document.getElementById('closeModalBtn').addEventListener('click', closeHandler);
+    }
+
+    async function handleLogin() {
+        const rawKey = document.getElementById('privateKeyInput').value.trim();
+        const nick = document.getElementById('nicknameInput').value.trim();
+        if (!rawKey) { await registerNewUser(nick); return; }
+        const normalized = normalizePrivateKey(rawKey);
+        if (!normalized) { showToast('❌ Неверный формат ключа', true); return; }
+        const success = await initWithPrivateKey(normalized, nick || null);
+        if (!success) showToast('❌ Ошибка входа', true);
+    }
+
+    function logout() { localStorage.removeItem('snh_private_key'); localStorage.removeItem('snh_nickname'); currentPrivateKey = null; currentPublicKey = null; document.getElementById('authPanel').style.display = 'block'; document.getElementById('appPanel').style.display = 'none'; showToast('👋 Вы вышли'); }
+
+    async function autoLogin() {
+        const stored = loadPrivateKey();
+        if (stored && isValidHexKey(stored)) { await initWithPrivateKey(stored, loadNickname()); return true; }
+        document.getElementById('authPanel').style.display = 'block';
+        document.getElementById('appPanel').style.display = 'none';
+        return false;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('publishBtn').addEventListener('click', async () => { const content = document.getElementById('postContent').value; if(await publishPost(content)) { document.getElementById('postContent').value = ''; refreshFeed(); } });
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('refreshFeedBtn').addEventListener('click', refreshFeed);
+        await autoLogin();
+    });
+</script>
 </body>
 </html>
